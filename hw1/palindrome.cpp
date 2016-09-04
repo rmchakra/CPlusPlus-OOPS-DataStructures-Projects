@@ -26,7 +26,17 @@ bool helper (stringstream &input, int len)
 	bool val = helper(input, len-2);
 
 	//make your changes only below this line.
-	if (val) return true;
+	//see what data you have and dont have at each stage
+	if (val)
+	{
+		char next;
+		input>> next;
+		if(next==prev)
+		{
+			return true;
+		}
+		
+	} 
 	return false;
 }
 
