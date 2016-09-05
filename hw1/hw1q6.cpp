@@ -17,10 +17,11 @@ int main (int argc, char* argv[])
 
   	infile >> words[i];
   }
-for(int i = size-1; i>-1;i--)
+for(int i = size-1; i>-1 ; i--)
 {
 	cout << words[i]<<endl;
 }
-  
+
+delete [] words;  
   return 0;
 }

@@ -1,6 +1,6 @@
 Problem 1:
 Part (a):
-1, 4
+1, 4, 8
 Part (b):
 2, 3, 4, 5
 Part(c):
@@ -15,7 +15,7 @@ Part (a):
 1, 3
 Part (b):
 1. git add hw1q2b.cpp
-2. git log
+2. git log -p -3
 
 Part (c)
 Message with which to commit will be requested. After the command is given with an appropriate message using -m "message" , it commits the staged files before pushing them onto github 
@@ -23,8 +23,7 @@ Message with which to commit will be requested. After the command is given with 
 Problem 4
 
 end output :-
-in = {1, 1, 1, 1, 1}
+in = {5, 1, 1, 1, 1}
 
 Logic :
-at each recursion, when the code enters funcB the 0th element (1) is stored in the temp variable. This is then iteratively swapped with increasing element numbers for i starting with a swap of itself, then the first element, then the second and so on until the fifth. After each swap, the original 0th element i.e. 1 replaces what is curently there in funcA. Thus this over the program replaces every element with the first element leading to a final outcome of in = {1, 1, 1, 1, 1}
-
+at each recursion, when the code enters funcB the 0th element (1) is stored in the temp variable. This is then iteratively swapped with increasing element numbers for i starting with a swap of itself, then the first element, then the second and so on until the fifth. After each swap in the next iteration, the original 0th element i.e. 1 replaces what is curently there in funcA. Thus when this is over the program replaces every element with the first element apart from the fifth element that is swapped in its place at the first spot (since this would have occured at the next iteration i.e. when swapping with the 5th element if it had existed) leading to a final outcome of in = {5, 1, 1, 1, 1}
