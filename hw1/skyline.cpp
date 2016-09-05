@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 		  ss >> x;
 		  ss >> y;
 		  ss >> c;
-		  if (ss.fail() || skyline[x] == NULL)
+		  if (ss.fail() || skyline[x] == NULL || y<1)
 		   {
 			  output << "Error - incorrect command extend" << endl;
 			  			  ss.clear(); //- try with and without
