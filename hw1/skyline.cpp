@@ -11,6 +11,7 @@ int main(int argc, char* argv[])
     cerr << "Please provide an input and output file." << endl;
     return 1;
   }
+
   ifstream input(argv[1]);
   ofstream output(argv[2]);
 
@@ -43,10 +44,20 @@ int main(int argc, char* argv[])
 		  ss >> x;
 		  ss >> y;
 		  ss >> c;
-		  if (ss.fail() || skyline[x] != NULL || x<0 || x> constructionspots || y<1) 
+
+		  char extra_arg_checker;//checks for extra arguments in line
+		  if(x<0 || x> constructionspots || ss.fail())
+		  {//invalid spot position for the command was made a separate if for each command since 
+		  	//skyline[x] would cause an error in these cases
+		  	//since stream shouldnt fail for everything except extra arguments 
+		  	//(in which case it should fail)
+		  	//fail condition was checked before checking for positive failure of extra arguments
+		  	output << "Error - incorrect command" << endl;
+		  }
+		  else if ( ss>>extra_arg_checker|| y<1 || skyline[x] != NULL) 
 		  {
-			  output << "Error - incorrect command BUILD" << endl;
-			  			  //ss.clear(); - try with and without
+			  output << "Error - incorrect command" << endl;
+			  			  ss.clear(); //- try with and without
 		  }
 		  else {
 		  			buildingheights[x]=y;
@@ -63,32 +74,40 @@ int main(int argc, char* argv[])
 		  ss >> x;
 		  ss >> y;
 		  ss >> c;
-		  if (ss.fail() || skyline[x] == NULL || y<1)
-		   {
+
+		  char extra_arg_checker;
+
+		  if(x<0 || x> constructionspots || ss.fail())
+		  {
+		  	output << "Error - incorrect command" << endl;
+		  }
+		  else if (ss>>extra_arg_checker || skyline[x] == NULL || y<1)
+		  {
 			  output << "Error - incorrect command extend" << endl;
-			  			  ss.clear(); //- try with and without
-		  	}
-		  	else
+			  ss.clear(); //- try with and without
+		  }
+		  else
+		  {
+		  	//temp stores coloring scheme of already built floors since the array would be deleted
+		  	//to reallocate memory during extension of the building
+		  	string* temp = new string [buildingheights[x]];
+		  	for(int i = 0; i<buildingheights[x]; i++)
 		  	{
-		  		
-		  		string* temp = new string [buildingheights[x]];
-		  		for(int i = 0; i<buildingheights[x]; i++)
-		  		{
-		  			temp[i] = skyline[x][i];
-		  		}
-		  		delete [] skyline[x];//delete former colors
-		  		buildingheights[x]+=y;//changing to new height
-		  		skyline[x] = new string [buildingheights[x]];
-		  		for(int i=0; i<(buildingheights[x]-y); i++)//copying old floors back
-				{
-					skyline[x][i] = temp[i];
-				}
-				for(int i = buildingheights[x]-y ; i< buildingheights[x]; i++)
-				{
-					skyline[x][i] = c;
-				}
-				delete [] temp;
+		  		temp[i] = skyline[x][i];
 		  	}
+		  	delete [] skyline[x];//delete former colors
+		  	buildingheights[x]+=y;//changing to new height
+		  	skyline[x] = new string [buildingheights[x]];
+		  	for(int i=0; i<(buildingheights[x]-y); i++)//copying old floors back
+			{
+				skyline[x][i] = temp[i];
+			}
+			for(int i = buildingheights[x]-y ; i< buildingheights[x]; i++)
+			{
+				skyline[x][i] = c;
+			}
+				delete [] temp;
+		  }
 
 
 
@@ -97,10 +116,17 @@ int main(int argc, char* argv[])
 
 	  	  int x;
 		  ss >> x;
-		  if (ss.fail() || skyline[x] == NULL)
+		  char extra_arg_checker;
+
+		   if(x<0 || x> constructionspots || ss.fail())
+		  {
+		  	output << "Error - incorrect command" << endl;
+		  }
+
+		  else if ( ss>> extra_arg_checker || skyline[x] == NULL)
 		   {
-			  output << "Error - incorrect command DEMOLISH" << endl;
-			  			  //ss.clear(); - try with and without
+			  output << "Error - incorrect command" << endl;
+			  			  ss.clear();
 		  }
 		  else
 		  	{
@@ -115,10 +141,16 @@ int main(int argc, char* argv[])
 	  {
 	  	  int y;
 		  ss >> y;
+		  char extra_arg_checker;
 		  if (ss.fail() || y<1) 
 		  {
-			  output << "Error - incorrect command sky" << endl;
-			  			  //ss.clear(); - try with and without
+			  output << "Error - incorrect command" << endl;
+			  			  ss.clear();t
+		  }
+		  else if(ss>> extra_arg_checker)
+		  {
+		  	 output << "Error - incorrect command" << endl;
+			  			  ss.clear();
 		  }
 		  else
 		  	{
@@ -127,6 +159,8 @@ int main(int argc, char* argv[])
 		  			if(buildingheights[i]>=y)
 		  			{
 		  				output<<skyline[i][y-1]<<" ";
+		  				//for skyline at a spot i and height y, since array for colors would start from
+		  				//0, position in y axis would be y - 1
 		  			}
 		  			else
 		  			{
@@ -140,11 +174,11 @@ int main(int argc, char* argv[])
 	  }
 	  else 
 	  {
-	  	output << "Error - incorrect command none" << endl;
+	  	output << "Error - incorrect command" << endl;
 	  }
   }
   for(int i = 0; i<constructionspots; i++)
-  {
+  {//freeing allocated data
   	delete [] skyline[i];
   }
   delete [] skyline;
