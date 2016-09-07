@@ -21,7 +21,8 @@ int main(int argc, char* argv[])
   string curr;
 
   input >> constructionspots;
-  getline(input, curr); //consume the newline character for the first line.
+  getline(input, curr); 
+  //consume the newline character for the first line.
   skyline = new string*[constructionspots];
 
   //you will need to keep track of the height of each building
@@ -52,7 +53,8 @@ int main(int argc, char* argv[])
            //skyline[x] would cause an error in these cases
            //since stream shouldnt fail for everything except extra arguments 
            //(in which case it should fail)
-           //fail condition was checked before checking for positive failure of extra arguments
+           //fail condition was checked before checking 
+          for positive failure of extra arguments
            output << "Error - incorrect command" << endl;
         }
         else if ( ss>>extra_arg_checker|| y<1 || skyline[x] != NULL) 
@@ -87,7 +89,8 @@ int main(int argc, char* argv[])
         }
         else
         {
-           //temp stores coloring scheme of already built floors since the array would be deleted
+           //temp stores coloring scheme of already
+           // built floors since the array would be deleted
            //to reallocate memory during extension of the building
            string* temp = new string [buildingheights[x]];
            for(int i = 0; i<buildingheights[x]; i++)
@@ -157,7 +160,8 @@ int main(int argc, char* argv[])
                  if(buildingheights[i]>=y)
                  {
                     output<<skyline[i][y-1]<<" ";
-                    //for skyline at a spot i and height y, since array for colors would start from
+                    //for skyline at a spot i and height y, 
+                    //since array for colors would start from
                     //0, position in y axis would be y - 1
                  }
                  else
