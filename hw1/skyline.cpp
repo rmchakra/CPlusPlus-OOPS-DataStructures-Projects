@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
            //since stream shouldnt fail for everything except extra arguments 
            //(in which case it should fail)
            //fail condition was checked before checking 
-          for positive failure of extra arguments
+          //for positive failure of extra arguments
            output << "Error - incorrect command" << endl;
         }
         else if ( ss>>extra_arg_checker|| y<1 || skyline[x] != NULL) 
