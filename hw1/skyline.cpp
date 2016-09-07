@@ -47,7 +47,8 @@ int main(int argc, char* argv[])
 
         char extra_arg_checker;//checks for extra arguments in line
         if(x<0 || x>= constructionspots || ss.fail())
-        {//invalid spot position for the command was made a separate if for each command since 
+        {//invalid spot position for the command was made a
+          //separate if for each command since 
            //skyline[x] would cause an error in these cases
            //since stream shouldnt fail for everything except extra arguments 
            //(in which case it should fail)
