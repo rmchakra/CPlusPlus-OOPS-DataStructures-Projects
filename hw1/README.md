@@ -1,5 +1,5 @@
 # CS 104 Student Repository
 
-- **Name**: Rohan Chakraborty
-- **USC ID**: 1233719421
-- **Email**: rmchakra@usc.edu
+- **Name**: Tommy Trojan
+- **USC ID**: 1234567890
+- **Email**: ttrojan@usc.edu
