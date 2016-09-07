@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 		  ss >> c;
 
 		  char extra_arg_checker;//checks for extra arguments in line
-		  if(x<0 || x> constructionspots || ss.fail())
+		  if(x<0 || x>= constructionspots || ss.fail())
 		  {//invalid spot position for the command was made a separate if for each command since 
 		  	//skyline[x] would cause an error in these cases
 		  	//since stream shouldnt fail for everything except extra arguments 
@@ -57,7 +57,6 @@ int main(int argc, char* argv[])
 		  else if ( ss>>extra_arg_checker|| y<1 || skyline[x] != NULL) 
 		  {
 			  output << "Error - incorrect command" << endl;
-			  			  ss.clear(); //- try with and without
 		  }
 		  else {
 		  			buildingheights[x]=y;
@@ -83,8 +82,7 @@ int main(int argc, char* argv[])
 		  }
 		  else if (ss>>extra_arg_checker || skyline[x] == NULL || y<1)
 		  {
-			  output << "Error - incorrect command extend" << endl;
-			  ss.clear(); //- try with and without
+			  output << "Error - incorrect command" << endl;
 		  }
 		  else
 		  {
@@ -126,13 +124,14 @@ int main(int argc, char* argv[])
 		  else if ( ss>> extra_arg_checker || skyline[x] == NULL)
 		   {
 			  output << "Error - incorrect command" << endl;
-			  			  ss.clear();
 		  }
 		  else
 		  	{
 		  		buildingheights[x] = 0;
 		  		delete [] skyline[x];
 		  		skyline[x] = NULL;
+		  		//deleting former floors and then setting it to
+		  		//NULL to prevent bad memory access
 
 		  	}
 
@@ -143,14 +142,12 @@ int main(int argc, char* argv[])
 		  ss >> y;
 		  char extra_arg_checker;
 		  if (ss.fail() || y<1) 
-		  {
+		  {//skyline cant be found below the first floor
 			  output << "Error - incorrect command" << endl;
-			  			  ss.clear();t
 		  }
 		  else if(ss>> extra_arg_checker)
 		  {
 		  	 output << "Error - incorrect command" << endl;
-			  			  ss.clear();
 		  }
 		  else
 		  	{
