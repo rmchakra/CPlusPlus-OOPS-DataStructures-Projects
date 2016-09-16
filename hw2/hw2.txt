@@ -1,0 +1,22 @@
+Problem 1
+(a)tracked and unmodified
+(b)README.md = tracked, modified and unstaged
+fun_problem.txt = untracked
+(c)README.md = tracked and staged for commit
+fun_problem.txt = tracked and staged for commit
+(d)tracked but modified and not staged for commit for the latest versions of the files, however the previous versions without the additions "Markdown is too easy" for README and "So far, so good" forfun_problem.txt are commited and ready to be pushed onto github.
+(e)README.md = tracked and staged for commit
+fun_problem.txt = tracked and unmodified
+ new changes discarded and previous version of file  fun_problem is loaded onto working directory
+ So fun_problem.txt is empty as the changes are discarded
+(f)README.md = exists in 2 states. The previous version is staged and ready for commit however the newly modified version which has been edited has not been staged.
+Problem 3
+
+Problem 4
+
+Problem 5 
+5, 4, 3, 2, 1 is the returned linked list
+Initially funcA recurses through to the tail of the list.
+funcB recurses to the end of the list passed as the second parameter which is the newly forming list. Initially this will just have the tail of the original list.
+Once funcB recursively reaches the tail of the newly forming list, it appends the first parameter passed to it which would be the end of the original list. After an element is added to the second list, out, the element previous to it is made the new tail of the list by making it point to NULL.
+This process ultimately reverses the entire list as it traces up the stack through the recursive function calls.
