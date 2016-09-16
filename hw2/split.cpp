@@ -1,5 +1,7 @@
 #include <iostream>
 
+using namespace std;
+
 struct Node {
     int value;
     Node *next;
@@ -11,7 +13,7 @@ struct Node {
     }
     Node()
     {
-    	value = NULL;
+    	value = 0;
     	next = NULL;
     }
 };
@@ -25,21 +27,25 @@ if(in->next == NULL)
    //base case is the end of the list
 	}
 */
+	void helper (Node*& in, Node*& odds, Node*& evens);
+	void append(Node*& list, Node*& value);
+	void print(Node*& list);
 
-	/*
-
-	void split (Node*& in, Node*& odds, Node*& evens)
-	{
-		helper (in, odds, evens);
-		in = NULL;
-	}
+void split (Node*& in, Node*& odds, Node*& evens)
+{
+	helper (in, odds, evens);
+	in = NULL;
+}
 
 void helper (Node*& in, Node*& odds, Node*& evens)
 {
-	if(in->next != NULL)
-	{//recurse through to the end of the list first
-		helper(in->next, odds, evens);
+	if(in == NULL)
+	{
+		return;
 	}
+
+	Node* next = in->next;
+
 		if(in->value % 2 ==0)
 		{//if even
 			append(evens, in);
@@ -54,52 +60,77 @@ void helper (Node*& in, Node*& odds, Node*& evens)
 		//	in->next = NULL;
 		//}
 		//return;
+	//if(next != NULL)
+	//{//recurse through to the end of the list 
+		helper(next, odds, evens);
+
+	//}
+
 }
 
+
+//*& is a pointer to the reference from &
 void append(Node*& list, Node*& value)
 {
-	if (list->value == NULL) return;
-
+	if (list == NULL)
+	{//adding to first of 
+		list = value;
+		value->next = NULL;
+		return;
+	} 
 	if(list->next == NULL)
-	{
-		list->next = &value;
+	{//adding further elements
+		list->next = value;
 		value->next = NULL;
 		return;
 	}
 	append(list->next, value);
 }
 
-*/
-
 void print(Node*& list)
 {
-	if(list->next == NULL)
+	if(list==NULL)
 	{
-		cout << list->value <<endl;
+		cout << "List is NULL"<< endl;
 		return;
 	}
+	//if(list->next == NULL)
+	//{
+		//cout << list->value <<endl;
+	//	return;
+	//}
 	cout << list->value<<endl;
 	print(list->next);
 }
 
-void main()
+int main()
 {
-	Node n1, n2, n3, odds, evens;
-	n1.value = 0;
-	n2.value = 1;
-	n3.value = 2;
+	Node n1, n2, n3;
+	n1.value = 1;
+	n2.value = 2;
+	n3.value = 3;
 	n1.next = &n2;
 	n2.next = &n3;
 	n3.next = NULL;
+	Node* list_head = &n1;
+	Node* odds_head = NULL;
+	Node* evens_head = NULL;
 
-	print(n1);
-/*
-	split (n1, Node*& odds, Node*& evens);
-	cout << "print n1" << endl;
-	print(n1);
+	//to check append
+	Node n4;
+	n4.value = 56;
+	Node* n4_ptr = &n4;
+
+	append(list_head,n4_ptr);
+	print(list_head);
+
+	split (list_head, odds_head, evens_head);
+	//cout << "print n1" << endl;
+	//print(list_head);
 	cout << "print odds" << endl;
-	print(odds);
+	print(odds_head);
 	cout << "print evens" << endl;
-	print(evens);
-	*/
+	print(evens_head);
+	
+	return 0;
 }
