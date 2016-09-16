@@ -11,6 +11,20 @@
  * http://www.cplusplus.com/doc/tutorial/exceptions/
  * 
  * We will cover exceptions later this semester. 
+
+ doubly linked list complete insert, remove, getNodeAt 
+ getNodeAt(return a pointer to the i-th node)
+
+ Valid locations for insertion are 0 to SIZE 
+ (where SIZE is the size of the list and indicates a value should be added to the back of the list)
+ 
+Valid locations for remove are 0 to SIZE-1.
+invalid location should cause the function to simply return 
+without modifying the list.
+
+allocate one of your LListString items and 
+make calls to insert() and remove() that will
+exercise the various cases you've coded in the functions.
  */
 
 LListString::LListString()
