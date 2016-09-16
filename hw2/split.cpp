@@ -20,7 +20,6 @@ struct Node {
 
 	void helper (Node*& in, Node*& odds, Node*& evens);
 	void append(Node*& list, Node*& value);
-	void print(Node*& list);
 
 void split (Node*& in, Node*& odds, Node*& evens)
 {
