@@ -1,3 +1,6 @@
 split
 split_checkers.cpp
 testAddToEmptyList.o
+lliststring_test
+lliststring.o
+makefile
