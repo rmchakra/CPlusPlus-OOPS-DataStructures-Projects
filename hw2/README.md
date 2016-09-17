@@ -8,9 +8,6 @@ Additional instructions :
 Tail pointer wasnt really required
  hence wasnt implemented in the code
 
-
-
-
 Compilation instructions :
 
 Compilation was done using a make file with the following contents
