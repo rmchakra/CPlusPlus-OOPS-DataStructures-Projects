@@ -66,6 +66,13 @@ class LListString {
     std::string val;
     Item *prev;
     Item *next;
+
+    Item(std::string value, Item *previous, Item *nextItem)
+    {
+       val = value;
+       prev = previous;
+       next = nextItem;
+    }
   };
 
   /** 

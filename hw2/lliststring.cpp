@@ -16,7 +16,8 @@
  getNodeAt(return a pointer to the i-th node)
 
  Valid locations for insertion are 0 to SIZE 
- (where SIZE is the size of the list and indicates a value should be added to the back of the list)
+ (where SIZE is the size of the list and indicates a value
+should be added to the back of the list)
  
 Valid locations for remove are 0 to SIZE-1.
 invalid location should cause the function to simply return 
@@ -25,6 +26,8 @@ without modifying the list.
 allocate one of your LListString items and 
 make calls to insert() and remove() that will
 exercise the various cases you've coded in the functions.
+
+sample test program - testAddToEmptyList.cpp
  */
 
 LListString::LListString()
@@ -52,12 +55,54 @@ int LListString::size() const
 void LListString::insert(int pos, const std::string& val)
 {
   // TODO: complete the insert function.
+  if(pos<0 || pos>SIZE){return;}//invalid positions
 
+   if(pos==0)
+  {//if inserting at head
+    Item* newElement = new Item (string val, NULL, head_);
+    head_ = newElement;
+    if(head_->next != NULL)
+    {//were not inserting to an empty list
+          head_->next->prev = head_;
+    }
+  }
+  else if(pos==size_)
+  {//if inserting at tail
+     Item* newElement = new Item (string val, getNodeAt(pos), NULL);
+     newElement->prev->next = newElement;
+  }
+
+  else
+  {//if inserting in the middle of linked list
+     Item *Nodeat = getNodeAt(pos);
+     Item* newElement = new Item (string val, Nodeat->prev, Nodeat);
+
+    newElement->next->prev = newElement;
+    newElement->prev->next = newElement;
+  }
+ 
 }
 
 void LListString::remove(int pos)
 {
   // TODO: complete the remove function.
+  if(pos < 0 || pos > size_-1){return;}//invalid positions
+ Item *Nodeat = getNodeAt(pos);
+  if(pos==0)
+    {//if removing head
+      head=head->next;
+      head->prev = NULL;
+    }
+    else
+    {
+      Nodeat->prev->next = Nodeat->next;
+    }
+    if(Nodeat->next !=  NULL)
+    {
+      Nodeat->next->prev =  Nodeat->prev;
+    }
+    //unsure about delete statement
+  delete Nodeat;
 
 }
 
@@ -101,5 +146,16 @@ void LListString::clear()
 LListString::Item* LListString::getNodeAt(int pos) const
 {
   // TODO: complete the getNodeAt function.
+  if(pos>-1 && pos<size)
+  {
+
+   Item* Nodeat = head_;
+    for(int i = 0; i<pos; i++)
+   {
+     Nodeat = Nodeat->next;
+   }
+
+  return Nodeat;
+  }
 
 }
