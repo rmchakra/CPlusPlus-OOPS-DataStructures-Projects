@@ -12,6 +12,25 @@ fun_problem.txt = tracked and unmodified
 (f)README.md = exists in 2 states. The previous version is staged and ready for commit however the newly modified version which has been edited has not been staged.
 
 Problem 3
+(a) O(n)
+since its big O, you assume worst case where every term of A is 0
+j forms a series with the powers of 2 as it is multiplied by 2 at each iteration until j = i (by rounding off). now i = 2^(log i). Hence the inner loop will run logi times each time it is run.
+Hence it will be a summation from o to logi where each term is 2^i. Thus using the formula for the geometric series, this is equal to (2^(log(i+1))-1)/(2-1) = 2^(logi) = i
+The outer loop equation is sum from 0 to n the time required for the inner. Hence it runs n times. Hence the runtime for the whole equation would be n
+
+(b)
+outermost loop occurs logn times
+middle occurs n-1 timmes
+innermost occurs n-j times
+
+(c)
+(d)O(1)
+capacity = n
+The array resizes each time it goes over the size of the array
+Mostly the array adds elements at constant time. 
+However 1/size of the times it goes over the size of the array as the other times it simply inserts. In this case a reallocation occurs by performing a deep copy which would take linear time O(n)
+Hence
+O(n)/n = O(1)
 
 Problem 4
 1. Map - An int key for the zip codes should be mapped onto a struct with the voting statistics
