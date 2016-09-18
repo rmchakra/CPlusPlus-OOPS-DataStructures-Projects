@@ -10,9 +10,26 @@ fun_problem.txt = tracked and unmodified
  new changes discarded and previous version of file  fun_problem is loaded onto working directory
  So fun_problem.txt is empty as the changes are discarded
 (f)README.md = exists in 2 states. The previous version is staged and ready for commit however the newly modified version which has been edited has not been staged.
+
 Problem 3
 
 Problem 4
+1. Map - An int key for the zip codes should be mapped onto a struct with the voting statistics
+
+A list wouldnt be appropriate as the order doesnt matter. 
+A set wouldnt work as it only checks for the presence or absence and can not be used to enable qiock look up
+Thus we need a data type that allows one to input a value (zip code) which is an int, and receive a result linked to it (the result being the voting statistics). Since there would be multiple voting statistics relateds to each zip code, a struct is required to store a unified collection of different forms of data. For example a float may be required to store decimal percentages of votes, a set of strings with major ethnic categories, etc.
+
+2.set of strings with either the names of the students/usernames or set of ints with their ID numbers could be used.
+We are only checking for the presence, or absense of a student in this collection or printing out the entire collection. Hence since the order is irrelevant (making a list dispensable) and theres no linking of an input giving a result (making a map overkill), the set is the most appropriate data type. Since names consist of letters, a string would be necessary.
+
+3.List of structs
+ Data relating to a pokemon such as its various statistics are required to be looked up deeming a struct necessary. A list is preferred as pokemon are ordered by their index.
+
+
+4.Multimap.
+First map has a string key (name of the movie) which points to a struct with data for movies with the same name. The second int key (for the year) points to a string set with the reviews relating to that movie
+Since we need to give an input for each of these and look up a result relating to that input, a map is necessary.
 
 Problem 5 
 5, 4, 3, 2, 1 is the returned linked list
