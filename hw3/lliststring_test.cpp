@@ -1,4 +1,9 @@
 /*
+issue with code ->assignment is shallow copying
+as it segfaults on clear command*/
+
+
+/*
 	test case summary
 	inserting head for empty list
 	inserting at negative and greater than size
@@ -173,6 +178,9 @@ int main() {
 //##########################################################################################
  //current list  Bob the builder,Voldemort,Gandalf, Doge
  //removing invalid positions - current list size is 4, so 5 and -1
+ 
+  LListString* list_copy = new LListString(*list);
+  //dereferencing
 
   list->remove(-1);
   list->remove(5);
@@ -205,7 +213,7 @@ int main() {
    //current list  Voldemort,Gandalf, Doge
  //removing invalid positions - current list size is 4, so 5 and -1
  
-
+ //LListString* list_copy = new LListString(list);
   list->remove(0);
   
 
@@ -315,8 +323,83 @@ int main() {
     cout << endl;
   }
 
+//################################################################################
+//new list test
+
+   if ( (list_copy->get(0) == "Bob the builder") && (list_copy->get(1) == "Voldemort" ) && (list_copy->get(2) == "Gandalf" )
+    && (list_copy->get(3) == "Doge"))
+  {
+    cout << "SUCCESS: Copy constructor worked"<< endl;
+  } 
+  else 
+  {
+    cout << "FAIL :copy constructor failed"<<  endl;
+  }
+
+   if (list_copy->size() == 4) 
+   {
+    cout << "SUCCESS: correct copy constructor size" << endl;
+  }
+   else 
+   {
+    cout << "FAIL: List has size " << list_copy->size() << endl;
+    cout << endl;
+  }
+
+//########################################
+//new list assignment test
+
+   LListString* list_assign = new LListString();
+   list_assign->insert(0, "0");
+   list_assign->insert(1, "1");
+   list_assign->insert(2, "2");
+
+   cout<<"pre assignment values"<<endl;
+   cout<<"0th  "<<list_assign->get(0)<<endl;
+   cout<<"1st  "<<list_assign->get(1)<<endl;
+   cout<<"2nd  "<<list_assign->get(2)<<endl;
+
+   cout<<"post assignment"<<endl;
+   list_assign = list_copy;
+   cout<<"0th  "<<list_assign->get(0)<<endl;
+   cout<<"1st  "<<list_assign->get(1)<<endl;
+   cout<<"2nd  "<<list_assign->get(2)<<endl;
+
+/*
+  cout<<"new"<<endl;
+
+   if ( (list_copy->get(0) == "Bob the builder") && (list_copy->get(1) == "Voldemort" ) && (list_copy->get(2) == "Gandalf" )
+    && (list_copy->get(3) == "Doge"))
+  {
+    cout << "SUCCESS: Copy constructor worked"<< endl;
+  } 
+  else 
+  {
+    cout << "FAIL :copy constructor failed"<<  endl;
+  }
+
+   if (list_copy->size() == 4) 
+   {
+    cout << "SUCCESS: correct copy constructor size" << endl;
+  }
+   else 
+   {
+    cout << "FAIL: List has size " << list_copy->size() << endl;
+    cout << endl;
+  }
+
+  */
+
+//########################################
+
+
+
 
   // Clean up memory.
   list->clear();
+  list_copy->clear();
+  list_assign->clear();
   delete list;
+  delete list_copy;//copy constructor
+  delete list_assign;//assignment tester
 }
