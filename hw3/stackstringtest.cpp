@@ -54,131 +54,35 @@ protected:
 
 TEST_F(stackstringtest, Boundrypush) {
 	//first push
-	stack.push("Bob the builder");
+	stack.push("Doge");
 	//EXPECT_EQ(list_copy.size(), list.size());
 	//cout<<"segfault";
-	  EXPECT_EQ(stack.top(), str_arr[0]);
-}
-/*
-
-
-TEST_F(stackstringtest, NominalCopyDeep) {	
-	//after removing from list copy should remain the same
-	LListString list_copy(list);
-	list.remove(2);
-	for (int i = 0 ; i <2 ; i++) {
-	        EXPECT_EQ(list_copy.get(i), list.get(i));
-	}
-	for (int i = 2 ; i <list.size() ; i++) {
-	        EXPECT_EQ(list.get(i), list_copy.get(i+1));
-	}
-
-	       
+	  EXPECT_EQ(stack.top(), str_arr[3]);
 }
 
 
-TEST_F(stackstringtest, Nominalassignmenty) {
-   list_assign.insert(0, "0");
-   list_assign.insert(1, "1");
-   list_assign.insert(2, "2");
 
-     list_assign = list;
+TEST_F(stackstringtest, Nominalpush) {	
+	//2nd push
+		   stack.push("Doge");
+	       stack.push(str_arr[2]);
+	       EXPECT_EQ(stack.top(), str_arr[2]);
+}
 
-     for (int i = 0 ; i <list_assign.size() && i <list.size() ; i++) {
-     //and ensures both variables are of same size else would seg fault
-	         EXPECT_EQ(list_assign.get(i), list.get(i));
+
+TEST_F(stackstringtest, pop) {
+   stack.push(str_arr[3]);
+   stack.push(str_arr[2]);
+   stack.push(str_arr[1]);
+   stack.push(str_arr[0]);
+
+     for (int i = 0 ; i <4  ; i++) {
+     //poping all and checking fo equality of top to each array element
+
+	         EXPECT_EQ(stack.top(), str_arr[i]);
+	         stack.pop();
 	 }
+	 stack.pop();
+	 stack.pop();
 
 }
-
-
-TEST_F(stackstringtest, NominalAdd) {
-   list_assign.insert(0, "0");
-   list_assign.insert(1, "1");
-   list_assign.insert(2, "2");
-
-
-     list_add= list_assign + list;
-
-     for (int i = 0 ; i <list_assign.size(); i++) {
-	         EXPECT_EQ(list_assign.get(i), list_add.get(i));
-	 }
-	 for (int i = 0 ; i <list.size(); i++) {
-	         EXPECT_EQ(list_add.get(i+list_assign.size()), list.get(i));
-	 }
-
-}
-
-
-TEST_F(stackstringtest, NominalAccess) {
-
-	for (int i = 0 ; i <list.size(); i++) {
-	         EXPECT_EQ(list[i], list.get(i));
-	}
-	 		
-}
-
-TEST_F(stackstringtest, offNominalAssignEqual) {
-	LListString old_list = list;
-	list=list;
-	for (int i = 0 ; i <list.size(); i++) {
-	         EXPECT_EQ(list[i], old_list.get(i));
-	}
-}
-
-TEST_F(stackstringtest, BoundryAssignEmpty) {
-//equating to empty list
-	list=list_assign;//list should be empty
-	         EXPECT_EQ(true, list.empty() );
-	     }
-*/
-/*	     
-TEST_F(lliststringtest, BoundryAddEmptyToItself) {
-	LListString old_list = list;
-	list=list+list_assign;//list_assign is empty
-	for (int i = 0 ; i <list.size(); i++) {
-	         EXPECT_EQ(list[i], old_list.get(i));
-	}
-}
-TEST_F(lliststringtest, BoundryAddEmptyToEmptyItself) {
-	//adding empty to empty and storing
-	LListString old_list = list;
-	list=list_assign+list_assign;//list_assign is empty
-	
-	         EXPECT_EQ(true, list.empty());
-}
-
-TEST_F(lliststringtest, offNominalAddtoItselfandStoreInItself) {
-	LListString old_list = list;
-	list=list+list;//adding to itself and storing in itself
-	for (int i = 0 ; i <old_list.size(); i++) {
-	         EXPECT_EQ(list[i], old_list.get(i));
-	}//checkibng each half of double the list as equal to the list
-	for (int i = 0 ; i <old_list.size(); i++) {
-	         EXPECT_EQ(list[i+old_list.size()], old_list.get(i));
-	}
-}
-TEST_F(lliststringtest, BoundryAcess0) {
-	//first element access
-	         EXPECT_EQ(list[0], "Bob the builder");
-}
-TEST_F(lliststringtest, BoundryAcessTail) {
-	//tail access
-	         EXPECT_EQ(list[list.size()-1],"Doge" );
-}
-TEST_F(lliststringtest, BoundryConstructor1Element) {
-	//single element constructor
-	LListString single_element_list;
-	single_element_list.insert(0, "0");
-	LListString constr(single_element_list);
-	EXPECT_EQ(constr.size(),1 );//checking size of 1 element
-	EXPECT_EQ(constr[0],"0" );//checking size of 1 element
-}
-TEST_F(lliststringtest, OffNominalEmptyListConstructed) {
-	//empty linked list copy constuctor
-	LListString constr(list_assign);//list_assign is an empty list
-	EXPECT_EQ(constr.size(),0);//checking size of 1 element
-}
-
-*/
-

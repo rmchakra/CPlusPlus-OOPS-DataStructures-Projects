@@ -1,3 +1,5 @@
 lliststring_test
 lliststring.o
 llisttest
+stackstring.o
+stackstringtest

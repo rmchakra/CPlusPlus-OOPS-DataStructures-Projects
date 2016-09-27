@@ -8,9 +8,9 @@ llist: lliststring_test.cpp
 	valgrind --leak-check=yes --tool=memcheck  --track-origins=yes ./llisttest
 	./llisttest
 
-stackstring: 
+stackstring: stackstringtest.cpp
 	g++ -g -Wall -c lliststring.cpp -o lliststring.o
-	g++ -g -Wall -c stackstring.cpp lliststring.o -o stackstring.o
-	g++ -g -Wall stackstringtest.cpp stackstring.o $(GTEST_LL) -o stackstringtest
+	g++ -g -Wall -c stackstring.cpp -o stackstring.o
+	g++ -g -Wall stackstring.o lliststring.o stackstringtest.cpp $(GTEST_LL) -o stackstringtest
 	valgrind --leak-check=yes --tool=memcheck  --track-origins=yes ./stackstringtest
 	./stackstringtest

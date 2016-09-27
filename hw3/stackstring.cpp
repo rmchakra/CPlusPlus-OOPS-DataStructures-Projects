@@ -31,7 +31,7 @@
    * If the stack is empty, the correct behavior is to throw
    * an exception: use LListString::get to achieve this.
    */
-  std::string StackString::const & top () const
+  std::string const & StackString::top () const
   {
   	return list.get(0);
   }
@@ -46,10 +46,4 @@
   	list.remove(0);
   }
 
- private:
-  /** 
-   * Single data member of the Stack.
-   * We use composition to implement this Stack 
-   */
-  LListString list;
 
