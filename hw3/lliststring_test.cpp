@@ -1,6 +1,10 @@
 /*
-issue with code ->assignment is shallow copying
-as it segfaults on clear command*/
+q3 issues
+issue with code ->assignment is shallow copying -head is same
+as it segfaults on clear command
+how to do the gtest - right now llisttest is simply a copy of the lab
+*/
+
 
 
 /*
@@ -347,7 +351,7 @@ int main() {
   }
 
 //########################################
-//new list assignment test
+//new list assignment test (=)
 
    LListString* list_assign = new LListString();
    list_assign->insert(0, "0");
@@ -360,7 +364,7 @@ int main() {
    cout<<"2nd  "<<list_assign->get(2)<<endl;
 
    cout<<"post assignment"<<endl;
-   list_assign = list_copy;
+   *list_assign = *list_copy;
    cout<<"0th  "<<list_assign->get(0)<<endl;
    cout<<"1st  "<<list_assign->get(1)<<endl;
    cout<<"2nd  "<<list_assign->get(2)<<endl;
@@ -392,8 +396,26 @@ int main() {
 
 //########################################
 
+/*
+//+ into empty
 
+   LListString* list_assign = new LListString();
+   list_assign->insert(0, "0");
+   list_assign->insert(1, "1");
+   list_assign->insert(2, "2");
 
+   cout<<"pre assignment values"<<endl;
+   cout<<"0th  "<<list_assign->get(0)<<endl;
+   cout<<"1st  "<<list_assign->get(1)<<endl;
+   cout<<"2nd  "<<list_assign->get(2)<<endl;
+
+   cout<<"post assignment"<<endl;
+   list_assign = list_copy;
+   cout<<"0th  "<<list_assign->get(0)<<endl;
+   cout<<"1st  "<<list_assign->get(1)<<endl;
+   cout<<"2nd  "<<list_assign->get(2)<<endl;
+*/
+//########################################
 
   // Clean up memory.
   list->clear();

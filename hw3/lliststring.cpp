@@ -47,7 +47,7 @@ void LListString::insert(int pos, const std::string& val)
           head_->next->prev = head_;
     }
   }
-  //cout << "POS ="<< pos << "SIZE =" << size_ << endl;
+  
   else if(pos==size_)
   {//if inserting at tail.
   // else if since for size 1 head and tail are same
@@ -147,10 +147,14 @@ LListString::Item* LListString::getNodeAt(int pos) const
     head_ = NULL;
     tail_ = NULL;
     size_ = 0;
-    for(int i =0; i<other.size();i++)
-    {
-      insert(i, other.get(i));
-    }
+    //clear();
+    //if(other==NULL)return;//if constructing from empty
+    
+     for(int i =0; i<other.size();i++)
+      {
+       insert(i, other.get(i));
+     }
+   
   }
 
   /**
@@ -159,17 +163,18 @@ LListString::Item* LListString::getNodeAt(int pos) const
    
   LListString& LListString::operator= (const LListString& other)
   {
+
     if(this == &other)return *this;
 
     
-    if (other.empty()) return *this;
+    if (other.empty()) this->clear  ();
 
 
-  clear();
+  this->clear();
 
     for(int i =0; i<other.size();i++)
     {
-      insert(i, other.get(i));
+      this->insert(i, other.get(i));
     }
 
     return *this;
@@ -180,15 +185,27 @@ LListString::Item* LListString::getNodeAt(int pos) const
   /**
    * Concatenation operator.  Returns a new list consisting of other appended to this.  Does not modify this.
    */
-  //LListString operator+ (const LListString& other) const
- // {
 
- // }
+  
+  LListString LListString::operator+ (const LListString& other) const
+  {
+        LListString lhs(*this);//creating deep copy of this
+        int lhs_tail = lhs.size();
+     for(int i =0; i<other.size();i++)
+    {
+      lhs.insert(lhs_tail+i, other.get(i));
+    }
+
+    return lhs;
+
+  }
 
   /**
    * Access Operator
    */
- // std::string const & operator[] (int pos) const
-  //{
+  std::string const & LListString::operator[] (int pos) const
+  {
+    return get(pos);
+  }
 
- // }
+   

@@ -82,12 +82,12 @@ class LListString {
   /**
    * Concatenation operator.  Returns a new list consisting of other appended to this.  Does not modify this.
    */
-  //LListString operator+ (const LListString& other) const;
+  LListString operator+ (const LListString& other) const;
 
   /**
    * Access Operator
    */
-  //std::string const & operator[] (int pos) const;
+  std::string const & operator[] (int pos) const;
 
 
  private:
