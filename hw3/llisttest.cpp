@@ -5,7 +5,7 @@ if other = null
 
 #include "lliststring.h"
 #include "gtest/gtest.h"
-//#include <iostream>
+#include <iostream>
 
 //all tests should have same name eg FIbtest or whatever 
 //i.e. first parameter
@@ -75,7 +75,6 @@ TEST_F(lliststringtest, NominalCopyDeep) {
 }
 
 
-
 TEST_F(lliststringtest, Nominalassignmenty) {
    list_assign.insert(0, "0");
    list_assign.insert(1, "1");
@@ -83,7 +82,8 @@ TEST_F(lliststringtest, Nominalassignmenty) {
 
      list_assign = list;
 
-     for (int i = 0 ; i <list_assign.size() && i <list.size() ; i++) {//since same size should go to larger one
+     for (int i = 0 ; i <list_assign.size() && i <list.size() ; i++) {
+     //and ensures both variables are of same size else would seg fault
 	         EXPECT_EQ(list_assign.get(i), list.get(i));
 	 }
 
@@ -115,4 +115,66 @@ TEST_F(lliststringtest, NominalAccess) {
 	}
 	 		
 }
+
+TEST_F(lliststringtest, offNominalAssignEqual) {
+	LListString old_list = list;
+	list=list;
+	for (int i = 0 ; i <list.size(); i++) {
+	         EXPECT_EQ(list[i], old_list.get(i));
+	}
+}
+
+TEST_F(lliststringtest, BoundryAssignEmpty) {
+//equating to empty list
+	list=list_assign;//list should be empty
+	         EXPECT_EQ(true, list.empty() );
+	     }
+TEST_F(lliststringtest, BoundryAddEmptyToItself) {
+	LListString old_list = list;
+	list=list+list_assign;//list_assign is empty
+	for (int i = 0 ; i <list.size(); i++) {
+	         EXPECT_EQ(list[i], old_list.get(i));
+	}
+}
+TEST_F(lliststringtest, BoundryAddEmptyToEmptyItself) {
+	//adding empty to empty and storing
+	LListString old_list = list;
+	list=list_assign+list_assign;//list_assign is empty
+	
+	         EXPECT_EQ(true, list.empty());
+}
+
+TEST_F(lliststringtest, offNominalAddtoItselfandStoreInItself) {
+	LListString old_list = list;
+	list=list+list;//adding to itself and storing in itself
+	for (int i = 0 ; i <old_list.size(); i++) {
+	         EXPECT_EQ(list[i], old_list.get(i));
+	}//checkibng each half of double the list as equal to the list
+	for (int i = 0 ; i <old_list.size(); i++) {
+	         EXPECT_EQ(list[i+old_list.size()], old_list.get(i));
+	}
+}
+TEST_F(lliststringtest, BoundryAcess0) {
+	//first element access
+	         EXPECT_EQ(list[0], "Bob the builder");
+}
+TEST_F(lliststringtest, BoundryAcessTail) {
+	//tail access
+	         EXPECT_EQ(list[list.size()-1],"Doge" );
+}
+TEST_F(lliststringtest, BoundryConstructor1Element) {
+	//single element constructor
+	LListString single_element_list;
+	single_element_list.insert(0, "0");
+	LListString constr(single_element_list);
+	EXPECT_EQ(constr.size(),1 );//checking size of 1 element
+	EXPECT_EQ(constr[0],"0" );//checking size of 1 element
+}
+TEST_F(lliststringtest, OffNominalEmptyListConstructed) {
+	//empty linked list copy constuctor
+	LListString constr(list_assign);//list_assign is an empty list
+	EXPECT_EQ(constr.size(),0);//checking size of 1 element
+}
+
+
 

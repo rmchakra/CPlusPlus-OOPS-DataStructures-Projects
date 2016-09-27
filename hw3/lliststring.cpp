@@ -164,11 +164,8 @@ LListString::Item* LListString::getNodeAt(int pos) const
   LListString& LListString::operator= (const LListString& other)
   {
 
-    if(this == &other)return *this;
-
-    
-    if (other.empty()) this->clear  ();
-
+    if(this == &other)return *this;//if assigning to itself which 
+    //could cause issues after clearing
 
   this->clear();
 
@@ -205,6 +202,9 @@ LListString::Item* LListString::getNodeAt(int pos) const
    */
   std::string const & LListString::operator[] (int pos) const
   {
+    if(pos < 0 || pos >= size_) {
+    throw std::invalid_argument("bad location");
+  }
     return get(pos);
   }
 
