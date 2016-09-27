@@ -1,35 +1,48 @@
-#ifndef STACKSTRING_H
-#define STACKSTRING_H
-#include "lliststring.h"
-#include <iostream>
+#include "stackstringstring.h"
 
-class StackString {
- public:
-  StackString();
-  ~StackString();
+   StackString::StackString()
+   {
+
+   }
+  StackString::~StackString()
+  {
+
+  }
 
   /**
    * Returns true if the stack is empty, false otherwise
    */
-  bool empty() const;
+  bool StackString::empty() const
+  {
+
+  }
 
   /**
    * Pushes a new value, val, onto the top of the stack
    */
-  void push (const std::string& val);
+  void StackString::push (const std::string& val)
+  {
+
+  }
 
   /**
    * Returns the top value on the stack.
    * If the stack is empty, the correct behavior is to throw
    * an exception: use LListString::get to achieve this.
    */
-  std::string const & top () const;
+  std::string StackString::const & top () const
+  {
+
+  }
 
   /**
    * Removes the top element on the stack.
    * Should do nothing if the stack is empty.
    */
-  void pop ();
+  void StackString::pop ()
+  {
+
+  }
 
  private:
   /** 
@@ -37,5 +50,4 @@ class StackString {
    * We use composition to implement this Stack 
    */
   LListString list;
-};
-#endif
+

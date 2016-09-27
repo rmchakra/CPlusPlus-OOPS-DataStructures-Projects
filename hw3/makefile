@@ -1,6 +1,6 @@
 GTEST_LL = -I /usr/include/gtest/ -l gtest -l gtest_main -pthread
 
-all: llist
+all: llist stackstring
 
 llist: lliststring_test.cpp
 	g++ -g -Wall -c lliststring.cpp -o lliststring.o
@@ -8,3 +8,9 @@ llist: lliststring_test.cpp
 	valgrind --leak-check=yes --tool=memcheck  --track-origins=yes ./llisttest
 	./llisttest
 
+stackstring: 
+	g++ -g -Wall -c lliststring.cpp -o lliststring.o
+	g++ -g -Wall -c stackstring.cpp lliststring.o -o stackstring.o
+	g++ -g -Wall stackstringtest.cpp stackstring.o $(GTEST_LL) -o stackstring
+	valgrind --leak-check=yes --tool=memcheck  --track-origins=yes ./stackstring
+	./stackstring
