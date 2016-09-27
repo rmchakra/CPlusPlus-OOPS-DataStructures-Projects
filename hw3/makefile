@@ -11,6 +11,6 @@ llist: lliststring_test.cpp
 stackstring: 
 	g++ -g -Wall -c lliststring.cpp -o lliststring.o
 	g++ -g -Wall -c stackstring.cpp lliststring.o -o stackstring.o
-	g++ -g -Wall stackstringtest.cpp stackstring.o $(GTEST_LL) -o stackstring
-	valgrind --leak-check=yes --tool=memcheck  --track-origins=yes ./stackstring
-	./stackstring
+	g++ -g -Wall stackstringtest.cpp stackstring.o $(GTEST_LL) -o stackstringtest
+	valgrind --leak-check=yes --tool=memcheck  --track-origins=yes ./stackstringtest
+	./stackstringtest

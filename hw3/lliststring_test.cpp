@@ -1,13 +1,4 @@
 /*
-q3 issues
-issue with code ->assignment is shallow copying -head is same
-as it segfaults on clear command
-how to do the gtest - right now llisttest is simply a copy of the lab
-*/
-
-
-
-/*
 	test case summary
 	inserting head for empty list
 	inserting at negative and greater than size

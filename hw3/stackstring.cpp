@@ -1,4 +1,4 @@
-#include "stackstringstring.h"
+#include "stackstring.h"
 
    StackString::StackString()
    {
@@ -12,9 +12,10 @@
   /**
    * Returns true if the stack is empty, false otherwise
    */
+
   bool StackString::empty() const
   {
-
+  	return list.empty();
   }
 
   /**
@@ -22,7 +23,7 @@
    */
   void StackString::push (const std::string& val)
   {
-
+  	list.insert(0, val);
   }
 
   /**
@@ -32,7 +33,7 @@
    */
   std::string StackString::const & top () const
   {
-
+  	return list.get(0);
   }
 
   /**
@@ -41,7 +42,8 @@
    */
   void StackString::pop ()
   {
-
+  	if(!list.empty())
+  	list.remove(0);
   }
 
  private:
