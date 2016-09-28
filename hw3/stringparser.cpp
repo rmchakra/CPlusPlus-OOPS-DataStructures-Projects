@@ -144,20 +144,55 @@ int main(int argc, char* argv[])
 
 //############################################################################################
 	//From here onwards actual stack calculations begin expression is the whole linewise expression
-
+//to remove from string is string.erase(pos,number of characters to erase)
 // 	keep pushing onto stack 1
 // if close bracket - pop from stack 1 and push onto stack 2 until open brace reached at top
 // once open brace is reached in popping mode, pop it from the top
 // evaluate stack 2
 // push stack 2 result to top of stack 1
-	stack <string> stack_main, stack_evaluator;//void push(value_to_push), void pop() string top()
+	stack <string> stack_main, parenthesis_evaluator;//void push(value_to_push), void pop() string top(), string.erase(pos,number of characters to erase)
 
-	while(stack_main.empty()==false)
-	{
+	while(expression!="")
+	{//while there are still elements inside the evaluator
+		char current_char = expression[0];//the current character on the expression
+		if(current_char==')')
+		{//if closing paranthesis encountered dont continue adding new elements but evaluate current ones
+			while(current_char!="(")
+			{//check situation where ( is encountered  whether unnecessary done
+				current_char = stack_main.top();
+				parenthesis_evaluator.push(current_char);//pushing expression to be evaluated onto stack_evaluator
+				//open brace will be pushed onto evaluator as top but will be popped from stack_main
+				stack_main.pop();
+			}
+			parenthesis_evaluator.pop();//popping the open brace from the stack_evaluator
+			//stack evaluator 
+			string evaluated_expression_temp="";//each evaluated expression within braces
+			while(parenthesis_evaluator.empty()==false)
+			{//while there are still elements inside stack evaluator
+				char top = parenthesis_evaluator.top();//topmost element of the parenthesis evaluator
+				parenthesis_evaluator.pop(); 
+				if(top>=a && top<=z)
+				{
+					evaluated_expression_temp+=top;
+				}
+				if(top=='+')continue;//since acts the same way as though it were a single expression
+				
+			}
+		}
+		stack_main.push(current_char);
+		string.erase(0,1);//removing the 0th element of the string after pushing onto the stack
 
 	}
 
-	  output << expression<< endl;//printing out the result of the expression
+	stack_main.push();
+	while(stack_main.empty()==false)
+	{
+
+		expression = stack_main.top();
+		stack_main.pop();
+	}
+
+	  output <<expression<< endl;//printing out the result of the expression
   }
 
   return 0;
