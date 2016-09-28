@@ -1,6 +1,6 @@
 GTEST_LL = -I /usr/include/gtest/ -l gtest -l gtest_main -pthread
 
-all: llist stackstring
+all: llist stackstring stringparser
 
 llist: lliststring_test.cpp
 	g++ -g -Wall -c lliststring.cpp -o lliststring.o
@@ -14,3 +14,10 @@ stackstring: stackstringtest.cpp
 	g++ -g -Wall stackstring.o lliststring.o stackstringtest.cpp $(GTEST_LL) -o stackstringtest
 	valgrind --leak-check=yes --tool=memcheck  --track-origins=yes ./stackstringtest
 	./stackstringtest
+
+stringparser: stringparser.cpp
+	g++ -g -Wall stringparser.cpp -o stringparser
+	valgrind --leak-check=yes --tool=memcheck  --track-origins=yes ./stringparser hw3_destroyer.in hw3_destroyer_out.txt
+	./stringparser hw3_destroyer.in hw3_destroyer_out.txt
+	rm stringparser
+	
