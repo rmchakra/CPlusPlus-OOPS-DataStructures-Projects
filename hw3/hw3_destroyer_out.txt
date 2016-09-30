@@ -1,13 +1,13 @@
+c+b+a
+Malformed
+Malformed
+(
+Malformed
+Malformed
+Malformed
+edcba
 
-Malformed
-Malformed
-()
-Malformed
-Malformed
-Malformed
-abcde
-
-dfsgh
+hgsfd
 Malformed
 Malformed
 Malformed

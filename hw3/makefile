@@ -16,8 +16,9 @@ stackstring: stackstringtest.cpp
 	./stackstringtest
 
 stringparser: stringparser.cpp
+	reset
 	g++ -g -Wall stringparser.cpp -o stringparser
 	valgrind --leak-check=yes --tool=memcheck  --track-origins=yes ./stringparser hw3_destroyer.in hw3_destroyer_out.txt
 	./stringparser hw3_destroyer.in hw3_destroyer_out.txt
-	rm stringparser
+	
 	

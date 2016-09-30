@@ -113,6 +113,33 @@ bool invalid_input(string expression)
 	return false;
 }
 
+
+void stack_evaluator(stack<string>& stack_main)
+{
+
+}
+
+
+/*
+//overloading operators
+string LListString::operator- (const LListString& other)
+  {
+
+    if(this == &other)return *this;//if assigning to itself which 
+    //could cause issues after clearing
+
+  this->clear();
+
+    for(int i =0; i<other.size();i++)
+    {
+      this->insert(i, other.get(i));
+    }
+
+    return *this;
+
+  }
+*/
+
 int main(int argc, char* argv[])
 {
   if(argc < 3){
@@ -143,52 +170,134 @@ int main(int argc, char* argv[])
 	}
 
 //############################################################################################
-	//From here onwards actual stack calculations begin expression is the whole linewise expression
+//EACH LINE EVALUATION
+
+//From here onwards actual stack calculations begin expression is the whole linewise expression
 //to remove from string is string.erase(pos,number of characters to erase)
 // 	keep pushing onto stack 1
 // if close bracket - pop from stack 1 and push onto stack 2 until open brace reached at top
 // once open brace is reached in popping mode, pop it from the top
 // evaluate stack 2
 // push stack 2 result to top of stack 1
-	stack <string> stack_main, parenthesis_evaluator;//void push(value_to_push), void pop() string top(), string.erase(pos,number of characters to erase)
+// if add and minus performed without braces then invalid expression add check for that eg a+b-c is invalid
+	//add a clear function if malformed expression
+	stack <string> stack_main;//void push(value_to_push), void pop() string top(), string.erase(pos,number of characters to erase)
 
+
+string current_string= "";
 	while(expression!="")
-	{//while there are still elements inside the evaluator
-		char current_char = expression[0];//the current character on the expression
-		if(current_char==')')
-		{//if closing paranthesis encountered dont continue adding new elements but evaluate current ones
-			while(current_char!="(")
-			{//check situation where ( is encountered  whether unnecessary done
-				current_char = stack_main.top();
-				parenthesis_evaluator.push(current_char);//pushing expression to be evaluated onto stack_evaluator
-				//open brace will be pushed onto evaluator as top but will be popped from stack_main
-				stack_main.pop();
-			}
-			parenthesis_evaluator.pop();//popping the open brace from the stack_evaluator
-			//stack evaluator 
-			string evaluated_expression_temp="";//each evaluated expression within braces
-			while(parenthesis_evaluator.empty()==false)
-			{//while there are still elements inside stack evaluator
-				char top = parenthesis_evaluator.top();//topmost element of the parenthesis evaluator
-				parenthesis_evaluator.pop(); 
-				if(top>=a && top<=z)
-				{
-					evaluated_expression_temp+=top;
-				}
-				if(top=='+')continue;//since acts the same way as though it were a single expression
-				
-			}
-		}
-		stack_main.push(current_char);
-		string.erase(0,1);//removing the 0th element of the string after pushing onto the stack
+	{//while there are still elements inside the original expression
+		string current_char = "";
+		current_char += expression[0];//converting the char received into a string
+		//the current character on the expression is changed to a string by adding the character onto an empty string
+		expression.erase(0,1);//removing the 0th element of the string after pushing onto the stack		
 
+
+		if(current_char>="a"&& current_char<="z")
+		{
+			current_string += current_char;//adding the letters
+			continue;//move onto next character of expression
+		}
+
+
+
+//############################################################################################
+		//AN OPERATION HAS BEEN ENCOUNTERED
+		stack_main.push(current_string);//the string is now pushed onto the stack
+		current_string.clear();	//check for pushing empty string
+//############################################################################################
+	//Close brace operation encountered is this section - skip over this section for any other operation
+		if(current_char==")")
+		{//if closing paranthesis encountered dont continue adding new elements but evaluate current ones from opening until that position 
+
+			string evaluated_expression_temp ="";
+			while(stack_main.top()!="(")
+			{//check situation where ( is encountered  whether unnecessary done
+				//
+				parenthesis_evaluator.push(stack_main.top());
+				stack_main.pop();//remove topmost
+				//parenthesis evaluator now contains the expression for the parenthesis
+			}
+			stack_main.pop();//removing opening brace
+			//parenthesis evaluator when you access will give commands in correct order
+
+
+
+			//clearing parenthesis_evaluator and performing operations
+			int front_remove_c =0, back_remove_c =0;//counts number of front and back characters to be removed
+			while(parenthesis_evaluator.size()>0)//contains everything except the braces
+			{
+				//actually calculate the parenthesis operation
+				if(parenthesis_evaluator.top()=="<")//last character to be removed
+				{
+					back_remove_c++;
+				}
+				else if(parenthesis_evaluator.top()==">")//front character to be removed
+				{
+					front_remove_c++;
+				}
+				else if(parenthesis_evaluator.top()=="+")
+				{
+
+				}
+				else
+				{//if it is a string
+					//remove last char
+						string current_parenthesis_string = parenthesis_evaluator.top();
+						current_parenthesis_string.erase((current_parenthesis_string.size()-back_remove_c),back_remove_c);//removing the 0th element of the string after pushing onto the stack	
+						back_remove_c = 0;
+						current_parenthesis_string.erase((current_parenthesis_string.size()-back_remove_c),back_remove_c);//removing the 0th element of the string after pushing onto the stack	
+						back_remove_c = 0;
+				}
+
+				parenthesis_evaluator.pop();
+			}
+			stack_main.push(evaluated_expression_temp);
+			evaluated_expression_temp.clear();//emptying out the evaluated expression
+		//AFTER SOLVING FOR THE EVALUATED EXPRESSION]
+
+
+		// 		if(stack_main.top()=="")
+		// 		current_char = stack_main.top();
+		// 		parenthesis_evaluator.push(current_char);//pushing expression to be evaluated onto stack_evaluator
+		// 		//open brace will be pushed onto evaluator as top but will be popped from stack_main
+		// 		stack_main.pop();
+		// 	}
+		// 	stack_main.pop();//removing the "(" from the main stack for which the expression was evaluated
+
+
+		// 	parenthesis_evaluator.pop();//popping the open brace from the stack_evaluator
+		// 	//stack evaluator 
+		// 	string evaluated_expression_temp="";//each evaluated expression within braces
+		// 	while(parenthesis_evaluator.empty()==false)
+		// 	{//while there are still elements inside stack evaluator
+		// 		string top = parenthesis_evaluator.top();//topmost element of the parenthesis evaluator
+		// 		parenthesis_evaluator.pop(); 
+		// 		if(top!="-" && top!="<" && top!=">"&& top!="+")
+		// 		{//if not an operation but a string
+		// 			evaluated_expression_temp+=top;
+		// 			continue;
+		// 		}
+		// 		if(top=="+")continue;//since acts the same way as though it were a single expression
+				
+		// 	}
+		// 	stack_main.push(evaluated_expression_temp);
+		// 	expression.erase(0,1);//removing the 0th element of the string after pushing onto the stack
+		// 	continue;//so the code goes to the next character and doesnt act on the other operation
+		// }
+	//############################################################################################
+		//ANY OPERATION EXCEPT ) ENCOUNTERED - SIMPLY PUSH ONTO STACK
+	stack_main.push(current_char);
+
+
+		//simply push onto main if no close
+		
 	}
 
-	stack_main.push();
-	while(stack_main.empty()==false)
+	while(!stack_main.empty())//while it has elements
 	{
 
-		expression = stack_main.top();
+		expression += stack_main.top();
 		stack_main.pop();
 	}
 
