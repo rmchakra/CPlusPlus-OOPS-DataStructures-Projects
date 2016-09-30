@@ -71,9 +71,11 @@ void remove_spaces(string& expression)
 	while (ss >> temp) //>>skips over white spaces
 	{expression+=temp;}
 }
-bool invalid_input(string expression)
+bool invalid_input(string &expression)
 { //checks for invalid characters or unmatched brackets
 	int unmatched_brace_counter = 0;
+	int brace_flag=0;
+	int plus_or_minus_flag=0;
 	for(unsigned int i = 0; i<expression.size(); i++)
 	{ 
 		if(unmatched_brace_counter<0)
@@ -85,16 +87,19 @@ bool invalid_input(string expression)
 
 		if(c == '<' || c == '>' || c == '+'|| c == '-')
 		{//valid operation characters
+			if(c=='+'||c=='-')plus_or_minus_flag++;
 			continue;//skips to next iteration so invalid_characters_present is not set to true
 		}
 		if(c == '(')
 		{
 			unmatched_brace_counter++;
+			brace_flag++;
 			continue;
 		}
 		if(c == ')')
 		{
 			unmatched_brace_counter--;
+			brace_flag++;
 			continue;
 		}
 		if(c >='a' && c <= 'z')
@@ -110,35 +115,16 @@ bool invalid_input(string expression)
 	 //so if more open than closed
 		return true;
 	}
+	if(brace_flag ==0 && plus_or_minus_flag==0)
+	{//no braces encountered and no + or - then add braces
+		expression= "("+expression;
+		expression+=")";
+
+	}
+
 	return false;
 }
 
-
-void stack_evaluator(stack<string>& stack_main)
-{
-
-}
-
-
-/*
-//overloading operators
-string LListString::operator- (const LListString& other)
-  {
-
-    if(this == &other)return *this;//if assigning to itself which 
-    //could cause issues after clearing
-
-  this->clear();
-
-    for(int i =0; i<other.size();i++)
-    {
-      this->insert(i, other.get(i));
-    }
-
-    return *this;
-
-  }
-*/
 
 int main(int argc, char* argv[])
 {
@@ -207,6 +193,9 @@ string current_string= "";
 		current_string.clear();	//check for pushing empty string
 //############################################################################################
 	//Close brace operation encountered is this section - skip over this section for any other operation
+
+/*
+
 		if(current_char==")")
 		{//if closing paranthesis encountered dont continue adding new elements but evaluate current ones from opening until that position 
 
@@ -284,7 +273,10 @@ string current_string= "";
 		// 	stack_main.push(evaluated_expression_temp);
 		// 	expression.erase(0,1);//removing the 0th element of the string after pushing onto the stack
 		// 	continue;//so the code goes to the next character and doesnt act on the other operation
-		// }
+	 }
+
+
+	 */
 	//############################################################################################
 		//ANY OPERATION EXCEPT ) ENCOUNTERED - SIMPLY PUSH ONTO STACK
 	stack_main.push(current_char);
@@ -295,8 +287,7 @@ string current_string= "";
 	}
 
 	while(!stack_main.empty())//while it has elements
-	{
-
+	{//prints out the whole expression
 		expression += stack_main.top();
 		stack_main.pop();
 	}
