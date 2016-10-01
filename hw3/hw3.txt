@@ -1,0 +1,21 @@
+part2
+(a)
+stack 1 intially contains 1 below 2, then since stack 2 is empty stack 2 now has after dequeue has just 2 as 1 is popped from it after transfering
+3 with on top 4 is then put onto stack 1.
+Next dequeue since stack 2 has elements only the top i.e. 1 is removed
+5 and 6 is then placed on 4 in stack 1
+so finally stack 1 - 3, 4, 5, 6 from lower to higher and stack 2 is empty
+
+(b)
+if stack 2 is empty then the entire contents of n are shifted to it from stack 1 so dequeue is O(n)
+Enqueue has a costant runtime of O(1) since only 1 operation is performed on it
+
+(c)
+for enqueue amortized runtime is simply O(1) as it is constant runtime for n times thus each one will be n/n time = 1
+for Dequeue most of the time the stack will not be empty thus calling it will take constant runtime of O(1) to simply pop an elemenet. However in one case where the stack is empty i.e. 1/n it will take n operations to be perform so n*1/n = 1. Thus the amortized runtime for dequeue will be constant
+
+(d)
+push(x) taking Θ(1) time, and pop() taking Θ(n)
+worst case of enqueue(x) and dequeue()
+Enqueue will take 0(1) for both its worst case and its amortized runtime as there is no variation in the cases. 
+Dequeue 0(n^2) in worst case as it pops O(n) for n operations amrtized or average will be  0(n)

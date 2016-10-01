@@ -39,7 +39,6 @@ Push open parenthesis '(', strings, and operators onto the stack. When you encou
      then push that result onto the stack as a string 
 
      USE STL STACK
-Checking parenthetisization
 if open bracket push onto stack1
 continue pushing if anything except close
 if next char is close keep pushing top onto another stack2 and pop present stack1 until open brace reached then just pop
@@ -60,6 +59,9 @@ push stack 2 result to top of stack 1
 #include <fstream>
 #include <sstream>
 #include <stack> 
+//the stack class is currently implemented for de
+#include "stackstring.h"
+#include "lliststring.h"
 #include <string>
 
 using namespace std;
@@ -82,39 +84,34 @@ string minus_string(string a, string b)
 }
 
 bool invalid_input(string &expression)
-//TESTED
+//May have issues
 { //checks for invalid characters or unmatched brackets
 	int unmatched_brace_counter = 0;
 	int brace_flag=0;
 	int plus_or_minus_flag=0;
-	for(unsigned int i = 0; i<expression.size(); i++)
+	for( unsigned int i = 0; i<expression.size(); i++)
 	{ 
 		if(unmatched_brace_counter<0)
 		{//if more closing braces than open at any point in the expression
 			return true;
+
 		}
 
 		char c = expression[i];
 
+
 		if(c == '<' || c == '>' || c == '+'|| c == '-')
 		{//valid operation characters
-			// if(i<expression.size()-1)
-			// {
-			// 	if(expression[i+1]==')')
-			// 	{
-			// 		return true;
-			// 	}
-			// }
-			if(c=='+'||c=='-')plus_or_minus_flag++;
+			if(c=='+'||c=='-'){plus_or_minus_flag++;}
 			continue;//skips to next iteration so invalid_characters_present is not set to true
 		}
-		if(c == '(')
+		 if(c == '(')
 		{
 			unmatched_brace_counter++;
 			brace_flag++;
 			continue;
 		}
-		if(c == ')')
+		 if(c == ')')
 		{
 			unmatched_brace_counter--;
 			brace_flag++;
@@ -122,9 +119,13 @@ bool invalid_input(string &expression)
 		}
 		if(c >='a' && c <= 'z')
 		{//valid string characters as letters if not operation then can check range of letters
+			
 			continue;
 		}
+		
 		return true;
+		
+		
 		//if this statement is reached then invalid characters are present as otherwise it 
 		//skips to next iteration through continue
 	}
@@ -158,7 +159,7 @@ bool is_operator(string c)
 }
 
 
-void print_stack(stack<string> stack_main)
+void print_stack(StackString stack_main)
 {
 	while(!stack_main.empty())//while it has elements
 	{//prints out the whole expression	
@@ -173,13 +174,17 @@ bool is_string(string h)
 	return false;
 }
 
-bool expression_evaluator(string& expression, stack<string>& stack_main)
+bool expression_evaluator(string& expression, StackString& stack_main)
 {//If malformed at any point simply return false to iterate to next expression
 	//RETURNS STACK WITH JUST 1 ELEMENT WHICH IS RESULT
-	//cout <<"HERE"<<endl;
 	remove_spaces(expression);//removes the spaces from the expression
-	if(invalid_input(expression))return false;//checks for invalid expression before any operation is performed
-	stack<string> parenthesis_evaluator;
+	if(invalid_input(expression))
+	{cout<<"STARTING FUNCT PROB"<<endl;
+		return false;
+	}
+	//checks for invalid expression before any operation is performed
+	StackString parenthesis_evaluator;
+	print_stack(stack_main);
 
 //############################################################################################
 //From here onwards actual stack calculations begin expression is the whole linewise expression
@@ -197,14 +202,36 @@ bool expression_evaluator(string& expression, stack<string>& stack_main)
 
 
 	string current_string= "";//to add characters and store consequetive characters as strings
+	//int back_remove_c=0, front_remove_c = 0, open_brace_counter;
+
+
+	//ALG places braces around expression
+
+
 	while(expression!="")
 	{//while there are still elements inside the original expression
 		string current_char ="";
 		current_char += expression[0];
 		expression.erase(0,1);//removing the 0th element of the string after pushing onto the stack		
 
+		// if(current_char=="<" )
+		// {
+		// 	back_remove_c++;
+		// 	//dont add it to the array
+		// }
+		// if(current_char==">")
+		// {//<> to take effect need another operator
+		// 	 front_remove_c++;//adding the letters
+		// 		//move onto next character of expression
+		// }
+		// if(current_char=="(")
+		// {
+		// 	open_brace_counter++;
+		// }
+
+		//print_stack(stack_main);
 		if(current_char>="a"&& current_char<="z")
-		{
+		{//<> to take effect need another operator
 			current_string += current_char;//adding the letters
 			continue;//move onto next character of expression
 		}
@@ -212,16 +239,25 @@ bool expression_evaluator(string& expression, stack<string>& stack_main)
 //############################################################################################
 		//AN OPERATION HAS BEEN ENCOUNTERED
 		if(current_string!="")
-		{//current string is not empty i.e.e characters saved on it
+		{//current string is not empty i.e. characters saved on it
+			
+			// if(open_brace_counter==0)
+			// {
+				// current_string.erase((current_string.size()-1-back_remove_c),back_remove_c);//removing the 0th element of the string after pushing onto the stack	
+				// back_remove_c = 0;
+				// current_string.erase(0,front_remove_c);//removing the 0th element of the string after pushing onto the stack	
+				// front_remove_c = 0;
+
+			// }
+
 			stack_main.push(current_string);//the string is now pushed onto the stack
-			//current_string.clear();	
+			current_string.clear();	
 		}
 
 		if(current_char!=")")
 		{//any operation except close brace is simply pushed onto stack
-			//before pushing onto the stack simply deal with the <>
 			stack_main.push(current_char);
-			 //print_stack(stack_main);
+			// print_stack(stack_main);
 		}
 		else//close brace has been encountered. remember just strings also I have added braces onto
 		{//after this I need to have evaluator pushed onto main stack
@@ -235,7 +271,7 @@ bool expression_evaluator(string& expression, stack<string>& stack_main)
 				parenthesis_evaluator.push(stack_main.top());//parenthesis evaluator now contains parenthis of main
 				stack_main.pop();
 			}
-			;
+			
 			stack_main.pop();//remove "("
 			//before a parenthesis has to be an operator, cant be a string
 				//HERE IS MAIN STACK IS EMPTY
@@ -245,7 +281,7 @@ bool expression_evaluator(string& expression, stack<string>& stack_main)
 
 			int back_remove_c=0, front_remove_c = 0, first_string_flag=0;
 			string current_parenthesis_string ="";
-			while(parenthesis_evaluator.size()>0)//contains everything except the braces
+			while(!parenthesis_evaluator.empty()>0)//contains everything except the braces
 			{//current_parenthesis_string contains the result of the parenthesis and should be pushed onto main stack
 				
 				if(parenthesis_evaluator.top()=="<")//last character to be removed
@@ -260,7 +296,7 @@ bool expression_evaluator(string& expression, stack<string>& stack_main)
 				}
 				else if(parenthesis_evaluator.top()=="+")
 				{
-					if(front_remove_c>0 ||back_remove_c>0 || first_string_flag == 0)return false;//<> then + which is not possible
+					//if(front_remove_c>0 ||back_remove_c>0 || first_string_flag == 0)return false;//<> then + which is not possible
 					parenthesis_evaluator.pop();
 					if(is_string(parenthesis_evaluator.top()))
 					{//if it is a string
@@ -278,20 +314,20 @@ bool expression_evaluator(string& expression, stack<string>& stack_main)
 				}
 				else
 				{//it is a string
-					if(first_string_flag == 0)
-					{
-						first_string_flag++;
+					// if(first_string_flag == 0)
+					// {
+						//first_string_flag++;
 						current_parenthesis_string = parenthesis_evaluator.top();
 						parenthesis_evaluator.pop();
-					}
-					else
-					{
-						current_parenthesis_string.erase((current_parenthesis_string.size()-1-back_remove_c),back_remove_c);//removing the 0th element of the string after pushing onto the stack	
+					// }
+					// else
+					// {
+						current_parenthesis_string.erase((current_parenthesis_string.size()-back_remove_c),back_remove_c);//removing the 0th element of the string after pushing onto the stack	
 						back_remove_c = 0;
 						current_parenthesis_string.erase(0,front_remove_c);//removing the 0th element of the string after pushing onto the stack	
 						front_remove_c = 0;
 
-					}	
+					//}	
 				}
 			
 			}
@@ -300,17 +336,13 @@ bool expression_evaluator(string& expression, stack<string>& stack_main)
 				
 					
 	}//while brace
-			//stack_main.pop();//removes the opening brace
-					
+			//stack_main.pop();//removes the opening brace		
 	return true;
 }	  
 
 int main(int argc, char* argv[])
 {
-  if(argc < 3){
-    cerr << "Please provide an input and output file." << endl;
-    return 1;
-  }
+  
   ifstream input(argv[1]);
   ofstream output(argv[2]);
 
@@ -326,7 +358,7 @@ int main(int argc, char* argv[])
   		continue;
   	}
 
-  	stack <string> stack_main;
+  	StackString stack_main;
   	if(expression_evaluator(expression, stack_main) ==false)
   	{
   		output <<"Malformed"<< endl;
@@ -334,14 +366,21 @@ int main(int argc, char* argv[])
   	}
 
 	//print_stack(stack_main);
-  
-  	output <<stack_main.top()<< endl;//printing out the result of the expression before going to next one
+	// if(stack_main.size()!=1)
+	// {
+	// 	//vector <string> v[stack_main.size()];
+	// 	// for(unsigned int i = 0; i< stack_main.size(); i++)
+	// 	// {
+	// 	// 	cout<<stack_main.top()<< stack_main.size()<<endl;
+	// 	// 	stack_main.pop();
+
+	// 	// }
+	// }
+	output <<stack_main.top()<<endl;//printing out the result of the expression before going to next one  	
   	stack_main.pop();//emptying out the stack for the last iteration
   }
   return 0;
 }
-
-
 
 
 
