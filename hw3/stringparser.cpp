@@ -272,7 +272,7 @@ bool expression_evaluator(string& expression, StackString& stack_main)
 				stack_main.pop();
 			}
 			
-			stack_main.pop();//remove "("
+			//stack_main.pop();//remove "("
 			//before a parenthesis has to be an operator, cant be a string
 				//HERE IS MAIN STACK IS EMPTY
 			if(!stack_main.empty())
