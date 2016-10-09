@@ -1,13 +1,3 @@
-/*
- * Scrabble.cpp
- *
- *  Created on: Sep 18, 2016
- *      Author: kempe
- */
-
-// The following is a suggestion for how to proceed.
-// Feel free to make any changes you like.
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -58,6 +48,15 @@ void readConfigFile (string config_file_name,
 		throw invalid_argument("Dictionary file name not specified in config file");
 }
 
+bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag)
+{
+
+	
+
+	return false;//if everything goes smoothly and it reaches the end
+
+}
+
 int main (int nargs, char **args)
 {
 	if (nargs < 2 || nargs > 2)
@@ -75,6 +74,8 @@ int main (int nargs, char **args)
 		Bag bag (bagFileName, 10); // second argument is random seed
 
 		// Good luck!
+
+		if(main_incorrect_command (dict, board, bag)  ) cout<<"incorrect_command";
 
 		return 0;
 	}

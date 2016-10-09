@@ -54,7 +54,7 @@ Bag::~Bag ()
 }
 
 void Bag::addTile (Tile *tile)
-{
+{//adds tiles to a random position in bad
 	_tiles.push_back (tile);
 	int j = rand() % _tiles.size();
 	_tiles[_tiles.size()-1] = _tiles[j];
