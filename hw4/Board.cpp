@@ -35,6 +35,8 @@ Board::Board (string board_file_name)
 
 	// Anything else you need to initialize?
 
+	a = new string [_x][_y];
+
 	for (int i = 0 ; i < _y; ++ i)
 	{
 		getline (boardFile, row);
@@ -60,4 +62,13 @@ Board::Board (string board_file_name)
 		}
 	}
 	boardFile.close ();
+}
+
+Board::~Board()
+{
+	for(int i = 0; i<_x; i++)
+	{
+		delete[] a[i];
+	}
+	delete[] a;
 }

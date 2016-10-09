@@ -24,6 +24,7 @@ private:
 	int _startx, _starty;
 
 	// What else will this need?
+	string* a;
 
 };
 

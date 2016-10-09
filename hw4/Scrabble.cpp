@@ -9,6 +9,7 @@
 #include "Dictionary.h"
 #include "Bag.h"
 #include "Board.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ void readConfigFile (string config_file_name,
 
 	if (!configFile.is_open())
 		throw invalid_argument("Cannot open file: " + config_file_name);
-	while (getline (configFile, line))
+	while (getline (configFile, line) )
 	{
 		stringstream ss (line);
 		string parameter;
@@ -49,8 +50,30 @@ void readConfigFile (string config_file_name,
 }
 
 bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag)
-{
+{//gameplay goes on in here and if incorrect command is entered then you return true from here
+	
+	vector<Player> players;
+	//initial set up
+	int number_of_players=0;
+	cout<<"Please enter the number of players (1-8): ";
+	cin>>number_of_players; cout<<endl;
+	
+	for(int i = 0; i<number_of_players; i++)
+	{
+		string player_name;
+		cout<<"Enter name of player " << i << ":";
+		cin.getline(player_name, player_name.max_size()); 
+		cout<<endl;//or this is getline(cin, player_name);
+	}
 
+	bool engame = false;
+	while(!endgame)
+	{//player runs out of letters when all tiles have already been taken from the bag
+		//after every move check if a player has no tiles
+		
+
+		if( (bag.tilesRemaining()==0 ) && /**/ ) engame = true; break;
+	}
 	
 
 	return false;//if everything goes smoothly and it reaches the end
