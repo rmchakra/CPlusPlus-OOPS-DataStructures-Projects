@@ -12,10 +12,15 @@
 #define DICTIONARY_H_
 
 #include <string>
+#include <set>
+#include <fstream>
+#include <iostream>
+#include <stdexcept>
 
 class Dictionary {
 public:
 	Dictionary (std::string dictionary_file_name);
+	is_present_bin_search(std::string word);
 	is_present(std::string word);
 
 	// what else will this need?

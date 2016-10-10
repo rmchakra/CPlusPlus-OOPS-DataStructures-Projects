@@ -12,7 +12,7 @@
 #define BOARD_H_
 
 #include <string>
- #include <Tile.h>
+// #include <Tile.h>
 
 class Board {
 public:
@@ -20,7 +20,7 @@ public:
 	~Board();
 
 	// What else will this need?
-	void Board::print();
+	void print();
 	std::string** get_board();
 	void set_board(std::string** input_board);
 
@@ -30,7 +30,7 @@ private:
 	int _startx, _starty;
 
 	// What else will this need?
-	string** board;
+	std::string** board;
 
 };
 

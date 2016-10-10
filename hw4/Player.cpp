@@ -59,7 +59,7 @@ using namespace std;
 		}
  	}
 
- 	void Player::place( char dir, int row, int column, std::string tiles, Board& board_obj)
+ 	void Player::place( char dir, int s_row, int s_column, std::string tiles, Board& board_obj)
 	{//placed instructions given with spaces between
 
 		row--;column--;//chaning rows and columns to start from 0 not 1
@@ -74,8 +74,8 @@ using namespace std;
 
 		else
 		{//deemed valid and board = row, column
-			int move_score = 0, 2w_cntr = 0, 3w_cntr = 0, occ_tiles=0;
-
+			int move_score = 0, 2w_cntr = 0, 3w_cntr = 0, occ_tiles=0, c_row = s_row, c_column = s_column;
+			//c_row, c_column are the current positions on the board of the program
 			for(int i = 0; i< (tiles.size() + occ_tiles);i++)
 			{
 				

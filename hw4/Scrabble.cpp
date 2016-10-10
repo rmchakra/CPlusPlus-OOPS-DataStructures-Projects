@@ -5,11 +5,11 @@
 #include <cstdlib>
 #include <stdexcept>
 
-#include "Tile.h"
-#include "Dictionary.h"
-#include "Bag.h"
 #include "Board.h"
-#include "Player.h"
+// #include "Player.h"
+// #include "Tile.h"
+// #include "Dictionary.h"
+// #include "Bag.h"
 
 using namespace std;
 
@@ -49,9 +49,12 @@ void readConfigFile (string config_file_name,
 		throw invalid_argument("Dictionary file name not specified in config file");
 }
 
-bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag)
+bool main_incorrect_command(Board& board)
 {//gameplay goes on in here and if incorrect command is entered then you return true from here
-	
+//main_incorrect_command(Dictionary& dict, Board& board, Bag& bag)
+	board.print();
+
+/*	
 	vector<Player> players;
 	//initial set up
 	int number_of_players=0;
@@ -72,10 +75,10 @@ bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag)
 		//after every move check if a player has no tiles
 		
 
-		if( (bag.tilesRemaining()==0 ) && /**/ ) engame = true; break;
+		if( (bag.tilesRemaining()==0 ) && ) engame = true; break;//after the and there is conditions needed to be checked
 	}
 	
-
+*/
 	return false;//if everything goes smoothly and it reaches the end
 
 }
@@ -92,14 +95,14 @@ int main (int nargs, char **args)
 						dictionaryFileName, boardFileName, bagFileName,
 						numTiles);
 
-		Dictionary dict (dictionaryFileName);
+		//Dictionary dict (dictionaryFileName);
 		Board board (boardFileName);
-		Bag bag (bagFileName, 10); // second argument is random seed
+		//Bag bag (bagFileName, 10); // second argument is random seed
 
 		// Good luck!
 
-		if(main_incorrect_command (dict, board, bag)  ) cout<<"incorrect_command";
-
+		if(main_incorrect_command (board) ) cout<<"incorrect_command";
+		//if(main_incorrect_command (dict, board, bag)  ) cout<<"incorrect_command";
 		return 0;
 	}
 	catch (invalid_argument & e)

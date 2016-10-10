@@ -15,30 +15,28 @@
 #include <stdexcept>
 #include "Board.h"
 
-using namespace std;
-
-Board::Board (string board_file_name)
+Board::Board (std::string board_file_name)
 {
-	ifstream boardFile (board_file_name.c_str());
-	string row;
+	std::ifstream boardFile (board_file_name.c_str());
+	std::string row;
 
 	_x = _y = _startx = _starty = 0; // to appease compiler
 	if (!boardFile.is_open())
-		throw invalid_argument("Cannot open file: " + board_file_name);
+		throw std::invalid_argument("Cannot open file: " + board_file_name);
 	getline (boardFile, row);
-	stringstream s1 (row);
+	std::stringstream s1 (row);
 	s1 >> _x >> _y;
 	getline (boardFile, row);
-	stringstream s2 (row);
+	std::stringstream s2 (row);
 	s2 >> _startx >> _starty;
 	_startx --; _starty --;  // coordinates from 0 in array
 
 	// Anything else you need to initialize?
 	//initializing board
-	board = new string* [_x];
+	board = new std::string* [_x];
 	for(int i = 0; i<_x; i++)
 	{
-		board[i] = new string [_y];
+		board[i] = new std::string [_y];
 	}
 
 	for (int i = 0 ; i < _y; ++ i)
@@ -47,21 +45,21 @@ Board::Board (string board_file_name)
 		for (int j = 0; j < _x; ++ j)
 		{//j is the column
 			// Fill in the following based on how you store the board.
-			if (i == _starty && j == _startx) {board[i][j]).useAs ('S'); }
+			if (i == _starty && j == _startx) {board[i][j] =".**"; }
 			else switch (row[j]) {
-			case '.' : board[i][j]="..";
+			case '.' : board[i][j]="...";
 			break;
-			case '2' : [board[i][j] = ".2";
+			case '2' : board[i][j] = ".2 ";
 			break;//double letter
-			case '3' : board[i][j] = ".3";
+			case '3' : board[i][j] = ".3 ";
 			break;//double letter
-			case 'd' : board[i][j] = ".d";
+			case 'd' : board[i][j] = ".d ";
 			break;//double word bonus
-			case 't' : board[i][j] = ".t";
+			case 't' : board[i][j] = ".t ";
 			break;//triple word bonus
 			default:
-				string error = "Improper character in Board file: ";
-				throw invalid_argument(error + row[j]);
+				std::string error = "Improper character in Board file: ";
+				throw std::invalid_argument(error + row[j]);
 			}
 		}
 	}
@@ -70,40 +68,55 @@ Board::Board (string board_file_name)
 
 void Board::print()
 {
-	for(int i =0; i<_y;++i)
+	std::cout<<"LEGEND"<<std::endl;
+	std::cout<<"... = empty tile"<<std::endl;
+	std::cout<<".**= start spot"<<std::endl;
+	std::cout<<".2 = double letter"<<std::endl;
+	std::cout<<".3 = triple letter"<<std::endl;
+	std::cout<<".d = double word"<<std::endl;
+	std::cout<<".t = triple word"<<std::endl;
+
+
+	std::cout<<std::endl;
+	std::cout<<"BOARD"<<std::endl;
+	
+	for(int i =0; i<=_y;++i)
 	{
-		cout<<i;
+		if(i<10) std::cout<<i << "   ";//if single digit occupies only 1 char but 2 digits occupy 2
+		else std::cout<<i << "  ";//one space less for allignment
 	}
 
-	cout<<endl;
+	std::cout<<std::endl;
 	
 	for (int i = 0 ; i < _y; ++ i)
 	{
-		cout<<i+1<< " ";
+		if(i<9) std::cout<<i+1<<"  ";
+		else std::cout<<i+1<<" ";
+
 		for (int j = 0; j < _x; ++ j)
 		{
-			cout<<board[i][j];
+			std::cout<<board[i][j] << " ";
 		}
-		cout<<endl;
+		std::cout<<std::endl;
 	}
 }
 
-std::string** get_board()
+std::string** Board::get_board()
 {
 	return board;
 }
 
 
-void set_board(std::string** input_board)
+void Board::set_board(std::string** input_board)
 {
 	board = input_board;
 }
 
 Board::~Board()
 {
-	for(int i = 0; i<_x+1; i++)
+	for(int i = 0; i<_x; i++)
 	{
-		delete[] a[i];
+		delete[] board[i];
 	}
-	delete[] a;
+	delete[] board;
 }
