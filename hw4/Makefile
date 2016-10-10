@@ -8,7 +8,7 @@ GTEST = -I /usr/include/gtest/ -l gtest -l gtest_main -pthread
 VG = valgrind --tool=memcheck --leak-check=yes --track-origins=yes
 
 
-all: Board Scrabble clean
+all: Board Dictionary Scrabble clean
 	
 Board: Board.cpp
 	$(CXX) $(CPPFLAGS) -c $^ -o Board.o	
