@@ -24,4 +24,5 @@ Scrabble: Dictionary.o Scrabble.cpp
 
 clean:
 	rm Board.o
+	rm Dictionary.o
 	rm scrabble
