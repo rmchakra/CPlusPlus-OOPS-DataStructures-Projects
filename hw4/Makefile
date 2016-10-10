@@ -13,7 +13,10 @@ all: Board Scrabble clean
 Board: Board.cpp
 	$(CXX) $(CPPFLAGS) -c $^ -o Board.o	
 
-Scrabble: Board.o Scrabble.cpp
+Dictionary: Dictionary.cpp 
+	$(CXX) $(CPPFLAGS) -c $< -o Dictionary.o
+
+Scrabble: Dictionary.o Scrabble.cpp
 	$(CXX) $(CPPFLAGS) $^ -o scrabble
 	$(VG) ./scrabble config.txt
 

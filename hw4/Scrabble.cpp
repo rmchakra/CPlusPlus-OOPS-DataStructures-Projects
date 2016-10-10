@@ -5,10 +5,10 @@
 #include <cstdlib>
 #include <stdexcept>
 
-#include "Board.h"
+//#include "Board.h"
+#include "Dictionary.h"
 // #include "Player.h"
 // #include "Tile.h"
-// #include "Dictionary.h"
 // #include "Bag.h"
 
 using namespace std;
@@ -49,11 +49,10 @@ void readConfigFile (string config_file_name,
 		throw invalid_argument("Dictionary file name not specified in config file");
 }
 
-bool main_incorrect_command(Board& board)
+bool main_incorrect_command(Dictionary& dict)
 {//gameplay goes on in here and if incorrect command is entered then you return true from here
 //main_incorrect_command(Dictionary& dict, Board& board, Bag& bag)
-	board.print();
-
+	//board.print();
 /*	
 	vector<Player> players;
 	//initial set up
@@ -95,13 +94,13 @@ int main (int nargs, char **args)
 						dictionaryFileName, boardFileName, bagFileName,
 						numTiles);
 
-		//Dictionary dict (dictionaryFileName);
-		Board board (boardFileName);
+		Dictionary dict (dictionaryFileName);
+		//Board board (boardFileName);
 		//Bag bag (bagFileName, 10); // second argument is random seed
 
 		// Good luck!
 
-		if(main_incorrect_command (board) ) cout<<"incorrect_command";
+		if(main_incorrect_command (dict) ) cout<<"incorrect_command";
 		//if(main_incorrect_command (dict, board, bag)  ) cout<<"incorrect_command";
 		return 0;
 	}

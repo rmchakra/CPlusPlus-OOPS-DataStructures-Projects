@@ -20,12 +20,13 @@
 class Dictionary {
 public:
 	Dictionary (std::string dictionary_file_name);
-	is_present_bin_search(std::string word);
-	is_present(std::string word);
+	//is_present_bin_search(std::string word);
+	bool is_present(std::string word);
 
 	// what else will this need?
 private:
-	std::vector<string> word_list;
+	//std::vector<string> word_list;
+	std::set<std::string> dict;
 };
 
 
