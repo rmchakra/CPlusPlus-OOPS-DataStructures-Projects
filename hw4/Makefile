@@ -19,15 +19,16 @@ Tile: Tile.h
 Bag: Bag.cpp Tile.o
 	$(CXX) $(CPPFLAGS) -c $^ -o Bag.o
 
-Board: Board.cpp
+Board: Board.cpp Tile.o
 	$(CXX) $(CPPFLAGS) -c $^ -o Board.o	
 
-Player: Player.h Bag.o Tile.o
+Player: Player.h Bag.o Tile.o Dictionary.o
 	$(CXX) $(CPPFLAGS) -c $^ -o Player.o	
 
 Scrabble: Player.o Tile.o  Bag.o Board.o Dictionary.o Scrabble.cpp
 	$(CXX) $(CPPFLAGS) $^ -o scrabble
 	./scrabble config.txt
+	
 clean:
 	rm dictionary.o
 	rm tile.o

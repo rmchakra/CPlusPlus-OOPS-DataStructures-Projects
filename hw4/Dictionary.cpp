@@ -30,6 +30,7 @@ Dictionary::Dictionary (string dictionary_file_name)
 		     uncomment if your dictionary file has Windows style line breaks */
 			
 			// What do you want to do with the word?
+			cout<<word<<endl;
 			word_list.push_back(word);
 		
 		}
@@ -41,7 +42,7 @@ Dictionary::Dictionary (string dictionary_file_name)
 bool Dictionary::is_present(std::string word)
 {//binary search
 			int lo = 0, hi = word_list.size(), mid, char_pos;
-			while(lo <= hi && char_pos<word_list.size()) 
+			while(lo <= hi && char_pos<word.size()) 
 			{
 				char_pos=0;
 				mid = (hi+lo)/2;
@@ -60,15 +61,13 @@ bool Dictionary::is_present(std::string word)
 				{
 					while( (word_list[mid][char_pos]== word[char_pos]) &&  (char_pos<word.size()) )
 					{
-						
-						if( (char_pos == word.size()-1) && (word_list[mid].size() > word.size())   )
-							{hi = mid-1; break;}
-
-
 							char_pos++;
 					}
+					if( (char_pos == word.size()) && (word_list[mid].size() > word.size())   )
+							{hi = mid-1; continue;}
+					
 
-					if(word[char_pos] < word_list[mid][char_pos])
+					else if(word[char_pos] < word_list[mid][char_pos])
 					hi = mid-1;
 
 					else if(word[char_pos] > word_list[mid][char_pos])

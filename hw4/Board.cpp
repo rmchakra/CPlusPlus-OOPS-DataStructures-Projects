@@ -34,27 +34,31 @@ Board::Board (string board_file_name)
 	_startx --; _starty --;  // coordinates from 0 in array
 
 	// Anything else you need to initialize?
-
-	a = new string [_x][_y];
+	//initializing board
+	board = new string* [_x];
+	for(int i = 0; i<_x; i++)
+	{
+		board[i] = new string [_y];
+	}
 
 	for (int i = 0 ; i < _y; ++ i)
-	{
+	{//i is the row
 		getline (boardFile, row);
 		for (int j = 0; j < _x; ++ j)
-		{
+		{//j is the column
 			// Fill in the following based on how you store the board.
-			if (i == _starty && j == _startx) { }
+			if (i == _starty && j == _startx) {board[i][j]).useAs ('S'); }
 			else switch (row[j]) {
-			case '.' :
+			case '.' : board[i][j]="..";
 			break;
-			case '2' :
-			break;
-			case '3' :
-			break;
-			case 'd' :
-			break;
-			case 't' :
-			break;
+			case '2' : [board[i][j] = ".2";
+			break;//double letter
+			case '3' : board[i][j] = ".3";
+			break;//double letter
+			case 'd' : board[i][j] = ".d";
+			break;//double word bonus
+			case 't' : board[i][j] = ".t";
+			break;//triple word bonus
 			default:
 				string error = "Improper character in Board file: ";
 				throw invalid_argument(error + row[j]);
@@ -64,9 +68,40 @@ Board::Board (string board_file_name)
 	boardFile.close ();
 }
 
+void Board::print()
+{
+	for(int i =0; i<_y;++i)
+	{
+		cout<<i;
+	}
+
+	cout<<endl;
+	
+	for (int i = 0 ; i < _y; ++ i)
+	{
+		cout<<i+1<< " ";
+		for (int j = 0; j < _x; ++ j)
+		{
+			cout<<board[i][j];
+		}
+		cout<<endl;
+	}
+}
+
+std::string** get_board()
+{
+	return board;
+}
+
+
+void set_board(std::string** input_board)
+{
+	board = input_board;
+}
+
 Board::~Board()
 {
-	for(int i = 0; i<_x; i++)
+	for(int i = 0; i<_x+1; i++)
 	{
 		delete[] a[i];
 	}

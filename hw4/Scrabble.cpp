@@ -62,7 +62,7 @@ bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag)
 	{
 		string player_name;
 		cout<<"Enter name of player " << i << ":";
-		cin.getline(player_name, player_name.max_size()); 
+		getline(cin,player_name); 
 		cout<<endl;//or this is getline(cin, player_name);
 	}
 
