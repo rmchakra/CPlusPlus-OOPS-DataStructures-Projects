@@ -1,3 +1,4 @@
+//#include "Scrabble.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -5,30 +6,40 @@
 #include <cstdlib>
 #include <stdexcept>
 
-//#include "Board.h"
+#include "Board.h"
 #include "Dictionary.h"
 #include "Player.h"
-// #include "Tile.h"
-// #include "Bag.h"
+#include "Tile.h"
+#include "Bag.h"
 
-using namespace std;
+//prototypes of functions
 
-void readConfigFile (string config_file_name,
-					 string & dictionary_file_name,
-					 string & board_file_name,
-					 string & bag_file_name,
+void readConfigFile (std::string config_file_name,
+					 std::string & dictionary_file_name,
+					 std::string & board_file_name,
+					 std::string & bag_file_name,
+					 unsigned int & hand_size);
+void testing(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size);
+bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size);
+int main (int nargs, char **args);
+
+
+void readConfigFile (std::string config_file_name,
+					 std::string & dictionary_file_name,
+					 std::string & board_file_name,
+					 std::string & bag_file_name,
 					 unsigned int & hand_size)
 {
-	ifstream configFile (config_file_name.c_str());
-	string line;
+	std::ifstream configFile (config_file_name.c_str());
+	std::string line;
     bool number = false, board = false, tiles = false, dictionary = false;
 
 	if (!configFile.is_open())
-		throw invalid_argument("Cannot open file: " + config_file_name);
+		throw std::invalid_argument("Cannot open file: " + config_file_name);
 	while (getline (configFile, line) )
 	{
-		stringstream ss (line);
-		string parameter;
+		std::stringstream ss (line);
+		std::string parameter;
 		ss >> parameter;
 		if (parameter == "NUMBER:")
 			{ ss >> hand_size; number = true; }
@@ -40,32 +51,33 @@ void readConfigFile (string config_file_name,
 			{ ss >> dictionary_file_name; dictionary = true; }
 	}
 	if (!number)
-		throw invalid_argument("Hand size not specified in config file");
+		throw std::invalid_argument("Hand size not specified in config file");
 	if (!board)
-		throw invalid_argument("Board file name not specified in config file");
+		throw std::invalid_argument("Board file name not specified in config file");
 	if (!tiles)
-		throw invalid_argument("Bag file name not specified in config file");
+		throw std::invalid_argument("Bag file name not specified in config file");
 	if (!dictionary)
-		throw invalid_argument("Dictionary file name not specified in config file");
+		throw std::invalid_argument("Dictionary file name not specified in config file");
 }
 
-bool main_incorrect_command(Dictionary& dict)
+bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
 {//gameplay goes on in here and if incorrect command is entered then you return true from here
-//main_incorrect_command(Dictionary& dict, Board& board, Bag& bag)
-	//board.print();
+	
+	testing(dict,board, bag, hand_size);
+
 /*	
 	vector<Player> players;
 	//initial set up
 	int number_of_players=0;
-	cout<<"Please enter the number of players (1-8): ";
-	cin>>number_of_players; cout<<endl;
+	std::cout<<"Please enter the number of players (1-8): ";
+	std::cin>>number_of_players; std::cout<<std::endl;
 	
 	for(int i = 0; i<number_of_players; i++)
 	{
-		string player_name;
-		cout<<"Enter name of player " << i << ":";
-		getline(cin,player_name); 
-		cout<<endl;//or this is getline(cin, player_name);
+		std::string player_name;
+		std::cout<<"Enter name of player " << i << ":";
+		getline(std::cin,player_name); 
+		std::cout<<std::endl;//or this is getline(std::cin, player_name);
 		//players.push_back()
 	}
 
@@ -77,18 +89,61 @@ bool main_incorrect_command(Dictionary& dict)
 
 		if( (bag.tilesRemaining()==0 ) && ) engame = true; break;//after the and there is conditions needed to be checked
 	}
+
+
+
+
+
+
+
+	//assuming one player to test the exchange
+
+
+
+
+
+
+
 	
 */
 	return false;//if everything goes smoothly and it reaches the end
 
 }
 
+void testing(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
+{
+	board.print();
+	std::cout<<"Tiles remaining in bag BEFORE giving to player"<<std::endl;
+	std::cout << bag.tilesRemaining ()<<std::endl;
+	Player p(hand_size, bag);
+	std::cout<<"Tiles remaining in bag AFTER giving to player = BEFORE-7"<<std::endl;
+	std::cout << bag.tilesRemaining ()<<std::endl;
+	std::cout<<"no tiles result:"<<p.no_tiles()<<std::endl;
+	std::cout<<"current tiles are"<<std::endl;
+	p.print_current_tiles();
+	std::cout<<std::endl;
+	p.set_name("name");
+	std::cout<<"printing name which was set as name : "<<p.return_name()<< std::endl;
+	std::cout<<"Enter Tiles to be checked for presence"<< std::endl;
+	std::string letters;
+	std::cin>> letters;
+	std::cout<<"Tiles are present? : "<<p.tiles_present(letters)<<std::endl;;
+	std::cout<<"Tiles being exchanged now "<<std::endl;
+	p.exchange_tiles(letters, bag);
+	std::cout<<"current tiles are"<<std::endl;
+	p.print_current_tiles();
+	std::cout<<std::endl;
+	std::cout<<"Tiles after exchange in bag = BEFORE-7"<<std::endl;
+	std::cout << bag.tilesRemaining ()<<std::endl;
+
+}
+
 int main (int nargs, char **args)
 {
 	if (nargs < 2 || nargs > 2)
-		cout << "Usage: Scrabble <config-filename>\n";
+		std::cout << "Usage: Scrabble <config-filename>\n";
 	try {
-		string dictionaryFileName, boardFileName, bagFileName;
+		std::string dictionaryFileName, boardFileName, bagFileName;
 		unsigned int numTiles;
 
 		readConfigFile (args[1],
@@ -101,12 +156,11 @@ int main (int nargs, char **args)
 
 		// Good luck!
 
-		if(main_incorrect_command (dict) ) cout<<"incorrect_command";
-		//if(main_incorrect_command (dict, board, bag)  ) cout<<"incorrect_command";
+		if(main_incorrect_command (dict, board, bag, numTiles)  ) std::cout<<"incorrect_command";
 		return 0;
 	}
-	catch (invalid_argument & e)
-	{ cout << "Fatal Error! " << e.what(); }
+	catch (std::invalid_argument & e)
+	{ std::cout << "Fatal Error! " << e.what(); }
 
 	return 1;
 }

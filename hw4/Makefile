@@ -1,5 +1,6 @@
 # $< - first dependency
 # $^ - all dependencies
+# if included in the .h file then dont need to compile together just puT  as dependency and use
 
 CXX = g++
 CPPFLAGS = -g -Wall
@@ -28,7 +29,7 @@ Player: Player.cpp Player.h
 
 Scrabble: Board.o Dictionary.o Tile.h Bag.o Player.o Scrabble.cpp
 	$(CXX) $(CPPFLAGS) $^ -o scrabble
-#	./scrabble config.txt
+	./scrabble config.txt
 
 #intermediate compilation
 

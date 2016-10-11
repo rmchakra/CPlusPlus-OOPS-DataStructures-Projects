@@ -20,7 +20,7 @@ public:
 	void set_score(int score_);
 
 	void print_current_tiles();
-	bool tiles_present(std::string letter);
+	bool tiles_present(std::string letters);
 
  	void exchange_tiles(std::string tiles_2_B_Exchanged, Bag& bag);
 

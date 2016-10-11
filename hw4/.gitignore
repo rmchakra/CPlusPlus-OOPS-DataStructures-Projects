@@ -7,3 +7,4 @@ Board.o
 Dictionary.o
 Player.o
 Tile.o
+Scrabble.h
