@@ -24,10 +24,12 @@ public:
 
  	void exchange_tiles(std::string tiles_2_B_Exchanged, Bag& bag);
 
- 	bool place( char dir, int row, int column, std::string tiles, Board& board);//works on actual board
+ 	bool valid_place( char dir, int s_row, int s_column, std::string tiles, Board board_obj, Dictionary& d);
+ 	//here board is passed by value not reference
+ 	
+ 	//void place( char dir, int s_row, int s_column, std::string tiles, Board& board)
 
- 	bool valid_place( char dir, int row, int column, std::string tiles, Board board);//works on copy of board
-
+ 	
 private:
 	std::string name;
 	int score; 
