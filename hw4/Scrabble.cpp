@@ -7,7 +7,7 @@
 
 //#include "Board.h"
 #include "Dictionary.h"
-// #include "Player.h"
+#include "Player.h"
 // #include "Tile.h"
 // #include "Bag.h"
 
@@ -66,6 +66,7 @@ bool main_incorrect_command(Dictionary& dict)
 		cout<<"Enter name of player " << i << ":";
 		getline(cin,player_name); 
 		cout<<endl;//or this is getline(cin, player_name);
+		//players.push_back()
 	}
 
 	bool engame = false;
@@ -95,8 +96,8 @@ int main (int nargs, char **args)
 						numTiles);
 
 		Dictionary dict (dictionaryFileName);
-		//Board board (boardFileName);
-		//Bag bag (bagFileName, 10); // second argument is random seed
+		Board board (boardFileName);
+		Bag bag (bagFileName, 10); // second argument is random seed
 
 		// Good luck!
 

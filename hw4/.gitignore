@@ -1,3 +1,8 @@
 Scrabble
 board2.txt
 c_makefile
+Bag.o
+Board.o
+Dictionary.o
+Player.o
+Tile.o

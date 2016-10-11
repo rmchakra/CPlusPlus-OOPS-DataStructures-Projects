@@ -1,35 +1,35 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
-#include <"Tile.h">
-#include <"Bag.h">
+#include "Tile.h"
+#include "Bag.h"
 #include <iostream>
-#include <"Board.h">
-#include <"Dictionary.h">
+#include "Board.h"
+#include "Dictionary.h"
 
 
 class Player {
 public:
-	Player ();
+	Player (int handsize, Bag&);
 
 	bool no_tiles();
 
 	std::string return_name();
 	void set_name(std::string name_input);
 
-	std::string return_score();
+	int return_score();
 	void set_score(int score_);
 
 	void print_current_tiles();
-	bool tiles_present(std::string tiles);
+	bool tiles_present(std::string letter);
 
  	void exchange_tiles(std::string tiles_2_B_Exchanged, Bag& bag);
 
- 	bool Player::place( char dir, int row, int column, std::string tiles, Board& board);//works on actual board
+ 	bool place( char dir, int row, int column, std::string tiles, Board& board);//works on actual board
 
- 	bool Player::valid_place( char dir, int row, int column, std::string tiles, Board board);//works on copy of board
+ 	bool valid_place( char dir, int row, int column, std::string tiles, Board board);//works on copy of board
 
 private:
-	string name;
+	std::string name;
 	int score; 
 	std::set<Tile*> current_tiles;
 };

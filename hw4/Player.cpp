@@ -1,49 +1,90 @@
-#include <"Player.h">
+#include "Player.h"
 //how do I make a copy of my board since it is pointer so modifying will edit orig board even if invalid
-using namespace std;
-
-	Player::Player ()
+//blank = eg for make where k is a ? then ma?ke
+//to lower to use a lower case letter or toupper for upper case letter
+	Player::Player (int handsize, Bag& bag)
 	{score = 0;
 		//initialise tile set
+			
+			std::set<Tile*> drawn_tiles = bag.drawTiles(handsize);
+
+			std::set<Tile*>::iterator it;
+	 		for (it=drawn_tiles.begin(); it!=drawn_tiles.end(); ++it)
+	 		{
+	 			std::cout <<" [" << (*it)->getLetter() << ", "<< (*it)->getPoints() << "]";
+				current_tiles.insert(*it) ;
+	 		}
+
 	}
 
-	bool Player::no_tiles()  { return (current_tiles.size()==0)); }
+	bool Player::no_tiles()  { return (current_tiles.size()==0); }
 
-	std::string return_name() {return name;}
+	std::string Player::return_name() {return name;}
 	void Player::set_name(std::string name_input) {name = name_input;}
 
-	std::string Player::return_score() {return score;}
+	int Player::return_score() {return score;}
 	void Player::set_score(int score_) {score = score_;}
 
 	void Player::print_current_tiles()
 	 {
 	 	std::cout <<"Your current tiles:";
-	 	for (std::set<Tile*>::iterator it=current_tiles.begin(); it!=current_tiles.end(); ++it)
+	 	std::set<Tile*>::iterator it;
+	 	for (it=current_tiles.begin(); it!=current_tiles.end(); ++it)
 	 	{
-	 		std::cout <<" [" <<it->getLetter(); <<", "<<it->getPoints()<<"]";
+	 		std::cout <<" [" << (*it)->getLetter() << ", "<< (*it)->getPoints() << "]";
 	 	}
-	 	std::cout <<endl;
+	 	std::cout <<std::endl;
  	}
 
- 	bool Player::tiles_present(std::string tiles)
- 	{
- 		int number_of_tiles=tiles_2_B_Exchanged.size();
-	
-	 	for (int i=0; i<number_of_tiles; ++i)
-	 	{ //check legality of exchange first	
-			Tile* it = current_tiles.find (tiles_2_B_Exchanged[i]);
-			if(it==current_tiles.end())
-			{
-				cout<<"Tile"<< tiles_2_B_Exchanged[i]<< "not present";
-				return false;
-			}
+ 	bool Player::tiles_present(std::string letters)
+ 	{//this will not check for duplcates. If theres a duplicate in the input then 
+ 		//keep a vector of bools so if already saw it then 1 else 0
+ 		std::vector <Tile*> tiles_seen;
+ 		unsigned int number_of_letters = letters.size();
+
+		std::set<Tile*>::iterator it;
+	 	for (int i=0; i<number_of_letters; ++i)
+	 	 {  //looping through each of the letter
+			//for each letter checking for a match
+
+	 		for (it=current_tiles.begin(); it!=current_tiles.end(); ++it)
+	 		{//iterating through each of the tiles in hand
+	 			
+	 			Tile* current_tile_ptr = *it;
+	 			if((current_tile_ptr)->getLetter () == letters[i])
+				{
+					bool seen = false;
+
+					for(unsigned int j = 0; j<tiles_seen.size(); j++)
+					{//iterating through the letters seen vector and seeing if ptr matchs any of the seen vectors
+						if(tiles_seen[j]==current_tile_ptr)
+						{//if its not a pointer thats already been seen
+							seen = true;
+							break;
+						}
+									
+					}
+					if(!seen)
+					{
+						tiles_seen.push_back(current_tile_ptr);
+						std::cout<<"Tile"<<letters<< "present";
+						break;
+					}
+
+				}
+	 			// std::cout <<" [" << (*it)->getLetter() << ", "<< (*it)->getPoints() << "]";
+	 		}	 		
+	 		// std::cout <<std::endl;
 	 	}
 
-	 	return true;
+	 	//if the size of freshly tiles_seen = number_of_letters then all the letters were matched
+	 	//so exchange is legal
+	 	return (tiles_seen.size() == number_of_letters);
  	}
 
  	void Player::exchange_tiles(std::string tiles_2_B_Exchanged, Bag& bag)
 	{//remember to do duplicate checking
+
 
 	 	int number_of_tiles=tiles_2_B_Exchanged.size();
 	
@@ -68,13 +109,13 @@ using namespace std;
 		{//if invalid place
 		 //assuming no spaces between tiles but just a string of the tiles
 			
-			cout<<"Invalid place"<<endl;
+			cout<<"Invalid place"<<std::end;
 			return;
 		}
 
 		else
 		{//deemed valid and board = row, column
-			int move_score = 0, 2w_cntr = 0, 3w_cntr = 0, occ_tiles=0, c_row = s_row, c_column = s_column;
+			int move_score = 0, w_2_cntr = 0, w_3_cntr = 0, occ_tiles=0, c_row = s_row, c_column = s_column;
 			//c_row, c_column are the current positions on the board of the program
 			for(int i = 0; i< (tiles.size() + occ_tiles);i++)
 			{
