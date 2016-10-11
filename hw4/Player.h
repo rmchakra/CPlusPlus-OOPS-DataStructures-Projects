@@ -24,7 +24,7 @@ public:
 
  	void exchange_tiles(std::string tiles_2_B_Exchanged, Bag& bag);
 
- 	bool valid_place( char dir, int s_row, int s_column, std::string tiles, Board board_obj, Dictionary& d);
+ 	bool valid_place( char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& d);
  	//here board is passed by value not reference
  	
  	//void place( char dir, int s_row, int s_column, std::string tiles, Board& board)

@@ -23,6 +23,8 @@ public:
 	void print();
 	std::string** get_board();
 	void set_board(std::string** input_board);
+	int get_width();
+	int get_height();
 
 
 private:

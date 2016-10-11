@@ -149,14 +149,25 @@
  	}
 
 
-bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, Board board, Dictionary& dict)//here board is passed by value not reference
- {//checks if placement is legal
+bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict)//here board is passed by value not reference
+ {//check if first word since that must be placed on the start tile
+ //checks if placement is legal
  		//remember these rows and columns start from 1 not 0
  	//tiles is the string of tiles to be placed at the postion s_row,  s_column in direction dir
+
+//check word size out of bounds
+
+ 	 	std::string** board = board_obj.get_board();
 
  	if(tiles_present(tiles)==false)return false;//if the inputted tiles are not present
  	if(board[s_row][s_column][0]!='.')return false;//if position being placed at is occupied
 //All the possible words formed
+
+
+
+
+
+
 
  	int input_size = tiles.size();
  	int curr_row = s_row;//one to the left of the position
@@ -182,6 +193,7 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
  		//first checking each vertically formed word
 
+
  		for(int i = 0; i<input_size; i++)
  		{//looping through postions of each of the input characters for each vertically formed word in that column
  			
@@ -190,8 +202,14 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			{//if a vertically formed word is already there then skip over checking that word
  			//add the letter to you current word
  			//add this code above
+ 				
+ 				curr_horizontal_word+= board[curr_row][curr_column][0];
+ 				curr_column++;
+ 				i--;//since input letter is not being used dont want that to increment
+ 				continue;
 
  			}
+
  			curr_horizontal_word+=tiles[i];
  			std::string curr_vertical_word="";
  			curr_vertical_word+=tiles[i];//tile at that position
@@ -199,7 +217,7 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			{//going upward
  			 //if equal to dot then it is empty
  				//because the 0th position always contains the letter
- 				curr_vertical_word = board[curr_row][curr_column][0] +curr_word;
+ 				curr_vertical_word = board[curr_row][curr_column][0] +curr_vertical_word;
  				curr_row--;
  				if(curr_row<0)break;
  			}
@@ -213,7 +231,7 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  				//because the 0th position always contains the letter
  				curr_vertical_word += board[curr_row][curr_column][0];
  				curr_row++;
- 				if(curr_row==board.size())break;
+ 				if(curr_row==board_obj.get_width())break;
  			}
 
  			if(!dict.is_present(curr_vertical_word))return false;
@@ -221,26 +239,23 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
  		//keep adding elements to the right until empty
  		//now checking the horizontally formed main word
+
+ 		while(board[curr_row][curr_column][0]!='.' && curr_column< board_obj.get_height())
+ 			{//going rightward beyond word
+ 			 //if equal to dot then it is empty
+ 				//because the 0th position always contains the letter
+ 				curr_horizontal_word += board[curr_row][curr_column][0];
+ 				curr_column++;
+ 				if(curr_column==board_obj.get_height())break;
+ 			}
+
+ 		if(!dict.is_present(curr_horizontal_word))return false;
+
  	}
 
  	else if(dir == '|')
  	{
  		
- 	}
-
-
-
-
-
-
-
-
-
- 	std::vector <std::string> words_formed;//vector containing all the words formed by the placed letters
-
- 	for(unsigned int i = 0; i< words_formed.size();i++)
- 	{
- 		if(! d.is_present(words_formed[i])) return false;
  	}
 
  	return true;

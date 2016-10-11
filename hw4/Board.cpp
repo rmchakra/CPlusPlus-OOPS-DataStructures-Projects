@@ -112,6 +112,15 @@ void Board::set_board(std::string** input_board)
 	board = input_board;
 }
 
+int Board::get_width()
+{
+	return _x;
+}
+int Board::get_height()
+{
+	return _y;
+}
+
 Board::~Board()
 {
 	for(int i = 0; i<_x; i++)
