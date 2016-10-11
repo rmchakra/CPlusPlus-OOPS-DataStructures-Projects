@@ -103,6 +103,7 @@
 
 						current_tiles.erase(it);
 						bag.addTile(*it);
+						break;//if already removed once do not want to remove all instances of it
 	 				}
 	 			}
 	 		}
@@ -110,11 +111,20 @@
 	 		//now need to remove from bag and add back to the hand
 
 	 		std::set<Tile*> set_from_bag = bag.drawTiles(number_of_tiles);
+	 		std::cout<<"number of tiles are :"<< number_of_tiles<< std::endl;
 	 		//this gives the set of tiles from the bag
+	 		std::cout<<"Tile set from bag is : ";
+	 		
+	 		std::set<Tile*>::iterator it;
+
+	 		for (it=set_from_bag.begin(); it!=set_from_bag.end(); ++it)
+	 			{//iterating through each of the tiles in set from bag and adding to the hand
+	 				std::cout<< (*it)->getLetter ();
+	 			}
+	 			std::cout<<std::endl;
 
 	 		//now need to iterate through the set and add back to the hand
 	 		//for insert you use a tile* so that would be *it
-	 		std::set<Tile*>::iterator it;
 	 		for (it=set_from_bag.begin(); it!=set_from_bag.end(); ++it)
 	 			{//iterating through each of the tiles in set from bag and adding to the hand
 	 				current_tiles.insert(*it);
