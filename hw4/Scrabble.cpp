@@ -116,11 +116,17 @@ void testing(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
 	std::cout<<"Tiles remaining in bag BEFORE giving to player"<<std::endl;
 	std::cout << bag.tilesRemaining ()<<std::endl;
 	Player p(hand_size, bag);
-	std::cout<<"Tiles remaining in bag AFTER giving to player = BEFORE-7"<<std::endl;
+
+	Player p2(hand_size, bag);
+
+	std::cout<<"Tiles remaining in bag AFTER giving to both player = BEFORE-14"<<std::endl;
 	std::cout << bag.tilesRemaining ()<<std::endl;
 	std::cout<<"no tiles result:"<<p.no_tiles()<<std::endl;
-	std::cout<<"current tiles are"<<std::endl;
+	std::cout<<"current tiles of p are"<<std::endl;
 	p.print_current_tiles();
+	std::cout<<std::endl;
+	std::cout<<"current tiles of p2 are"<<std::endl;
+	p2.print_current_tiles();
 	std::cout<<std::endl;
 	p.set_name("name");
 	std::cout<<"printing name which was set as name : "<<p.return_name()<< std::endl;
