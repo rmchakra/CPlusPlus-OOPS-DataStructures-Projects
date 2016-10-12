@@ -23,6 +23,9 @@ public:
 	int return_score();
 	void set_score(int score_);
 
+
+ 	int current_handsize();
+
 	void print_current_tiles();
 	bool tiles_present(std::string letters, std::vector <Tile*>& tiles_seen);
 
@@ -41,6 +44,7 @@ private:
 	int score; 
 	std::set<Tile*> current_tiles;
 	int max_handsize;
+
 };
 
 

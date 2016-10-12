@@ -79,6 +79,8 @@
 	int Player::return_score() {return score;}
 	void Player::set_score(int score_) {score = score_;}
 
+	int Player::return_current_handsize() {return current_tiles.size();}
+
 	void Player::print_current_tiles()
 	 {
 	 	std::cout <<"Your current tiles:";

@@ -63,9 +63,9 @@ void readConfigFile (std::string config_file_name,
 bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
 {//gameplay goes on in here and if incorrect command is entered then you return true from here
 
-	testing(dict,board, bag, hand_size);
+	//testing(dict,board, bag, hand_size);
 	//first player will have to be set up with true first move and the rest as false
-/*	
+	
 	vector<Player> players;
 	//initial set up
 	int number_of_players=0;
@@ -77,17 +77,72 @@ bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned in
 		std::string player_name;
 		std::cout<<"Enter name of player " << i << ":";
 		getline(std::cin,player_name); 
-		std::cout<<std::endl;//or this is getline(std::cin, player_name);
-		//players.push_back()
+		std::cout<<std::endl;
+		Player p(hand_size, bag);
+		players.push_back(p);
 	}
 
-	bool engame = false;
-	while(!endgame)
-	{//player runs out of letters when all tiles have already been taken from the bag
-		//after every move check if a player has no tiles
-		
 
-		if( (bag.tilesRemaining()==0 ) && ) engame = true; break;//after the and there is conditions needed to be checked
+	//loop for actual gameplay
+
+	std::stringstream ss;
+
+	bool allpassed = true;
+
+
+	for(int i =0;getline(std::cin,ss);i++)
+	{//game ends when
+
+		//player runs out of letters when all tiles have already been taken from the bag
+		//after every move check if a player has no tiles
+		//check all passed
+		if( (bag.tilesRemaining()==0 ) && players[i].return_current_handsize() == 0) break;//after the and there is conditions needed to be checked
+	
+			
+
+		std::cout<<players[i].return_name()<< ", it's your move."<<std::endl;
+		std::cout<<"Current Scores"<<std::endl;
+		for(int i = 0; i<number_of_players; i++)
+		{
+			std::cout<<players[i].return_name() << ":";
+			std::cout<<players[i].return_score()<<std::endl;
+		}
+
+		board.print();
+		std::cout<<"To pass your turn, type PASS.
+
+
+ 
+   
+   
+Your current tiles: [A, 1] [A, 1] [P, 3] [R, 1] [I, 1] [U, 1] [U, 1]"<<std::endl;
+	
+	std::cout<<"To discard tiles, type EXCHANGE, followed by a string of those tiles."<<std::endl;
+	
+	std::cout<<"To place a word, type PLACE, followed by the following:"<<std::endl;
+
+	std::cout<<"       first, either a | or - for vertical/horizontal placement;"<<std::endl;
+	std::cout<<"       second, the row (from the top), the column (from the left),"<<std::endl;
+	
+	std::cout<<"       third, a sequence of letters to place;"<<std::endl;
+	
+	std::cout<<"       to use a blank tile, type ? followed by the letter you want to use it for."<<std::endl;
+	
+	std::cout<<"current tiles of p are"<<std::endl;
+	players[i].print_current_tiles();
+	std::cout<<std::endl;
+
+	std::string command;
+	ss>>command;
+	command = players[i].make_upper(command);
+
+
+		if(i ==(players.size()-1) )
+		{//reached the last player then goes to -1 state which is inremented at the end of the loop
+			i=-1;
+			if(allpassed == true) break;
+		
+		}
 	}
 
 
@@ -104,8 +159,6 @@ bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned in
 
 
 
-	
-*/
 	return false;//if everything goes smoothly and it reaches the end
 
 }
