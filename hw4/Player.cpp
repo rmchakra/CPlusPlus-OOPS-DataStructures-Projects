@@ -455,13 +455,15 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  	 	curr_row--;//now one row above
  		if(curr_row>-1)
  		{//adding the letters to the top of the vertical word
- 			while(board[curr_row][curr_column][0]!='.')//i.e. not unfilled tile
+ 			while(board[curr_row][curr_column][0]!='.')//i.e. spot already has letter tile
  			{
  				adjacent = true;//in contact with word to the top of it
  				std::string let_at_board_pos = "";
  				let_at_board_pos += tolower(board[curr_row][curr_column][0]);
  				curr_vertical_word= let_at_board_pos +curr_vertical_word;
-
+ 				//SCORING
+ 				 main_direction_score+= char_to_int(board[curr_row][curr_column][1]) ;
+ 				//SCORING
  				curr_row--;
  				if(curr_row==-1)break;
  			}
@@ -482,12 +484,15 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			// std::cout<<"ROW IS::"<<curr_row+1<<std::endl;
  				
  			if(board[curr_row][curr_column][0]!='.')
- 			{//if a vertically formed word is already there then skip over checking that word
+ 			{//if a horizontally formed word is already there then skip over checking that word
  			//add the letter to you current word
  			//add this code above
  				//std::cout<<"ENTERING THE ALREADY PRESENT LETTERS"<<board[curr_row][curr_column][0]<<std::endl;
  				adjacent = true;//in contact with a word which is in the middle of this one
  				curr_vertical_word+= tolower(board[curr_row][curr_column][0]);
+ 				//SCORING
+ 				 main_direction_score+= char_to_int(board[curr_row][curr_column][1]) ;
+ 				//SCORING
  				curr_row++;
  				i--;//since input letter is not being used dont want that to increment
  				continue;
@@ -496,6 +501,13 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
  			std::string curr_horizontal_word="";
  			curr_vertical_word+=tiles[i];//tile at that position
+
+ 			//SCORING
+ 			main_direction_score+= (((tiles_seen[i])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));
+ 			main_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
+ 			//SCORING
+
+ 			//here adding a new tile
  			curr_column--;//going to the spot a column to the left
  			if(curr_column>-1)
  			{
@@ -555,6 +567,9 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
  				adjacent = true;//means there is a word to the bottom of the present word
  				curr_vertical_word += tolower(board[curr_row][curr_column][0]);
+ 				//SCORING
+ 				 main_direction_score+= char_to_int(board[curr_row][curr_column][1]) ;
+ 				//SCORING
  				curr_row++;
  				if(curr_row==board_obj.get_height())break;
  			}	
