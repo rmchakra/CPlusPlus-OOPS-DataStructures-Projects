@@ -194,8 +194,6 @@ void testing(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
  	// std::cout <<"TILES remaining = 88 = " <<bag.tilesRemaining ()<<std::endl;
  	//  p.print_current_tiles();
 	 // std::cout<<std::endl;
-
-
 }
 
 int main (int nargs, char **args)

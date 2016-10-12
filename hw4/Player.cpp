@@ -18,6 +18,16 @@
 
 	}
 
+	int Player::char_to_int(char c)
+	{
+		std::stringstream ss;
+		ss << c;
+		int letter_points;
+		ss>>letter_points;
+
+		return letter_points;
+	}
+
 
 	std::string Player::make_upper(std::string a)
 	{
@@ -39,6 +49,27 @@
 		}
 		return b;
 	}
+
+	//EFFECTS OF EACH KIND OF BONUS
+		//
+		// ".2 "//double letter
+		// 	".3 "//triple letter
+		// 	".d "//double word
+		// ".t "//triple word bonus
+
+	int Player::word_multiplier_bonus(char c)
+	{
+		if(c=='d')return 2;
+ 		if(c=='t')return 3;
+ 		else return 1;
+	}
+	
+ 	int Player::letter_multiplier_bonus(char c)
+ 	{
+ 		if(c=='2')return 2;
+ 		if(c=='3')return 3;
+ 		else return 1;
+ 	}
 
 	bool Player::no_tiles()  { return (current_tiles.size()==0); }
 
@@ -172,8 +203,10 @@
  	}
 
 
-bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict, std::vector <Tile*>& tiles_seen, bool first_move)//here board is passed by value not reference
- {//do ajacent = true for sides which has not yet been done
+bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict, std::vector <Tile*>& tiles_seen, bool first_move, int& move_score)//here board is passed by value not reference
+ {//for scoring do the letters count up the multiplier and give it
+
+ //do ajacent = true for sides which has not yet been done
 
  //check if first word since that must be placed on the start tile bool first move
  	//except first, newly formed word must be in contact with some letters already on board
@@ -184,13 +217,31 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 //check word size out of bounds
 
 
+ 		//score inputted by reference from place - just a variable with 0, not the original score variable
+		int main_direction_multiplier =1;//need to finally put the score in move_score int
+		int perp_direction_multiplier =1;
+		int main_direction_score =0;//need to finally put the score in move_score int
+		int perp_direction_score =0;
+
+		//each non-main direction will be added each time
+		//main score will be calculated at the end
+
+
+		//EFFECTS OF EACH KIND OF BONUS
+		//
+		// ".2 "//double letter
+		// 	".3 "//triple letter
+		// 	".d "//double word
+		// ".t "//triple word bonus
+
+
  	 	std::string** board = board_obj.get_board();
  	 	//std::vector <Tile*> tiles_seen;
 
  	if(tiles_present(tiles, tiles_seen)==false)
  	{
  		
- 		std::cout<<"Tiles are not present in valid"<<std::endl;
+ 		std::cout<<"Tiles attempting to be removed are not present in hand"<<std::endl;
  		return false;//if the inputted tiles are not present
  	}
  	if(board[s_row][s_column][0]!='.')
@@ -212,11 +263,11 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  	int curr_column = s_column;
 
  	if(dir == '-')
- 	{
+ 	{//main direction is horizontal
  		std::string curr_horizontal_word="";
 
  		if(first_move)
- 		{
+ 		{//checking validity of first move
  			if(s_column > board_obj.get_start_column())return false;
  			
 			if(s_column< board_obj.get_start_column() && (s_column+input_size-1)< board_obj.get_start_column() )return false;	
@@ -233,12 +284,29 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		//now one column to the left
  		if(curr_column>-1)
  		{//adding the letters to the left
- 			while(board[curr_row][curr_column][0]!='.')//i.e. not unfilled tile
+ 			while(board[curr_row][curr_column][0]!='.')//i.e. tile with some letter already
  			{
  				adjacent = true;//in contact with word to the left of it
  				std::string let_at_board_pos = "";
  				let_at_board_pos += tolower(board[curr_row][curr_column][0]);
  				curr_horizontal_word= let_at_board_pos +curr_horizontal_word;
+
+ 				//SCORING
+				 main_direction_score+= char_to_int(board[curr_row][curr_column][1]) ;
+
+		//each non-main direction will be added each time
+		//main score will be calculated at the end
+
+
+		//EFFECTS OF EACH KIND OF BONUS
+		//
+		// ".2 "//double letter
+		// 	".3 "//triple letter
+		// 	".d "//double word
+		// ".t "//triple word bonus
+
+
+ 				//SCORING
 
  				curr_column--;
  				if(curr_column==-1)break;
@@ -266,13 +334,89 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  				//std::cout<<"ENTERING THE ALREADY PRESENT LETTERS"<<board[curr_row][curr_column][0]<<std::endl;
  				adjacent = true;//in contact with a word which is in the middle of this one
  				curr_horizontal_word+= tolower(board[curr_row][curr_column][0]);
+ 				
+ 				//SCORING
+ 				main_direction_score+= char_to_int(board[curr_row][curr_column][1]) ;
+
+
+ 				//SCORING
+
  				curr_column++;
  				i--;//since input letter is not being used dont want that to increment
  				continue;
 
  			}
-
+ 			//tiles[i] is your input tile so here is a new tile which you are coming across
  			curr_horizontal_word+=tiles[i];
+ 			//SCORING
+
+ 			//SCORING
+//only partially done with the main direction just the non bonused letter stuff in the - direction
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  			std::string curr_vertical_word="";
  			curr_vertical_word+=tiles[i];//tile at that position
@@ -514,56 +658,9 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
 		row--;column--;//changing rows and columns to start from 0 not 1
 //(char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict)//here board is passed by value not reference
-		
+		int move_score = 0;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		if(! Player::valid_place( dir, row, column, tiles, board_obj, dict, hand_tiles_for_input_letters, first_move))
+		if(! Player::valid_place( dir, row, column, tiles, board_obj, dict, hand_tiles_for_input_letters, first_move, move_score))
 		{//if invalid place
 		 //assuming no spaces between tiles but just a string of the tiles
 			
@@ -573,7 +670,6 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
 		else
 		{//deemed valid and board = row, column
-			int move_score = 0, w_2_cntr = 0, w_3_cntr = 0;
 			//c_row, c_column are the current positions on the board of the program
 			for(unsigned int i = 0; i< tiles.size() ;++i)
 			{

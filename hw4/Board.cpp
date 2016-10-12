@@ -52,7 +52,7 @@ Board::Board (std::string board_file_name)
 			case '2' : board[i][j] = ".2 ";
 			break;//double letter
 			case '3' : board[i][j] = ".3 ";
-			break;//double letter
+			break;//triple letter
 			case 'd' : board[i][j] = ".d ";
 			break;//double word bonus
 			case 't' : board[i][j] = ".t ";
