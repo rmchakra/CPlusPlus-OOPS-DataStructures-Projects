@@ -205,7 +205,7 @@
 
 bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict, std::vector <Tile*>& tiles_seen, bool first_move, int& move_score)//here board is passed by value not reference
  {//for scoring do the letters count up the multiplier and give it
-
+ 	//if all the letters used then add 50
  //do ajacent = true for sides which has not yet been done
 
  //check if first word since that must be placed on the start tile bool first move
@@ -219,9 +219,9 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
  		//score inputted by reference from place - just a variable with 0, not the original score variable
 		int main_direction_multiplier =1;//need to finally put the score in move_score int
-		int perp_direction_multiplier =1;
+		
 		int main_direction_score =0;//need to finally put the score in move_score int
-		int perp_direction_score =0;
+
 
 		//each non-main direction will be added each time
 		//main score will be calculated at the end
@@ -321,7 +321,7 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
 
  		for(int i = 0; i<input_size && curr_column< board_obj.get_width(); i++)
- 		{//looping through postions of each of the input characters and checking each vertically formed word in that column as its added to the horizontal
+ 		{//looping through each of the input characters and checking each vertically formed word in that column as its added to the horizontal
  			
  			// std::cout<<"CHARACTER AT BOARD IS::"<<board[curr_row][curr_column][0]<<std::endl;
  			// std::cout<<"COLUMN IS::"<<curr_column+1<<std::endl;
@@ -355,12 +355,34 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
 
  			std::string curr_vertical_word="";
+ 			
+
+ 			//SCORING
+ 			int perp_direction_score =0;
+			int perp_direction_multiplier =1;
+			bool upward_flag = false;//if the flag is true then dont need to add the tile or multiplier of placed tile
+ 			//SCORING
+
+
  			curr_vertical_word+=tiles[i];//tile at that position
  			curr_row--;//going to the spot a row above
  			if(curr_row>-1)
  			{
  				while(board[curr_row][curr_column][0]!='.')
- 				{//going upward
+ 				{
+ 					//only if it goes upward or downward then add the tile score
+ 					//SCORING
+ 					if(!upward_flag)
+ 					{//for each upward only want to add the tile score once
+ 						upward_flag = true;
+ 						perp_direction_score+=(((tiles_seen[i])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+ 						perp_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
+
+ 					}
+ 					
+ 					perp_direction_score+= char_to_int(board[curr_row][curr_column][1]) ;
+ 					//SCORING
+ 				//going upward
  			 	//if equal to dot then it is empty
  				//because the 0th position always contains the letter
  				
@@ -387,6 +409,17 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			 		//if equal to dot then it is empty
  					//because the 0th position always contains the letter
 
+ 					//SCORING
+ 					if(!upward_flag)
+ 					{//for each upward/downward only want to add the tile score once
+ 						upward_flag = true;//also works as a downward flag
+ 						perp_direction_score+=(((tiles_seen[i])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+ 						perp_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
+
+ 					}
+ 					
+ 					perp_direction_score+= char_to_int(board[curr_row][curr_column][1]) ;
+ 					//SCORING
 
  					adjacent = true;//means there is a word downward
  					curr_vertical_word += tolower(board[curr_row][curr_column][0]);
@@ -397,6 +430,13 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			
  			//finished going downward so reset the row
  			 curr_row = s_row;
+
+ 			 //SCORING
+ 			
+ 			perp_direction_score*=perp_direction_multiplier;
+ 			move_score += perp_direction_score;	
+
+ 					//SCORING
  			if(!dict.is_present(curr_vertical_word)&& (curr_vertical_word.size()>1))
  				{
  					std::cout<<"vertically formed word"<<curr_vertical_word<<"is not in Dictionary"<<std::endl;
@@ -435,6 +475,42 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  					return false;
  			}
  	}
+
+
+
+
+
+//done main direction but not the perp direction scores for | direction
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  	else if(dir == '|')
  	{//each inputted letter is being placed twice as part of main word
@@ -595,17 +671,7 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  	}
 
  	main_direction_score*=main_direction_multiplier;
- 	move_score = main_direction_score;//each of the perp direction scores need to be added and main for vertical
-
-
-
-
-
-
-
-
-
-
+ 	move_score += main_direction_score;//each of the perp direction scores need to be added and main for vertical
 
  	return true;
  }
