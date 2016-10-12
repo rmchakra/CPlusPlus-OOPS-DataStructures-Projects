@@ -5,11 +5,15 @@
 #include <iostream>
 #include "Board.h"
 #include "Dictionary.h"
+#include <sstream>
 
 
 class Player {
 public:
 	Player (int handsize, Bag&);
+
+	std::string make_upper(std::string a);
+	std::string make_lower(std::string a);
 
 	bool no_tiles();
 
@@ -20,20 +24,21 @@ public:
 	void set_score(int score_);
 
 	void print_current_tiles();
-	bool tiles_present(std::string letters);
+	bool tiles_present(std::string letters, std::vector <Tile*>& tiles_seen);
 
  	void exchange_tiles(std::string tiles_2_B_Exchanged, Bag& bag);
 
- 	bool valid_place( char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& d);
- 	//here board is passed by value not reference
- 	
- 	//void place( char dir, int s_row, int s_column, std::string tiles, Board& board)
+ 	bool valid_place( char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& d, std::vector <Tile*>& tiles_seen, bool first_move);
+ 	//add a bool for the first move where it must cover start square
+ 	//check bag draw when tiles not remaining in handsize
+ 	void place( char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict, Bag& bag, bool first_move);
 
  	
 private:
 	std::string name;
 	int score; 
 	std::set<Tile*> current_tiles;
+	int max_handsize;
 };
 
 

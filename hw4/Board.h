@@ -25,6 +25,8 @@ public:
 	void set_board(std::string** input_board);
 	int get_width();
 	int get_height();
+	int get_start_row();
+	int get_start_column();
 
 
 private:

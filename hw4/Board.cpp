@@ -45,7 +45,7 @@ Board::Board (std::string board_file_name)
 		for (int j = 0; j < _x; ++ j)
 		{//j is the column
 			// Fill in the following based on how you store the board.
-			if (i == _starty && j == _startx) {board[i][j] =".**"; }
+			if (i == _starty && j == _startx) {board[i][j] =".d*"; }
 			else switch (row[j]) {
 			case '.' : board[i][j]="...";
 			break;
@@ -70,7 +70,7 @@ void Board::print()
 {
 	std::cout<<"LEGEND"<<std::endl;
 	std::cout<<"... = empty tile"<<std::endl;
-	std::cout<<".**= start spot"<<std::endl;
+	std::cout<<".d*= start spot"<<std::endl;
 	std::cout<<".2 = double letter"<<std::endl;
 	std::cout<<".3 = triple letter"<<std::endl;
 	std::cout<<".d = double word"<<std::endl;
@@ -106,7 +106,15 @@ std::string** Board::get_board()
 	return board;
 }
 
+int Board::get_start_row()
+{
+	return _startx;
+}
 
+int Board::get_start_column()
+{
+	return _starty;
+}
 void Board::set_board(std::string** input_board)
 {
 	board = input_board;
