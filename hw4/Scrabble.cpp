@@ -159,7 +159,7 @@ void testing(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
  	bool first_move = true;
 
  	std::cout<<std::endl;
- 	p.place('-' , 8 , 8 , "AY", board, dict, bag, first_move);
+ 	p.place('-' , 8 , 7 , "AY", board, dict, bag, first_move);
  	first_move = false;
  	board.print();
  	std::cout <<"TILES remaining = 90 = " <<bag.tilesRemaining ()<<std::endl;
@@ -174,7 +174,7 @@ void testing(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
 	// std::cout<<"placing ds to form days valid"<< std::endl;
 
  	//std::cout<<std::endl;
-	 p.place('-' , 8 , 7 , "PED", board, dict, bag, first_move);
+	 p.place('-' , 8 , 6 , "PED", board, dict, bag, first_move);
  	board.print();
  	std::cout <<"TILES remaining = 89 = " <<bag.tilesRemaining ()<<std::endl;
  	 p.print_current_tiles();

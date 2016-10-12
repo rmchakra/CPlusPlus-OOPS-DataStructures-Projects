@@ -208,15 +208,15 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  	int curr_row = s_row;
  	int curr_column = s_column;
 
- 	std::string curr_horizontal_word="";
-
  	if(dir == '-')
  	{
+ 		std::string curr_horizontal_word="";
 
  		if(first_move)
  		{
+ 			if(s_column > board_obj.get_start_column())return false;
  			
-			if(s_column< board_obj.get_start_column() && (s_column+input_size-1)< board_obj.get_start_column() )	return false;	
+			if(s_column< board_obj.get_start_column() && (s_column+input_size-1)< board_obj.get_start_column() )return false;	
  			if(s_row != board_obj.get_start_row())
  			{
  			
@@ -351,8 +351,208 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
  	else if(dir == '|')
  	{
+ 		//here vertical_word will be the main word formed by the letters while each horizontal will need to be checked
+
+ 		std::string curr_vertical_word="";
+
+ 		if(first_move)
+ 		{
+ 			if(s_row > board_obj.get_start_row())return false;//begins from below start and goes downward
+			if(s_row< board_obj.get_start_row() && (s_row+input_size-1)< board_obj.get_start_row() )return false;//doesnt cross	
+ 			if(s_column != board_obj.get_start_column())return false;//different column from start
+ 			
+ 			adjacent = true;//if it is the first move cant be adjacent to anything
+ 		}
+ 	
+
+ 	 	curr_row--;//now one row above
+ 		if(curr_row>-1)
+ 		{//adding the letters to the top of the vertical word
+ 			while(board[curr_row][curr_column][0]!='.')//i.e. not unfilled tile
+ 			{
+ 				adjacent = true;//in contact with word to the top of it
+ 				std::string let_at_board_pos = "";
+ 				let_at_board_pos += tolower(board[curr_row][curr_column][0]);
+ 				curr_vertical_word= let_at_board_pos +curr_horizontal_word;
+
+ 				curr_row--;
+ 				if(curr_row==-1)break;
+ 			}
+ 		}
  		
- 	}
+ 		//resetting the row to start
+ 		curr_row = s_row;
+
+
+ 		//first checking each horizontally formed word
+
+
+ 	// 	for(int i = 0; i<input_size && curr_column< board_obj.get_width(); i++)
+ 	// 	{//looping through postions of each of the input characters and checking each vertically formed word in that column as its added to the horizontal
+ 			
+ 	// 		// std::cout<<"CHARACTER AT BOARD IS::"<<board[curr_row][curr_column][0]<<std::endl;
+ 	// 		// std::cout<<"COLUMN IS::"<<curr_column+1<<std::endl;
+ 	// 		// std::cout<<"ROW IS::"<<curr_row+1<<std::endl;
+ 				
+ 	// 		if(board[curr_row][curr_column][0]!='.')
+ 	// 		{//if a vertically formed word is already there then skip over checking that word
+ 	// 		//add the letter to you current word
+ 	// 		//add this code above
+ 	// 			//std::cout<<"ENTERING THE ALREADY PRESENT LETTERS"<<board[curr_row][curr_column][0]<<std::endl;
+ 	// 			adjacent = true;//in contact with a word which is in the middle of this one
+ 	// 			curr_horizontal_word+= tolower(board[curr_row][curr_column][0]);
+ 	// 			curr_column++;
+ 	// 			i--;//since input letter is not being used dont want that to increment
+ 	// 			continue;
+
+ 	// 		}
+
+ 	// 		curr_horizontal_word+=tiles[i];
+
+ 	// 		std::string curr_vertical_word="";
+ 	// 		curr_vertical_word+=tiles[i];//tile at that position
+ 	// 		curr_row--;//going to the spot a row above
+ 	// 		if(curr_row>-1)
+ 	// 		{
+ 	// 			while(board[curr_row][curr_column][0]!='.')
+ 	// 			{//going upward
+ 	// 		 	//if equal to dot then it is empty
+ 	// 			//because the 0th position always contains the letter
+ 				
+ 	// 			adjacent = true;//means there is a word upward
+ 	// 			std::string let_at_board_pos = "";
+ 	// 			let_at_board_pos += tolower(board[curr_row][curr_column][0]);
+
+ 	// 			curr_vertical_word = let_at_board_pos +curr_vertical_word;
+ 	// 			curr_row--;
+ 	// 			if(curr_row<0)break;
+ 	// 			}
+ 	// 		}
+ 			
+
+ 	// 		 curr_row = s_row;
+ 	// 		 //curr_column = s_column;
+
+ 	// 		  curr_row++;//going downward
+
+ 	// 		if(curr_row<board_obj.get_height())
+ 	// 		{
+ 	// 			while(board[curr_row][curr_column][0]!='.')
+ 	// 			{	//going down
+ 	// 		 		//if equal to dot then it is empty
+ 	// 				//because the 0th position always contains the letter
+
+
+ 	// 				adjacent = true;//means there is a word downward
+ 	// 				curr_vertical_word += tolower(board[curr_row][curr_column][0]);
+ 	// 				curr_row++;
+ 	// 				if(curr_row==board_obj.get_height())break;
+ 	// 			}
+ 	// 		}
+ 			
+ 	// 		//finished going downward so reset the row
+ 	// 		 curr_row = s_row;
+ 	// 		if(!dict.is_present(curr_vertical_word)&& (curr_vertical_word.size()>1))
+ 	// 			{
+ 	// 				std::cout<<"vertically formed word"<<curr_vertical_word<<"is not in Dictionary"<<std::endl;
+ 	// 				return false;
+ 	// 			}
+ 	// 		curr_column++;
+ 	// 	}
+
+ 	// 	//keep adding elements to the right until empty
+ 	// 	//now checking the horizontally formed main word
+ 	// 	//curr_column++;
+ 	// 	if(curr_column<board_obj.get_width())
+ 	// 	{
+ 	// 		while(board[curr_row][curr_column][0]!='.' && curr_column< board_obj.get_height())
+ 	// 		{//going rightward beyond word
+ 	// 		 //if equal to dot then it is empty
+ 	// 			//because the 0th position always contains the letter
+
+ 	// 			adjacent = true;//means there is a word to the right of the present word
+ 	// 			curr_horizontal_word += tolower(board[curr_row][curr_column][0]);
+ 	// 			curr_column++;
+ 	// 			if(curr_column==board_obj.get_width())break;
+ 	// 		}	
+ 	// 	}
+ 		
+
+ 	// 	if(!dict.is_present(   make_lower(curr_horizontal_word)  )   )
+ 	// 		{
+ 				
+ 	// 			std::cout<<"Horizontal word is:"<<curr_horizontal_word<<std::endl;
+ 	// 			std::cout<<"!dict.is_present(curr_horizontal_word)"<<std::endl;
+ 	// 				return false;
+ 	// 		}
+ 	// }
+
+ 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  	if(!adjacent)
  	{
