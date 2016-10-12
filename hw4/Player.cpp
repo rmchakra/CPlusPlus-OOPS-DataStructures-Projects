@@ -63,7 +63,7 @@
  		if(c=='t')return 3;
  		else return 1;
 	}
-	
+
  	int Player::letter_multiplier_bonus(char c)
  	{
  		if(c=='2')return 2;
@@ -349,73 +349,9 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			//tiles[i] is your input tile so here is a new tile which you are coming across
  			curr_horizontal_word+=tiles[i];
  			//SCORING
-
+ 			main_direction_score+= (((tiles_seen[i])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));
+ 			main_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
  			//SCORING
-//only partially done with the main direction just the non bonused letter stuff in the - direction
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
  			std::string curr_vertical_word="";
@@ -478,9 +414,13 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			{//going rightward beyond word
  			 //if equal to dot then it is empty
  				//because the 0th position always contains the letter
-
+ 				//these are letters already present
  				adjacent = true;//means there is a word to the right of the present word
  				curr_horizontal_word += tolower(board[curr_row][curr_column][0]);
+ 				//SCORING
+ 				main_direction_score+= char_to_int(board[curr_row][curr_column][1]);
+
+ 				//SCORING
  				curr_column++;
  				if(curr_column==board_obj.get_width())break;
  			}	
@@ -639,6 +579,19 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		return false;
  	}
 
+ 	main_direction_score*=main_direction_multiplier;
+ 	move_score = main_direction_score;//each of the perp direction scores need to be added and main for vertical
+
+
+
+
+
+
+
+
+
+
+
  	return true;
  }
 
@@ -743,7 +696,8 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
 
 
-			//score +=move_score;
+			score +=move_score;
+			std::cout<<"SCORE IS: "<< score << std::endl;
 
 		}
 	 	
