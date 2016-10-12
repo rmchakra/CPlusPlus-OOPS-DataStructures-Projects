@@ -174,9 +174,17 @@ void testing(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
 	// std::cout<<"placing ds to form days valid"<< std::endl;
 
  	//std::cout<<std::endl;
-	 p.place('-' , 8 , 6 , "PED", board, dict, bag, first_move);
+	p.place('-' , 8 , 6 , "PED", board, dict, bag, first_move);
  	board.print();
  	std::cout <<"TILES remaining = 89 = " <<bag.tilesRemaining ()<<std::endl;
+ 	 p.print_current_tiles();
+	 std::cout<<std::endl;
+
+	 //CHECKING VERTICAL PLACEMENT
+
+	 p.place('|' , 7 , 7 , "LW", board, dict, bag, first_move);
+ 	board.print();
+ 	std::cout <<"TILES remaining =" <<bag.tilesRemaining ()<<std::endl;
  	 p.print_current_tiles();
 	 std::cout<<std::endl;
 

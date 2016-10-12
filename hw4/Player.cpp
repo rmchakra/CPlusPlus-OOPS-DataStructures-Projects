@@ -353,7 +353,7 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  	}
 
  	else if(dir == '|')
- 	{
+ 	{//each inputted letter is being placed twice as part of main word
  		//here vertical_word will be the main word formed by the letters while each horizontal will need to be checked
 
  		std::string curr_vertical_word="";
@@ -409,8 +409,6 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  				continue;
 
  			}
-
- 			curr_vertical_word+=tiles[i];
 
  			std::string curr_horizontal_word="";
  			curr_vertical_word+=tiles[i];//tile at that position
@@ -517,6 +515,54 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 		row--;column--;//changing rows and columns to start from 0 not 1
 //(char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict)//here board is passed by value not reference
 		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		if(! Player::valid_place( dir, row, column, tiles, board_obj, dict, hand_tiles_for_input_letters, first_move))
 		{//if invalid place
 		 //assuming no spaces between tiles but just a string of the tiles
