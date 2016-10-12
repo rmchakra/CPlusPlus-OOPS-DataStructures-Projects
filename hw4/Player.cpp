@@ -173,13 +173,16 @@
 
 
 bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict, std::vector <Tile*>& tiles_seen, bool first_move)//here board is passed by value not reference
- {//check if first word since that must be placed on the start tile bool first move
+ {//do ajacent = true for sides which has not yet been done
+
+ //check if first word since that must be placed on the start tile bool first move
  	//except first, newly formed word must be in contact with some letters already on board
  //checks if placement is legal
  		//remember these rows and columns start from 1 not 0
  	//tiles is the string of tiles to be placed at the postion s_row,  s_column in direction dir
 //check if lower vs upper case causes issues
 //check word size out of bounds
+
 
  	 	std::string** board = board_obj.get_board();
  	 	//std::vector <Tile*> tiles_seen;
@@ -384,81 +387,79 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		curr_row = s_row;
 
 
- 		//first checking each horizontally formed word
+ 		//first checking each horizontally formed word as you iterate down the vertical word
 
 
- 	// 	for(int i = 0; i<input_size && curr_column< board_obj.get_width(); i++)
- 	// 	{//looping through postions of each of the input characters and checking each vertically formed word in that column as its added to the horizontal
+ 	 	for(int i = 0; i<input_size && curr_row< board_obj.get_height(); i++)
+ 		{//looping through postions of each of the input characters and checking each vertically formed word in that column as its added to the horizontal
  			
- 	// 		// std::cout<<"CHARACTER AT BOARD IS::"<<board[curr_row][curr_column][0]<<std::endl;
- 	// 		// std::cout<<"COLUMN IS::"<<curr_column+1<<std::endl;
- 	// 		// std::cout<<"ROW IS::"<<curr_row+1<<std::endl;
+ 			// std::cout<<"CHARACTER AT BOARD IS::"<<board[curr_row][curr_column][0]<<std::endl;
+ 			// std::cout<<"COLUMN IS::"<<curr_column+1<<std::endl;
+ 			// std::cout<<"ROW IS::"<<curr_row+1<<std::endl;
  				
- 	// 		if(board[curr_row][curr_column][0]!='.')
- 	// 		{//if a vertically formed word is already there then skip over checking that word
- 	// 		//add the letter to you current word
- 	// 		//add this code above
- 	// 			//std::cout<<"ENTERING THE ALREADY PRESENT LETTERS"<<board[curr_row][curr_column][0]<<std::endl;
- 	// 			adjacent = true;//in contact with a word which is in the middle of this one
- 	// 			curr_horizontal_word+= tolower(board[curr_row][curr_column][0]);
- 	// 			curr_column++;
- 	// 			i--;//since input letter is not being used dont want that to increment
- 	// 			continue;
+ 			if(board[curr_row][curr_column][0]!='.')
+ 			{//if a vertically formed word is already there then skip over checking that word
+ 			//add the letter to you current word
+ 			//add this code above
+ 				//std::cout<<"ENTERING THE ALREADY PRESENT LETTERS"<<board[curr_row][curr_column][0]<<std::endl;
+ 				adjacent = true;//in contact with a word which is in the middle of this one
+ 				curr_vertical_word+= tolower(board[curr_row][curr_column][0]);
+ 				curr_row++;
+ 				i--;//since input letter is not being used dont want that to increment
+ 				continue;
 
- 	// 		}
+ 			}
 
- 	// 		curr_horizontal_word+=tiles[i];
+ 			curr_vertical_word+=tiles[i];
 
- 	// 		std::string curr_vertical_word="";
- 	// 		curr_vertical_word+=tiles[i];//tile at that position
- 	// 		curr_row--;//going to the spot a row above
- 	// 		if(curr_row>-1)
- 	// 		{
- 	// 			while(board[curr_row][curr_column][0]!='.')
- 	// 			{//going upward
- 	// 		 	//if equal to dot then it is empty
- 	// 			//because the 0th position always contains the letter
+ 			std::string curr_horizontal_word="";
+ 			curr_vertical_word+=tiles[i];//tile at that position
+ 			curr_column--;//going to the spot a column to the left
+ 			if(curr_column>-1)
+ 			{
+ 				while(board[curr_row][curr_column][0]!='.')
+ 				{//going leftward
+ 			 	//if equal to dot then it is empty
+ 				//because the 0th position always contains the letter
  				
- 	// 			adjacent = true;//means there is a word upward
- 	// 			std::string let_at_board_pos = "";
- 	// 			let_at_board_pos += tolower(board[curr_row][curr_column][0]);
+ 				adjacent = true;//means there is a word leftward
+ 				std::string let_at_board_pos = "";
+ 				let_at_board_pos += tolower(board[curr_row][curr_column][0]);
 
- 	// 			curr_vertical_word = let_at_board_pos +curr_vertical_word;
- 	// 			curr_row--;
- 	// 			if(curr_row<0)break;
- 	// 			}
- 	// 		}
+ 				curr_horizontal_word = let_at_board_pos +curr_horizontal_word;
+ 				curr_column--;
+ 				if(curr_column<0)break;
+ 				}
+ 			}
  			
+ 			 curr_column = s_column;//resetting the column
 
- 	// 		 curr_row = s_row;
- 	// 		 //curr_column = s_column;
+ 			  curr_column++;//going rightward
 
- 	// 		  curr_row++;//going downward
-
- 	// 		if(curr_row<board_obj.get_height())
- 	// 		{
- 	// 			while(board[curr_row][curr_column][0]!='.')
- 	// 			{	//going down
- 	// 		 		//if equal to dot then it is empty
- 	// 				//because the 0th position always contains the letter
+ 			if(curr_row<board_obj.get_height())
+ 			{
+ 				while(board[curr_row][curr_column][0]!='.')
+ 				{	//going right
+ 			 		//if equal to dot then it is empty
+ 					//because the 0th position always contains the letter
 
 
- 	// 				adjacent = true;//means there is a word downward
- 	// 				curr_vertical_word += tolower(board[curr_row][curr_column][0]);
- 	// 				curr_row++;
- 	// 				if(curr_row==board_obj.get_height())break;
- 	// 			}
- 	// 		}
+ 					adjacent = true;//means there is a word downward
+ 					curr_horizontal_word += tolower(board[curr_row][curr_column][0]);
+ 					curr_column++;
+ 					if(curr_column==board_obj.get_width())break;
+ 				}
+ 			}
  			
- 	// 		//finished going downward so reset the row
- 	// 		 curr_row = s_row;
- 	// 		if(!dict.is_present(curr_vertical_word)&& (curr_vertical_word.size()>1))
- 	// 			{
- 	// 				std::cout<<"vertically formed word"<<curr_vertical_word<<"is not in Dictionary"<<std::endl;
- 	// 				return false;
- 	// 			}
- 	// 		curr_column++;
- 	// 	}
+ 			//finished going rightward so reset the column
+ 			 curr_column = s_column;
+ 			if(!dict.is_present(curr_horizontal_word)&& (curr_horizontal_word.size()>1))
+ 				{
+ 					std::cout<<"horizontally formed word"<<curr_horizontal_word<<"is not in Dictionary"<<std::endl;
+ 					return false;
+ 				}
+ 			curr_row++;
+ 		}
 
  	// 	//keep adding elements to the right until empty
  	// 	//now checking the horizontally formed main word
@@ -566,10 +567,14 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  }
 
  	void Player::place( char dir, int row, int column, std::string tiles, Board& board_obj, Dictionary& dict, Bag& bag, bool first_move)
-	{//placed instructions given with spaces between
+	{	//ACTUAL GAMEPLAY AND SCORING NEED TO BE DONE
+
+		//placed instructions given with spaces between
 		//add in the scoring later after figuring out the placement
 		//can do scoring by reference in valid place - need to add the score and the vertical direction valid and code
 		//newly placed word should have some form of intersection with board present letters else invalid
+
+
 
 		std::string** board = board_obj.get_board();
 		std::vector <Tile*> hand_tiles_for_input_letters;
