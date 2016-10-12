@@ -330,7 +330,7 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		//curr_column++;
  		if(curr_column<board_obj.get_width())
  		{
- 			while(board[curr_row][curr_column][0]!='.' && curr_column< board_obj.get_height())
+ 			while(board[curr_row][curr_column][0]!='.' && curr_column< board_obj.get_width())
  			{//going rightward beyond word
  			 //if equal to dot then it is empty
  				//because the 0th position always contains the letter
@@ -376,7 +376,7 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  				adjacent = true;//in contact with word to the top of it
  				std::string let_at_board_pos = "";
  				let_at_board_pos += tolower(board[curr_row][curr_column][0]);
- 				curr_vertical_word= let_at_board_pos +curr_horizontal_word;
+ 				curr_vertical_word= let_at_board_pos +curr_vertical_word;
 
  				curr_row--;
  				if(curr_row==-1)break;
@@ -461,103 +461,37 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			curr_row++;
  		}
 
- 	// 	//keep adding elements to the right until empty
- 	// 	//now checking the horizontally formed main word
- 	// 	//curr_column++;
- 	// 	if(curr_column<board_obj.get_width())
- 	// 	{
- 	// 		while(board[curr_row][curr_column][0]!='.' && curr_column< board_obj.get_height())
- 	// 		{//going rightward beyond word
- 	// 		 //if equal to dot then it is empty
- 	// 			//because the 0th position always contains the letter
+ 		//keep adding elements to the bottom until empty
+ 		//now checking the vertically formed main word
+	
+ 		if(curr_row<board_obj.get_height())
+ 		{
+ 			while(board[curr_row][curr_column][0]!='.' && curr_row< board_obj.get_width())
+ 			{//going downward beyond word
+ 			 //if equal to dot then it is empty
+ 				//because the 0th position always contains the letter
 
- 	// 			adjacent = true;//means there is a word to the right of the present word
- 	// 			curr_horizontal_word += tolower(board[curr_row][curr_column][0]);
- 	// 			curr_column++;
- 	// 			if(curr_column==board_obj.get_width())break;
- 	// 		}	
- 	// 	}
+ 				adjacent = true;//means there is a word to the bottom of the present word
+ 				curr_vertical_word += tolower(board[curr_row][curr_column][0]);
+ 				curr_row++;
+ 				if(curr_row==board_obj.get_height())break;
+ 			}	
+ 		}
  		
 
- 	// 	if(!dict.is_present(   make_lower(curr_horizontal_word)  )   )
- 	// 		{
+ 		if(!dict.is_present(   make_lower(curr_vertical_word)  )   )
+ 			{
  				
- 	// 			std::cout<<"Horizontal word is:"<<curr_horizontal_word<<std::endl;
- 	// 			std::cout<<"!dict.is_present(curr_horizontal_word)"<<std::endl;
- 	// 				return false;
- 	// 		}
- 	// }
-
- 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 				std::cout<<"vertical word is:"<<curr_vertical_word<<std::endl;
+ 				std::cout<<"!dict.is_present(curr_vertical_word)"<<std::endl;
+ 				return false;
+ 			}
+ 	}
 
 
  	if(!adjacent)
  	{
- 		std::cout<<"Horizontal word is:"<<curr_horizontal_word<<std::endl;
+ 		//std::cout<<"Horizontal word is:"<<curr_horizontal_word<<std::endl;
  		std::cout<<"placed tile not adjacent"<<std::endl;
  		std::cout<<"value of adjacent is : "<< adjacent <<std::endl;
  		return false;
