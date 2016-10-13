@@ -9,7 +9,7 @@ GTEST = -I /usr/include/gtest/ -l gtest -l gtest_main -pthread
 VGA = valgrind --tool=memcheck --leak-check=yes --track-origins=yes
 
 
-all: Reset Board Dictionary Bag  Player Scrabble clean
+all: Board Dictionary Bag  Player Scrabble clean
 
 Reset: 
 	reset
