@@ -62,7 +62,7 @@ void readConfigFile (std::string config_file_name,
 
 bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
 {//gameplay goes on in here and if incorrect command is entered then you return true from here
-
+	//add an ss.fail for each of the stringstream to anywhere
 	//testing(dict,board, bag, hand_size);
 	//first player will have to be set up with true first move and the rest as false
 	//return true;
@@ -166,7 +166,7 @@ std::vector<Player> players;
 			char dir;
 			ss>>dir;
 
-			if(dir!= '-' && dir!= '|'){std::cout<<"INCORRECT COMMAND wrong dir"<<std::endl;}
+			if(dir!= '-' && dir!= '|'){std::cout<<"INCORRECT COMMAND wrong dir"<<std::endl; continue;}
 
 			int  row, column;
 			std::string letters_to_be_placed;
@@ -183,7 +183,7 @@ std::vector<Player> players;
  	
 
 		}
-		else if(command != "PASS"){std::cout<<"INCORRECT COMMAND unrecognizable"<<std::endl;}
+		else if(command != "PASS"){std::cout<<"INCORRECT COMMAND unrecognizable"<<std::endl; continue;}
 
 
 

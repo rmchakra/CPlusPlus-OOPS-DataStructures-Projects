@@ -94,6 +94,8 @@
 
  	bool Player::tiles_present(std::string letters, std::vector <Tile*>& tiles_seen)
  	{
+ 		
+ 		letters = make_upper(letters);
  		//std::vector <Tile*> tiles_seen;
  		unsigned int number_of_letters = letters.size();
 
@@ -447,7 +449,8 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			move_score += perp_direction_score;	
 
  					//SCORING
- 			if(!dict.is_present(curr_vertical_word)&& (curr_vertical_word.size()>1))
+
+ 			if(!dict.is_present(make_lower(curr_vertical_word))&& (curr_vertical_word.size()>1))
  				{
  					std::cout<<"vertically formed word"<<curr_vertical_word<<"is not in Dictionary"<<std::endl;
  					return false;
@@ -639,7 +642,7 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			
  			//finished going rightward so reset the column
  			 curr_column = s_column;
- 			if(!dict.is_present(curr_horizontal_word)&& (curr_horizontal_word.size()>1))
+ 			if(!dict.is_present(make_lower(curr_horizontal_word))&& (curr_horizontal_word.size()>1))
  				{
  					std::cout<<"horizontally formed word"<<curr_horizontal_word<<"is not in Dictionary"<<std::endl;
  					return false;

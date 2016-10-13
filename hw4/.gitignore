@@ -9,3 +9,4 @@ Player.o
 Tile.o
 Scrabble.h
 dirup
+scrabble_test.cpp
