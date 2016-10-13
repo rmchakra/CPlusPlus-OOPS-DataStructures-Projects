@@ -30,7 +30,7 @@ Player: Player.cpp Player.h
 
 Scrabble: Board.o Dictionary.o Tile.h Bag.o Player.o Scrabble.cpp
 	$(CXX) $(CPPFLAGS) $^ -o scrabble
-	$(VG) ./scrabble config.txt
+	./scrabble config.txt
 
 #intermediate compilation
 
