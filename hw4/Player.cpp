@@ -93,7 +93,7 @@
  	}
 
  	bool Player::tiles_present(std::string letters, std::vector <Tile*>& tiles_seen)
- 	{
+ 	{//? doesnt work for anything
  		
  		letters = make_upper(letters);
  		//std::vector <Tile*> tiles_seen;
@@ -108,6 +108,7 @@
 	 		{//iterating through each of the tiles in hand
 	 			
 	 			Tile* current_tile_ptr = *it;
+
 	 			if((current_tile_ptr)->getLetter () == letters[i])
 				{//if letter of a tile matches the inputted letter
 					bool seen = false;
@@ -156,7 +157,7 @@
 	 			std::set<Tile*>::iterator it; 
 				for (it=current_tiles.begin(); it!=current_tiles.end(); ++it)
 	 			{//iterating through each of the tiles in hand
-	 				if((*it)->getLetter() == tiles_2_B_Exchanged[i])
+	 				if((*it)->getLetter() == toupper(tiles_2_B_Exchanged[i]))
 	 				{
 
 						current_tiles.erase(it);
@@ -169,17 +170,17 @@
 	 		//now need to remove from bag and add back to the hand
 
 	 		std::set<Tile*> set_from_bag = bag.drawTiles(number_of_tiles);
-	 		std::cout<<"number of tiles being drawn are :"<< number_of_tiles<< std::endl;
+	 		//std::cout<<"number of tiles being drawn are :"<< number_of_tiles<< std::endl;
 	 		//this gives the set of tiles from the bag
-	 		std::cout<<"Tile set from bag is : ";
+	 		//std::cout<<"Tile set from bag is : ";
 	 		
 	 		std::set<Tile*>::iterator it;
 
-	 		for (it=set_from_bag.begin(); it!=set_from_bag.end(); ++it)
-	 			{//iterating through each of the tiles in set from bag and adding to the hand
-	 				std::cout<< (*it)->getLetter ();
-	 			}
-	 			std::cout<<std::endl;
+	 		// for (it=set_from_bag.begin(); it!=set_from_bag.end(); ++it)
+	 		// 	{//iterating through each of the tiles in set from bag and adding to the hand
+	 		// 		std::cout<< (*it)->getLetter ();
+	 		// 	}
+	 		// 	std::cout<<std::endl;
 
 	 		//now need to iterate through the set and add back to the hand
 	 		//for insert you use a tile* so that would be *it
@@ -483,8 +484,8 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		if(!dict.is_present(   make_lower(curr_horizontal_word)  )   )
  			{
  				
- 				std::cout<<"Horizontal word is:"<<curr_horizontal_word<<std::endl;
- 				std::cout<<"!dict.is_present(curr_horizontal_word)"<<std::endl;
+ 				std::cout<<"Horizontal word "<<curr_horizontal_word<<" is not in Dictionary"<<std::endl;
+ 				//std::cout<<"!dict.is_present(curr_horizontal_word)"<<std::endl;
  					return false;
  			}
  	}
@@ -682,8 +683,8 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		if(!dict.is_present(   make_lower(curr_vertical_word)  )   )
  			{
  				
- 				std::cout<<"vertical word is:"<<curr_vertical_word<<std::endl;
- 				std::cout<<"!dict.is_present(curr_vertical_word)"<<std::endl;
+ 				std::cout<<"vertical word "<<curr_vertical_word<< " is not in Dictionary"<<std::endl;
+ 				//std::cout<<"!dict.is_present(curr_vertical_word)"<<std::endl;
  				return false;
  			}
 

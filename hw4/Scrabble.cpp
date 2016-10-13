@@ -158,14 +158,27 @@ std::vector<Player> players;
 			allpassed = false;
 			std::string tiles_2_B_Exchanged;
 			ss>>tiles_2_B_Exchanged;
+
+
+			if(ss.fail())
+			{
+				std::cout<<"INCORRECT COMMAND - wrong number of inputs"<<std::endl;
+				continue;
+			}
+
 			players[player_ref].exchange_tiles(tiles_2_B_Exchanged,bag);
+
 		}
 		else if(command == "PLACE")
 		{
 			allpassed = false;
 			char dir;
 			ss>>dir;
-
+			if(ss.fail())
+			{
+				std::cout<<"INCORRECT COMMAND - wrong number of inputs"<<std::endl;
+				continue;
+			}
 			if(dir!= '-' && dir!= '|'){std::cout<<"INCORRECT COMMAND wrong dir"<<std::endl; continue;}
 
 			int  row, column;
@@ -175,13 +188,28 @@ std::vector<Player> players;
 			ss>>column;
 			ss>>letters_to_be_placed;
 
+			if(ss.fail())
+			{
+				std::cout<<"INCORRECT COMMAND - wrong number of inputs"<<std::endl;
+				continue;
+			}
 			letters_to_be_placed = players[player_ref].make_upper(letters_to_be_placed);
 
-
+			// for(int i = 0; i< letters_to_be_placed.size(); i++)
+			// {
+			// 	if(letters_to_be_placed[i] == '?')
+			// 	{
+			// 			//std::cout<<"Enter use of tile"<<std::endl;
+			//    			//char use;
+			//    			//std::cin>>use;
+			//    			curr_tile->useAs(toupper(use));
+			// 	}
+			// }
 
 			players[player_ref].place( dir, row, column, letters_to_be_placed, board, dict, bag, first_move);
  	
 
+			first_move = false;
 		}
 		else if(command != "PASS"){std::cout<<"INCORRECT COMMAND unrecognizable"<<std::endl; continue;}
 
@@ -198,9 +226,6 @@ std::vector<Player> players;
 			allpassed = true;
 			//resetting allpassed back to true
 		}
-
-		
-		first_move = false;
 		player_ref++;
 
 	}
@@ -223,8 +248,29 @@ std::vector<Player> players;
 	return false;//if everything goes smoothly and it reaches the end
 
 }
-
 void testing(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
+{
+	Player p(hand_size, bag);
+	 std::vector <Tile*> tiles_seen;//bullshit vector
+ 	bool first_move = true;
+ 	std::cout<<std::endl;
+ 	p.place('-' , 8 , 8 , "day", board, dict, bag, first_move);
+ 	first_move = false;
+ 	p.place('-' , 7 , 9 , "py", board, dict, bag, first_move);
+ 	p.place('-' , 7 , 10 , "ale", board, dict, bag, first_move);
+	p.place('-' , 7 , 13 , "sin", board, dict, bag, first_move);
+ 
+ 	std::cout<<"score 53 = "<<p.return_score()<<std::endl;
+
+}
+
+
+
+
+
+
+
+void testing_basic(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
 {
 	
 
