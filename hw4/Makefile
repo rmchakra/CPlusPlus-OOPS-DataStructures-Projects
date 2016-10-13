@@ -5,7 +5,7 @@
 CXX = g++
 CPPFLAGS = -g -Wall
 GTEST = -I /usr/include/gtest/ -l gtest -l gtest_main -pthread
-VG = valgrind --tool=memcheck --leak-check=yes --track-origins=yes
+VGD = valgrind --tool=memcheck --leak-check=yes --track-origins=yes
 
 
 all: Reset Board Dictionary Bag  Player Scrabble clean
@@ -29,7 +29,7 @@ Player: Player.cpp Player.h
 
 Scrabble: Board.o Dictionary.o Tile.h Bag.o Player.o Scrabble.cpp
 	$(CXX) $(CPPFLAGS) $^ -o scrabble
-	$(VALG) ./scrabble config.txt
+	$(VG) ./scrabble config.txt
 
 #intermediate compilation
 

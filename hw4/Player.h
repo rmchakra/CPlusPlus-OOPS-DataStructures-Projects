@@ -23,8 +23,7 @@ public:
 	int return_score();
 	void set_score(int score_);
 
-
- 	int current_handsize();
+ 	int return_current_handsize();
 
 	void print_current_tiles();
 	bool tiles_present(std::string letters, std::vector <Tile*>& tiles_seen);

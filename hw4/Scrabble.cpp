@@ -65,42 +65,61 @@ bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned in
 
 	//testing(dict,board, bag, hand_size);
 	//first player will have to be set up with true first move and the rest as false
-	
-	vector<Player> players;
+	//return true;
+
+
+
+
+
+//COMMENT OUT TESTING AND THE RETURN STATEMENT TO SEE IF IT WORKS
+
+std::vector<Player> players;
 	//initial set up
 	int number_of_players=0;
-	std::cout<<"Please enter the number of players (1-8): ";
-	std::cin>>number_of_players; std::cout<<std::endl;
+	std::cout<<"Please enter the number of players (1-8): "<<std::endl;
+	
+	std::cin>>number_of_players;
+
+	std::string dummy;//to clear the previous input
+	getline(std::cin,dummy);
 	
 	for(int i = 0; i<number_of_players; i++)
 	{
 		std::string player_name;
-		std::cout<<"Enter name of player " << i << ":";
+		std::cout<<"Enter name of player " << i+1 << ":"<<std::endl;
 		getline(std::cin,player_name); 
+
 		std::cout<<std::endl;
 		Player p(hand_size, bag);
+		p.set_name(player_name);
+		
 		players.push_back(p);
 	}
 
 
 	//loop for actual gameplay
 
-	std::stringstream ss;
+	//std::stringstream ss;
+	std::string full_command;
+	std::string command="";
+
 
 	bool allpassed = true;
-
-
-	for(int i =0;getline(std::cin,ss);i++)
+	bool first_move = true;
+	int player_ref = 0;
+	while(true)
 	{//game ends when
 
 		//player runs out of letters when all tiles have already been taken from the bag
 		//after every move check if a player has no tiles
 		//check all passed
-		if( (bag.tilesRemaining()==0 ) && players[i].return_current_handsize() == 0) break;//after the and there is conditions needed to be checked
-	
-			
+		if( (bag.tilesRemaining()==0 ) && players[player_ref].return_current_handsize() == 0)
+		{
+				std::cout<<"ENDGAME: No tiles in bag and no tiles in hand"<<std::endl;
+				break;//after the and there is conditions needed to be checked
+		}	
 
-		std::cout<<players[i].return_name()<< ", it's your move."<<std::endl;
+		std::cout<<players[player_ref].return_name()<< ", it's your move."<<std::endl;
 		std::cout<<"Current Scores"<<std::endl;
 		for(int i = 0; i<number_of_players; i++)
 		{
@@ -109,41 +128,83 @@ bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned in
 		}
 
 		board.print();
-		std::cout<<"To pass your turn, type PASS.
-
-
- 
-   
-   
-Your current tiles: [A, 1] [A, 1] [P, 3] [R, 1] [I, 1] [U, 1] [U, 1]"<<std::endl;
+		std::cout<<"To pass your turn, type PASS"<<std::endl;
+		std::cout<<"To discard tiles, type EXCHANGE, followed by a string of those tiles."<<std::endl;
 	
-	std::cout<<"To discard tiles, type EXCHANGE, followed by a string of those tiles."<<std::endl;
-	
-	std::cout<<"To place a word, type PLACE, followed by the following:"<<std::endl;
-
-	std::cout<<"       first, either a | or - for vertical/horizontal placement;"<<std::endl;
-	std::cout<<"       second, the row (from the top), the column (from the left),"<<std::endl;
-	
-	std::cout<<"       third, a sequence of letters to place;"<<std::endl;
-	
-	std::cout<<"       to use a blank tile, type ? followed by the letter you want to use it for."<<std::endl;
-	
-	std::cout<<"current tiles of p are"<<std::endl;
-	players[i].print_current_tiles();
-	std::cout<<std::endl;
-
-	std::string command;
-	ss>>command;
-	command = players[i].make_upper(command);
+		std::cout<<"To place a word, type PLACE, followed by the following:"<<std::endl;
+		std::cout<<"       first, either a | or - for vertical/horizontal placement;"<<std::endl;
+		std::cout<<"       second, the row (from the top), the column (from the left),"<<std::endl;
+		std::cout<<"       third, a sequence of letters to place;"<<std::endl;
+		std::cout<<"       to use a blank tile, type ? followed by the letter you want to use it for."<<std::endl;
+		std::cout<<"current tiles of"<<players[player_ref].return_name()<<"are:"<<std::endl;
+		players[player_ref].print_current_tiles();
+		std::cout<<std::endl;
 
 
-		if(i ==(players.size()-1) )
-		{//reached the last player then goes to -1 state which is inremented at the end of the loop
-			i=-1;
-			if(allpassed == true) break;
+
+		std::cout<<"ENTER COMMAND:"<<std::endl;
+		getline(std::cin, full_command);//getting the command
+		std::stringstream ss;
+		ss<<full_command;
+		std::cout<<"FULL COMMAND IS :"<<ss.str()<<std::endl;
+		ss>>command;
+		command = players[player_ref].make_upper(command);
+
+
+
 		
+		if(command == "EXCHANGE")
+		{
+			allpassed = false;
+			std::string tiles_2_B_Exchanged;
+			ss>>tiles_2_B_Exchanged;
+			players[player_ref].exchange_tiles(tiles_2_B_Exchanged,bag);
 		}
+		else if(command == "PLACE")
+		{
+			allpassed = false;
+			char dir;
+			ss>>dir;
+
+			if(dir!= '-' && dir!= '|'){std::cout<<"INCORRECT COMMAND wrong dir"<<std::endl;}
+
+			int  row, column;
+			std::string letters_to_be_placed;
+
+			ss>>row;
+			ss>>column;
+			ss>>letters_to_be_placed;
+
+			letters_to_be_placed = players[player_ref].make_upper(letters_to_be_placed);
+
+
+
+			players[player_ref].place( dir, row, column, letters_to_be_placed, board, dict, bag, first_move);
+ 	
+
+		}
+		else if(command != "PASS"){std::cout<<"INCORRECT COMMAND unrecognizable"<<std::endl;}
+
+
+
+
+
+		if(player_ref == ((int)players.size()-1)) 
+		{//reached the last player then goes to -1 state which is incremented at the end of the loop
+			if(allpassed == true)
+			{std::cout<<"ENDGAME: All PASSED"<<std::endl; break;}
+			
+			player_ref=-1;
+			allpassed = true;
+			//resetting allpassed back to true
+		}
+
+		
+		first_move = false;
+		player_ref++;
+
 	}
+
 
 
 
@@ -266,8 +327,7 @@ int main (int nargs, char **args)
 		Bag bag (bagFileName, 10); // second argument is random seed
 
 		// Good luck!
-
-		if(main_incorrect_command (dict, board, bag, numTiles)  ) std::cout<<"incorrect_command";
+	main_incorrect_command (dict, board, bag, numTiles);
 		return 0;
 	}
 	catch (std::invalid_argument & e)
