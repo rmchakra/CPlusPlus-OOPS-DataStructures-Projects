@@ -73,7 +73,7 @@ bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned in
 
 //COMMENT OUT TESTING AND THE RETURN STATEMENT TO SEE IF IT WORKS
 
-std::vector<Player> players;
+	std::vector<Player> players;
 	//initial set up
 	int number_of_players=0;
 	std::cout<<"Please enter the number of players (1-8): "<<std::endl;
@@ -135,7 +135,7 @@ std::vector<Player> players;
 		std::cout<<"       first, either a | or - for vertical/horizontal placement;"<<std::endl;
 		std::cout<<"       second, the row (from the top), the column (from the left),"<<std::endl;
 		std::cout<<"       third, a sequence of letters to place;"<<std::endl;
-		std::cout<<"       to use a blank tile, type ? followed by the letter you want to use it for."<<std::endl;
+		std::cout<<"       to use a blank tile, type ? While the letter is being placed you will be prompted for the letter you wish to place"<<std::endl;
 		std::cout<<"current tiles of"<<players[player_ref].return_name()<<"are:"<<std::endl;
 		players[player_ref].print_current_tiles();
 		std::cout<<std::endl;
@@ -373,7 +373,7 @@ int main (int nargs, char **args)
 		Bag bag (bagFileName, 10); // second argument is random seed
 
 		// Good luck!
-	main_incorrect_command (dict, board, bag, numTiles);
+	bool result = main_incorrect_command (dict, board, bag, numTiles);
 		return 0;
 	}
 	catch (std::invalid_argument & e)
