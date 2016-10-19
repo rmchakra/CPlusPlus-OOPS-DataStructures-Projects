@@ -10,4 +10,4 @@ Unused variable result will be used in future implementation hence produces a wa
 
 memory leaks occur causing errors which is traced back to file bag which I am not allowed to edit
 
-Program does not segfault on my vm however the submission check seg faults it. Please verify code on vm
+Program does not segfault on my vm however the submission check seg faults it. Please verify code on vm.
