@@ -5,6 +5,13 @@
 - **Email**: rmchakra@usc.edu
 
 Changes I need to make
+make separate window for initial input of number of players 
+make separate window for initial input of  player names. Once the first one is executed close it. Public slot can be the function that just .shows the next step in the desired window sequence. Until then dont show it. Make it into the signal for the inputs given and the push button for the values to be send as the close and not just pressing x like in the Qt example.
+basically make the
+
+
+
+All my modifying the board functions such as place would be a public slot which is being passed the board object.
 
 Read up on
 		QLabel
@@ -23,8 +30,13 @@ Read up on
 error happens during startup
 		write an error message to cout and terminate
 		no need to pop up a window for that
+
+For each of the is the move valid have a pop up window th
+that displays the message so for each of the is_valid moves
+
 Board class
-		Imherit the orig board class publicly and make the print a virtual function. Overwrite it to be a GUI and in orig change the variables
+		Inherit the orig board class publicly and make the print a virtual function. Overwrite it to be a GUI and in orig change the variables
+Need to make the board clickable
 
 window for moves
 		At each move pop up a window asking which move should be carried out

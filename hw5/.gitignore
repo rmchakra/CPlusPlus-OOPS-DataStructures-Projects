@@ -1,2 +1,7 @@
 Qt-Examples
 Scrabble-Qt
+*.o
+*moc_*
+*.pro
+*.txt
+first_2_windows
