@@ -89,6 +89,8 @@ class Sqt : public QWidget
     Bag& bag;
     unsigned int & hand_size;
 
+    bool firstmove;
+
 
     public slots:
     void setup(QVector<QString>, int );

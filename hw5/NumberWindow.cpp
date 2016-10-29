@@ -81,7 +81,7 @@ void NumberWindow::set_window_number(int a)
 
 void NumberWindow::closeEvent (QCloseEvent *event)
 {
-  std::cout << "Bye Bye.\n";
+  //std::cout << "Bye Bye.\n";
   //  event->accept();
   QWidget::closeEvent (event);
 }

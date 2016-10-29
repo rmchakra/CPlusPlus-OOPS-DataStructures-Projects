@@ -29,11 +29,12 @@ public:
 	bool tiles_present(std::string letters, std::vector <Tile*>& tiles_seen);
 
  	std::string exchange_tiles(std::string tiles_2_B_Exchanged, Bag& bag);
-
- 	bool valid_place( char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& d, std::vector <Tile*>& tiles_seen, bool first_move, int& move_score);
+//"S" is returned for success or true and if it isnt S then it must be false
+ 	
+ 	std::string valid_place( char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& d, std::vector <Tile*>& tiles_seen, bool first_move, int& move_score);
  	//add a bool for the first move where it must cover start square
  	//check bag draw when tiles not remaining in handsize
- 	void place( char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict, Bag& bag, bool first_move);
+ 	std::string place( char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict, Bag& bag, bool first_move);
  	int char_to_int(char c);
  	int word_multiplier_bonus(char c);
  	int letter_multiplier_bonus(char c);

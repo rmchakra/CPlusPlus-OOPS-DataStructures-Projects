@@ -110,6 +110,7 @@ Sqt::Sqt(QApplication *app, Board& b, Dictionary& d, Bag& ba, unsigned int & hs)
 		
 	player_ref =0;
     allpassed = true;
+    firstmove= true;
 
 	//BELOW THIS POINT IS QTBOARD creation
 
@@ -210,7 +211,8 @@ void Sqt::q_place()
 	allpassed = false;
 
 	QString str = tiles->text();
-	QString dir = place_dir-> currentText() ;
+	QString directi = place_dir-> currentText();//DIRECTION VERTICAL OR HORIZONTAL
+	std::string direc = directi.toStdString();
 
 	QPushButton *called = (QPushButton*) QObject::sender();
 	int i=0,j=0;
@@ -225,10 +227,45 @@ void Sqt::q_place()
 			}
 		}
 	}
+//UNTIL HERE WE HAVE THE COORDINATES(ROW AND COL OF PRESSED BUTTON)
+
+
+	std::string letters_to_be_placed = str.toStdString();
+	letters_to_be_placed = players[player_ref].make_upper(letters_to_be_placed);
+//LETTERS TO BE PLACED HAVE NOW BEEN OBTAINED
+	char dir;//THIS IS THE DIRECTION IN WHICH TO PLACE IT
+
+	if(direc == "HORIZONTAL") dir = '-';
+	if(direc == "VERTICAL") dir = '|';
+
+
+
+	std::string placement_res = players[player_ref].place( dir, i, j, letters_to_be_placed, mb, dict, bag, firstmove);
+ 	
+
+	if(placement_res!="S")
+	{//it failed
+		invalid_move(QString::fromStdString(placement_res));
+	}
+
+	else
+	{//means it is a valid placement and has already been performed on mb
+
+	}
+
+
+
+
+
+
+
+
+//placing on the pushbuttonboard
+
 	for (QString::iterator it = str.begin(); it != str.end(); ++it) 
 	{
 		
-		if(dir == "HORIZONTAL")
+		if(direc  == "HORIZONTAL")
 		{
 			if (j < cols)
 			{
@@ -256,7 +293,7 @@ void Sqt::q_place()
 		
 	}
 
-
+	firstmove = false;//SET TO FALSE AFTER THE FIRST PLACEMENT HAS BEEN MADE
 	post_move_endgame();
 }
 

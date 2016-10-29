@@ -85,7 +85,7 @@
 
 	std::string Player::return_str_current_tiles()
 	 {
-	 	std::cout <<"Your current tiles:";
+	 	//std::cout <<"Your current tiles:";
 	 	
 	 	std::string s_t = "";
 
@@ -98,11 +98,7 @@
 	 		std::string pts;
 	 		ss>>pts;
 	 		s_t = s_t + "[" + (*it)->getLetter() +","+pts +"]";
-
-
-	 		std::cout<<s_t<<std::endl;
 	 	}
-	 	std::cout<<s_t<<std::endl;
 	 	return s_t;
  	}
 
@@ -225,8 +221,8 @@
  	}
 
 
-bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict, std::vector <Tile*>& tiles_seen, bool first_move, int& move_score)//here board is passed by value not reference
- {//for scoring do the letters count up the multiplier and give it
+std::string Player::valid_place(char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict, std::vector <Tile*>& tiles_seen, bool first_move, int& move_score)//here board is passed by value not reference
+{//for scoring do the letters count up the multiplier and give it
  	//if all the letters used then add 50
  //do ajacent = true for sides which has not yet been done
 
@@ -263,14 +259,14 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  	if(tiles_present(tiles, tiles_seen)==false)
  	{
  		
- 		std::cout<<"Tiles attempting to be removed are not present in hand"<<std::endl;
- 		return false;//if the inputted tiles are not present
+ 		return ("Tiles attempting to be removed are not present in hand");
+//if the inputted tiles are not present
  	}
  	if(board[s_row][s_column][0]!='.')
  	{
  		
- 		std::cout<<"Placed spot is occupied"<<std::endl;
- 		return false;//if position being placed at is occupied
+ 		return ("Placed spot is occupied");
+ 		//if position being placed at is occupied
 //All the possible words formed
  	}
 
@@ -290,13 +286,13 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
  		if(first_move)
  		{//checking validity of first move
- 			if(s_column > board_obj.get_start_column())return false;
+ 			if(s_column > board_obj.get_start_column())return("first move must begin at starting square");
  			
-			if(s_column< board_obj.get_start_column() && (s_column+input_size-1)< board_obj.get_start_column() )return false;	
+			if(s_column< board_obj.get_start_column() && (s_column+input_size-1)< board_obj.get_start_column() )return("first move must begin at starting square");	
  			if(s_row != board_obj.get_start_row())
  			{
  			
- 			return false;
+ 				return("first move must begin at starting square");
  			}
  			adjacent = true;//if it is the first move cant be adjacent to anything
  		}
@@ -470,8 +466,8 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
  			if(!dict.is_present(make_lower(curr_vertical_word))&& (curr_vertical_word.size()>1))
  				{
- 					std::cout<<"vertically formed word"<<curr_vertical_word<<"is not in Dictionary"<<std::endl;
- 					return false;
+ 					return ("vertically formed word " + curr_vertical_word+" is not in Dictionary");
+ 					
  				}
  			curr_column++;
  		}
@@ -501,9 +497,9 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		if(!dict.is_present(   make_lower(curr_horizontal_word)  )   )
  			{
  				
- 				std::cout<<"Horizontal word "<<curr_horizontal_word<<" is not in Dictionary"<<std::endl;
+ 				return( "Horizontal word " + curr_horizontal_word +" is not in Dictionary");
  				//std::cout<<"!dict.is_present(curr_horizontal_word)"<<std::endl;
- 					return false;
+ 					 
  			}
  	}
 
@@ -521,9 +517,9 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
  		if(first_move)
  		{
- 			if(s_row > board_obj.get_start_row())return false;//begins from below start and goes downward
-			if(s_row< board_obj.get_start_row() && (s_row+input_size-1)< board_obj.get_start_row() )return false;//doesnt cross	
- 			if(s_column != board_obj.get_start_column())return false;//different column from start
+ 			if(s_row > board_obj.get_start_row())return("first move must begin at starting square");//begins from below start and goes downward
+			if(s_row< board_obj.get_start_row() && (s_row+input_size-1)< board_obj.get_start_row() )return("first move must begin at starting square");//doesnt cross	
+ 			if(s_column != board_obj.get_start_column())return("first move must begin at starting square");//different column from start
  			
  			adjacent = true;//if it is the first move cant be adjacent to anything
  		}
@@ -662,8 +658,8 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			 curr_column = s_column;
  			if(!dict.is_present(make_lower(curr_horizontal_word))&& (curr_horizontal_word.size()>1))
  				{
- 					std::cout<<"horizontally formed word"<<curr_horizontal_word<<"is not in Dictionary"<<std::endl;
- 					return false;
+ 					return ("horizontally formed word" + curr_horizontal_word + "is not in Dictionary");
+ 					 
  				}
  			curr_row++;
 
@@ -700,9 +696,9 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		if(!dict.is_present(   make_lower(curr_vertical_word)  )   )
  			{
  				
- 				std::cout<<"vertical word "<<curr_vertical_word<< " is not in Dictionary"<<std::endl;
+ 				return ("vertical word " + curr_vertical_word + " is not in Dictionary");
  				//std::cout<<"!dict.is_present(curr_vertical_word)"<<std::endl;
- 				return false;
+ 				
  			}
 
  	}
@@ -711,18 +707,18 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  	if(!adjacent)
  	{
  		//std::cout<<"Horizontal word is:"<<curr_horizontal_word<<std::endl;
- 		std::cout<<"placed tile not adjacent"<<std::endl;
- 		std::cout<<"value of adjacent is : "<< adjacent <<std::endl;
- 		return false;
+ 		//std::cout<<"placed tile not adjacent"<<std::endl;
+ 		//std::cout<<"value of adjacent is : "<< adjacent <<std::endl;
+ 		return "placed tile not adjacent";
  	}
 
  	main_direction_score*=main_direction_multiplier;
  	move_score += main_direction_score;//each of the perp direction scores need to be added and main for vertical
 
- 	return true;
+ 	return "S";
  }
 
- 	void Player::place( char dir, int row, int column, std::string tiles, Board& board_obj, Dictionary& dict, Bag& bag, bool first_move)
+ 	std::string Player::place( char dir, int row, int column, std::string tiles, Board& board_obj, Dictionary& dict, Bag& bag, bool first_move)
 	{	//ACTUAL GAMEPLAY AND SCORING NEED TO BE DONE
 
 		//placed instructions given with spaces between
@@ -740,12 +736,15 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 //(char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict)//here board is passed by value not reference
 		int move_score = 0;
 
-		if(! Player::valid_place( dir, row, column, tiles, board_obj, dict, hand_tiles_for_input_letters, first_move, move_score))
+
+		std::string val_place = Player::valid_place( dir, row, column, tiles, board_obj, dict, hand_tiles_for_input_letters, first_move, move_score);
+
+		if("S" != val_place )
 		{//if invalid place
 		 //assuming no spaces between tiles but just a string of the tiles
 			
-			std::cout<<"Invalid place"<<std::endl;
-			return;
+			//std::cout<<"Invalid place"<<std::endl;
+			return val_place;
 		}
 
 		else
@@ -823,5 +822,6 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 	 	
 
 	 	board_obj.set_board(board);
+	 	return("S");
  	}
 
