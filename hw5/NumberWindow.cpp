@@ -98,15 +98,15 @@ void NumberWindow::confirmPressed ()
   else if(window_number == 1)
   {
 
-    names =  new QString [number_of_players];
+    //names =  new QString [number_of_players];
     //QString names[number_of_players];
     for(int i = 0; i<number_of_players;i++)
     {
-      names[i]=name_inputs[i]->text();
-      std::cout<<"EMMITING NAME: "<<names[i].toStdString()<<std::endl;
+      names.push_back(name_inputs[i]->text());
+      //std::cout<<"EMMITING NAME: "<<names[i].toStdString()<<std::endl;
     }
 
-    //emit W2send(names, number_of_players);
+    emit W2send(names, number_of_players);
   }
  
   close();
@@ -144,13 +144,16 @@ void NumberWindow::W0confirmPressed (/*QString name = "no input",*/ int players)
 }
 
 
-// void NumberWindow::W1confirm(QString* n, int players )
+// void NumberWindow::W1confirm(QVector<QString> n, int players )
 // {
-
+//       for(int i = 0; i < players; i++)
+//       {
+//         names.push_back(n[i]);
+//       }
 //   names = n;
 //   number_of_players = players;
 //   std::cout<<"SIZE OF NAMES ISRYTKRT :"<<number_of_players<<std::endl;
-//   std::cout<<"NAMES ARE :"<<std::endl;
+//   std::cout<<"NAMES ARE:"<<std::endl;
 // //ARRAY OF NAMES IS NOT BEING RECEIVED
 
 
@@ -167,11 +170,16 @@ void NumberWindow::W0confirmPressed (/*QString name = "no input",*/ int players)
 
 //   for(int i = 0; i< number_of_players; i++)
 //   {
+//     allNameLabels[i] = new QLabel;
 
-//     allNameLabels[i]->setText(names[i]);   
+//    std::cout <<"Entered the FOR"<<std::endl;
+//     (allNameLabels[i])->setText(names[i]);
+//    std::cout <<"allNameLabels SET TEXT CROSEED"<<std::endl;   
 //     fl->addRow ("Player's name", allNameLabels[i]);
-//   }
 
+//    std::cout <<"ADDING ROW TO FL"<<std::endl;  
+//   }
+//   std::cout <<"CROSSED THE FOR"<<std::endl;
 //   mainLayout->addLayout (fl);
 
 //   setLayout (mainLayout);
@@ -184,6 +192,6 @@ void NumberWindow::W0confirmPressed (/*QString name = "no input",*/ int players)
 
 void NumberWindow::quitPressed ()
 {
-  std::cout << "Quit was pressed!\n";
+  //std::cout << "Quit was pressed!\n";
   close ();
 }

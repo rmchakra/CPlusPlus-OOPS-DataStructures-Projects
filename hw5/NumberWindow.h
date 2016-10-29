@@ -9,27 +9,12 @@
 #include <QLabel>
 #include <QString>
 
-class Qboard : public QWidget
+class NumberWindow : public QWidget
 {
   Q_OBJECT
 
     public:
-    Qboard (Board& board, QWidget *parent = 0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+    NumberWindow (int a = 0, QWidget *parent = 0);
 
     void closeEvent (QCloseEvent *event);
     int get_window_number(){return window_number;}
@@ -38,23 +23,20 @@ class Qboard : public QWidget
 
     signals:
     void  W0(/*QString name, */int players);
-   // void W2send(QString* names, int players);
+    void W2send(QVector<QString> names, int players);
+    //QVector<QString>
+
 
     public slots:
     void confirmPressed ();
     void quitPressed ();
     void W0confirmPressed (/*QString name = "no input",*/ int players);
-    //void W1confirm(QString* n, int players);
-    QString* get_names(){return names;}
-    void set_names(QString n[]){names=n;}
+    //void W1confirm(QVector<QString>, int );
+    //QString* get_names(){return names;}
+    //void set_names(QString n[]){names=n;}
 
 
  private:
-    Board& mb;//this is my board
-
-
-
-
     QPushButton *quitButton, *confirmButton;
     //QLineEdit *name;
     QSpinBox *number;
@@ -65,6 +47,6 @@ class Qboard : public QWidget
     QLabel** allNameLabels; 
     int window_number;
     int number_of_players;
-    QString* names;
+    QVector<QString> names;
 
 };

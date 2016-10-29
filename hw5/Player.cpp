@@ -6,7 +6,9 @@
 	{score = 0;
 		 max_handsize = handsize;
 		//initialise tile set
-			
+
+		 
+				
 			std::set<Tile*> drawn_tiles = bag.drawTiles(handsize);
 
 			std::set<Tile*>::iterator it;
@@ -81,15 +83,27 @@
 
 	int Player::return_current_handsize() {return current_tiles.size();}
 
-	void Player::print_current_tiles()
+	std::string Player::return_str_current_tiles()
 	 {
 	 	std::cout <<"Your current tiles:";
-	 	std::set<Tile*>::iterator it;
-	 	for (it=current_tiles.begin(); it!=current_tiles.end(); ++it)
+	 	
+	 	std::string s_t = "";
+
+	 		
+	 	for (std::set<Tile*>::iterator it=current_tiles.begin(); it!=current_tiles.end(); ++it)
 	 	{
-	 		std::cout <<" [" << (*it)->getLetter() << ", "<< (*it)->getPoints() << "]";
+	 		
+	 		std::stringstream ss;
+	 		ss<< (*it)->getPoints();
+	 		std::string pts;
+	 		ss>>pts;
+	 		s_t = s_t + "[" + (*it)->getLetter() +","+pts +"]";
+
+
+	 		std::cout<<s_t<<std::endl;
 	 	}
-	 	std::cout <<std::endl;
+	 	std::cout<<s_t<<std::endl;
+	 	return s_t;
  	}
 
  	bool Player::tiles_present(std::string letters, std::vector <Tile*>& tiles_seen)
@@ -140,7 +154,7 @@
 	 	return (tiles_seen.size() == number_of_letters);
  	}
 
- 	void Player::exchange_tiles(std::string tiles_2_B_Exchanged, Bag& bag)
+ 	std::string Player::exchange_tiles(std::string tiles_2_B_Exchanged, Bag& bag)
 	{//remember to do duplicate checking
 
 		std::vector <Tile*> tiles_seen;//simply meant to satsify prototype of tile_present, otherwise unused
@@ -148,7 +162,7 @@
 	 	int number_of_tiles=tiles_2_B_Exchanged.size();
 	
 		if(tiles_present(tiles_2_B_Exchanged, tiles_seen))
-		{
+		{//if the EXCHANGE WAS SUCCESSFUL RETURN S ELSE RETURN THE STRING ERROR
 			for (int i=0; i<number_of_tiles; ++i)
 	 		{//performing the removals from the tiles in hand and adding to bag
 			
@@ -199,11 +213,14 @@
 
 	 		// current_tiles.insert(bag.drawTiles(number_of_tiles));
 			//bag.draw tiles gives a set of tile*
+
+
+	 		return "S";
 		}
 
 		else
 		{
-			std::cout<<"Tiles to be exchanged are not present"<<std::endl;
+			return "Tiles to be exchanged are not present";
 		}
  	}
 

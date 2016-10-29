@@ -25,10 +25,10 @@ public:
 
  	int return_current_handsize();
 
-	void print_current_tiles();
+	std::string return_str_current_tiles();
 	bool tiles_present(std::string letters, std::vector <Tile*>& tiles_seen);
 
- 	void exchange_tiles(std::string tiles_2_B_Exchanged, Bag& bag);
+ 	std::string exchange_tiles(std::string tiles_2_B_Exchanged, Bag& bag);
 
  	bool valid_place( char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& d, std::vector <Tile*>& tiles_seen, bool first_move, int& move_score);
  	//add a bool for the first move where it must cover start square
