@@ -240,7 +240,7 @@ void Sqt::q_place()
 
 
 
-	std::string placement_res = players[player_ref].place( dir, i, j, letters_to_be_placed, mb, dict, bag, firstmove);
+	std::string placement_res = players[player_ref].place( dir, i, j, letters_to_be_placed, mb, dict, bag, firstmove, pb_board);
  	
 
 	if(placement_res!="S")
@@ -262,36 +262,36 @@ void Sqt::q_place()
 
 //placing on the pushbuttonboard
 
-	for (QString::iterator it = str.begin(); it != str.end(); ++it) 
-	{
+	// for (QString::iterator it = str.begin(); it != str.end(); ++it) 
+	// {
 		
-		if(direc  == "HORIZONTAL")
-		{
-			if (j < cols)
-			{
+	// 	if(direc  == "HORIZONTAL")
+	// 	{
+	// 		if (j < cols)
+	// 		{
 
-			pb_board[i][j]->setText(*it);
-			(pb_board[i][j])->setEnabled(false);
-			//std::cout<< ((pb_board[i][j])->text()).toStdString();
-			}
+	// 		pb_board[i][j]->setText(*it);
+	// 		(pb_board[i][j])->setEnabled(false);
+	// 		//std::cout<< ((pb_board[i][j])->text()).toStdString();
+	// 		}
 
-			j++;
-		}
-		else
-		{
-			if (i < rows)
-			{
+	// 		j++;
+	// 	}
+	// 	else
+	// 	{
+	// 		if (i < rows)
+	// 		{
 
-			pb_board[i][j]->setText(*it);
-			(pb_board[i][j])->setEnabled(false);
-			//std::cout<< ((pb_board[i][j])->text()).toStdString();
-			}
+	// 		pb_board[i][j]->setText(*it);
+	// 		(pb_board[i][j])->setEnabled(false);
+	// 		//std::cout<< ((pb_board[i][j])->text()).toStdString();
+	// 		}
 
-			i++;
-		}
+	// 		i++;
+	// 	}
 
 		
-	}
+	// }
 
 	firstmove = false;//SET TO FALSE AFTER THE FIRST PLACEMENT HAS BEEN MADE
 	post_move_endgame();

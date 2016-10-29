@@ -718,7 +718,7 @@ std::string Player::valid_place(char dir, int s_row, int s_column, std::string t
  	return "S";
  }
 
- 	std::string Player::place( char dir, int row, int column, std::string tiles, Board& board_obj, Dictionary& dict, Bag& bag, bool first_move)
+ 	std::string Player::place( char dir, int row, int column, std::string tiles, Board& board_obj, Dictionary& dict, Bag& bag, bool first_move, QPushButton ***pb_board)
 	{	//ACTUAL GAMEPLAY AND SCORING NEED TO BE DONE
 
 		//placed instructions given with spaces between
@@ -747,7 +747,7 @@ std::string Player::valid_place(char dir, int s_row, int s_column, std::string t
 			return val_place;
 		}
 
-		else
+		if(val_place == "S")
 		{//deemed valid and board = row, column
 			//c_row, c_column are the current positions on the board of the program
 			for(unsigned int i = 0; i< tiles.size() ;++i)
@@ -782,6 +782,8 @@ std::string Player::valid_place(char dir, int s_row, int s_column, std::string t
 			   	//converting int to string score
 
 			   		board[row][column]=  curr_tile->getUse() + tile_points + " ";
+			   		pb_board[row--][column--]->setText(QString::fromStdString(curr_tile->getUse() + tile_points + " "));
+				   (pb_board[row--][column--])->setEnabled(false);
 
 
 			   		//only if something is being placed then you want to erase the tile from hand if not then dont
@@ -793,8 +795,8 @@ std::string Player::valid_place(char dir, int s_row, int s_column, std::string t
 					std::set<Tile*>::iterator it;
 	 				for (it=drawn_tiles.begin(); it!=drawn_tiles.end(); ++it)
 	 				{
-	 					std::cout<<"Drawn tiles are"<<std::endl;
-	 					std::cout <<" [" << (*it)->getLetter() << ", "<< (*it)->getPoints() << "]";
+	 					//std::cout<<"Drawn tiles are"<<std::endl;
+	 					//std::cout <<" [" << (*it)->getLetter() << ", "<< (*it)->getPoints() << "]";
 						current_tiles.insert(*it) ;
 	 				}
 
@@ -817,11 +819,11 @@ std::string Player::valid_place(char dir, int s_row, int s_column, std::string t
 
 			score +=move_score;
 			std::cout<<"SCORE IS: "<< score << std::endl;
-
+				 	return("S");
 		}
 	 	
 
 	 	board_obj.set_board(board);
-	 	return("S");
+
  	}
 
