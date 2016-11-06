@@ -22,7 +22,7 @@ using namespace std;
 
 Bag::Bag (const string bag_file_name, int random_seed)
 {
-	srand (random_seed);
+	srand (random_seed);//changed from random seed
 	ifstream bagFile (bag_file_name.c_str());
 
 	if (bagFile.is_open())

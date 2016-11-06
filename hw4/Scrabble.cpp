@@ -1,4 +1,5 @@
-//#include "Scrabble.h"
+//#include <NumberWindow.h>
+#include "Scrabble.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -60,6 +61,67 @@ void readConfigFile (std::string config_file_name,
 		throw std::invalid_argument("Dictionary file name not specified in config file");
 }
 
+void endgame(std::vector<Player> players, int player_ref, bool allpassed)
+{
+	int all_p_tile_sum = 0;
+
+
+
+	if(allpassed==false)
+	{
+		for(unsigned int i = 0; i<players.size(); i++)
+		{
+
+				if((int)i!=player_ref)
+				{
+					all_p_tile_sum += players[i].final_score();
+				}
+		}
+
+
+	}
+
+	
+
+
+
+
+	players[player_ref].set_score((players[player_ref].return_score())+ all_p_tile_sum);
+
+	int h_player_score_ref =player_ref;
+
+
+
+
+
+	//DETERMINING HIGHEST SCORE PLAYERS AND PRINTING THEIR NAMES
+
+	for(unsigned int i = 0; i<players.size(); i++)
+	{
+
+		if(players[i].return_score() > players[h_player_score_ref].return_score())
+		{
+			h_player_score_ref = i;
+		}
+	}
+
+		for(unsigned int i = 0; i<players.size(); i++)
+	{
+
+		if(players[i].return_score() == players[h_player_score_ref].return_score())
+		{
+			std::cout<<"Winner is : "<< players[i].return_name() << " \n With Score:" << players[i].return_score()<< std::endl;
+
+		}
+	}
+
+
+	
+	//int return_score();
+	//void set_score(int score_);
+
+}
+
 bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned int & hand_size)
 {//gameplay goes on in here and if incorrect command is entered then you return true from here
 	//add an ss.fail for each of the stringstream to anywhere
@@ -116,6 +178,7 @@ bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned in
 		if( (bag.tilesRemaining()==0 ) && players[player_ref].return_current_handsize() == 0)
 		{
 				std::cout<<"ENDGAME: No tiles in bag and no tiles in hand"<<std::endl;
+				endgame(players, player_ref, false);
 				break;//after the and there is conditions needed to be checked
 		}	
 
@@ -146,7 +209,7 @@ bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned in
 		getline(std::cin, full_command);//getting the command
 		std::stringstream ss;
 		ss<<full_command;
-		std::cout<<"FULL COMMAND IS :"<<ss.str()<<std::endl;
+		//std::cout<<"FULL COMMAND IS :"<<ss.str()<<std::endl;
 		ss>>command;
 		command = players[player_ref].make_upper(command);
 
@@ -220,7 +283,15 @@ bool main_incorrect_command(Dictionary& dict, Board& board, Bag& bag,unsigned in
 		if(player_ref == ((int)players.size()-1)) 
 		{//reached the last player then goes to -1 state which is incremented at the end of the loop
 			if(allpassed == true)
-			{std::cout<<"ENDGAME: All PASSED"<<std::endl; break;}
+			{
+				std::cout<<"ENDGAME: All PASSED"<<std::endl; 
+
+
+				endgame(players, player_ref, true);
+
+
+				break;
+			}
 			
 			player_ref=-1;
 			allpassed = true;

@@ -34,6 +34,11 @@
 		std::string b = "";
 		for(unsigned int i =0 ; i<a.size();i++)
 		{
+			if(a[i]=='?')
+			{
+				b+=a[i];
+				continue;
+			}
 			b+=toupper(a[i]);
 		}
 		return b;
@@ -100,9 +105,20 @@
  		unsigned int number_of_letters = letters.size();
 
 		std::set<Tile*>::iterator it;
+		bool ques = false;
 	 	for (unsigned int i=0; i<number_of_letters; ++i)
 	 	 {  //looping through each of the letter
 			//for each letter checking for a match
+	 	 	if(i>0)
+	 	 	{
+
+				if(letters[i-1]=='?') 
+					{
+						
+						ques = true;
+						continue;	
+					}
+	 	 	}
 
 	 		for (it=current_tiles.begin(); it!=current_tiles.end(); ++it)
 	 		{//iterating through each of the tiles in hand
@@ -137,6 +153,8 @@
 
 	 	//if the size of freshly tiles_seen = number_of_letters then all the letters were matched
 	 	//so exchange is legal
+
+	 	if(ques==true) number_of_letters--;
 	 	return (tiles_seen.size() == number_of_letters);
  	}
 
@@ -248,7 +266,9 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		
  		std::cout<<"Tiles attempting to be removed are not present in hand"<<std::endl;
  		return false;//if the inputted tiles are not present
- 	}
+ 	}	
+
+
  	if(board[s_row][s_column][0]!='.')
  	{
  		
@@ -256,7 +276,6 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		return false;//if position being placed at is occupied
 //All the possible words formed
  	}
-
 
  	bool adjacent = false;//checks if newly placed word is adjacent to previous words
  				
@@ -325,12 +344,18 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		//first checking each vertically formed word
 
 
+ 		int ques_counter = 0;
+
+
+
+
  		for(int i = 0; i<input_size && curr_column< board_obj.get_width(); i++)
  		{//looping through each of the input characters and checking each vertically formed word in that column as its added to the horizontal
  			
  			// std::cout<<"CHARACTER AT BOARD IS::"<<board[curr_row][curr_column][0]<<std::endl;
  			// std::cout<<"COLUMN IS::"<<curr_column+1<<std::endl;
  			// std::cout<<"ROW IS::"<<curr_row+1<<std::endl;
+
  				
  			if(board[curr_row][curr_column][0]!='.')
  			{//if a vertically formed word is already there then skip over checking that word
@@ -351,10 +376,43 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  				continue;
 
  			}
+
+ 			if(tiles[i]== '?')
+
+ 			{
+ 				//main_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
+ 				ques_counter++;
+ 				continue;	
+ 			} 
+
+
  			//tiles[i] is your input tile so here is a new tile which you are coming across
+ 			
  			curr_horizontal_word+=tiles[i];
- 			//SCORING
- 			main_direction_score+= (((tiles_seen[i])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));
+ 			
+ 			if(i>0)
+ 			{
+
+ 				if(tiles[i-1] != '?')
+ 				{
+
+
+		//tiles_seen[i]->getPoints ();
+
+
+
+ 					main_direction_score+= (((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));
+ 			
+
+ 				}
+ 			}
+ 			
+
+				if(i==0)
+ 			{
+ 					main_direction_score+= (((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));
+ 			}
+
  			main_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
  			//SCORING
 
@@ -380,7 +438,22 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  					if(!upward_flag)
  					{//for each upward only want to add the tile score once
  						upward_flag = true;
- 						perp_direction_score+=(((tiles_seen[i])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+
+
+ 			if(i>0)
+ 			{
+ 				if(tiles[i-1] != '?')
+ 				{
+ 					perp_direction_score+=(((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+ 					
+					}
+ 			}
+
+ 			if(i == 0)
+ 			{
+ 				perp_direction_score+=(((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+ 					
+ 			}
  						perp_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
 
  					}
@@ -420,7 +493,30 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  					if(!upward_flag)
  					{//for each upward/downward only want to add the tile score once
  						upward_flag = true;//also works as a downward flag
- 						perp_direction_score+=(((tiles_seen[i])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+
+
+
+
+
+
+
+ 							if(i>0)
+ 							{
+ 								if(tiles[i-1] != '?')
+ 								{
+ 									perp_direction_score+=(((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+ 						
+ 								}
+ 							}
+ 							if(i == 0)
+ 							{
+ 								perp_direction_score+=(((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+ 						
+ 							}
+
+
+
+
  						perp_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
 
  					}
@@ -458,7 +554,6 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  				}
  			curr_column++;
  		}
-
  		//keep adding elements to the right until empty
  		//now checking the horizontally formed main word
  		//curr_column++;
@@ -480,6 +575,7 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			}	
  		}
  		
+ 		std::cout<<"Horizontal word : "<<curr_horizontal_word<<std::endl;
 
  		if(!dict.is_present(   make_lower(curr_horizontal_word)  )   )
  			{
@@ -488,6 +584,10 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  				//std::cout<<"!dict.is_present(curr_horizontal_word)"<<std::endl;
  					return false;
  			}
+
+
+
+
  	}
 
 
@@ -536,6 +636,10 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  		//first checking each horizontally formed word as you iterate down the vertical word
 
 
+ 		int ques_counter = 0;
+
+
+
  	 	for(int i = 0; i<input_size && curr_row< board_obj.get_height(); i++)
  		{//looping through postions of each of the input characters and checking each vertically formed word in that column as its added to the horizontal
  			
@@ -559,6 +663,13 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
  			}
 
+ 			if(tiles[i]== '?')
+
+ 			{
+ 				//main_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
+ 				continue;	
+ 			} 
+
  			std::string curr_horizontal_word="";
  			curr_vertical_word+=tiles[i];//tile at that position
  			
@@ -569,8 +680,29 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  			//SCORING
 
 
+
+			if(i>0)
+ 			{
+ 				if(tiles[i-1] != '?')
+ 				{
+ 					main_direction_score+= (((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));
+ 			
+ 				}
+ 			}
+ 			
+
+				if(i==0)
+ 			{
+ 					main_direction_score+= (((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));
+ 			
+ 			}
+
+
+
+
+
+
  			//SCORING
- 			main_direction_score+= (((tiles_seen[i])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));
  			main_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
  			//SCORING
 
@@ -589,7 +721,22 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  					if(!upward_flag)
  					{//for each upward only want to add the tile score once
  						upward_flag = true;
- 						perp_direction_score+=(((tiles_seen[i])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+
+ 							if(i>0)
+ 							{
+ 								if(tiles[i-1] != '?')
+ 								{
+ 									perp_direction_score+=(((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+ 						
+ 								}
+ 							}
+ 							if(i == 0)
+ 							{
+ 								perp_direction_score+=(((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+ 						
+ 							}
+
+
  						perp_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
 
  					}
@@ -624,7 +771,27 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
  					if(!upward_flag)
  					{//for each upward/downward only want to add the tile score once
  						upward_flag = true;//also works as a downward flag
- 						perp_direction_score+=(((tiles_seen[i])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+
+
+
+
+
+
+
+
+ 						if(i>0)
+ 							{
+ 								if(tiles[i-1] != '?')
+ 								{
+ 									perp_direction_score+=(((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+ 						
+ 								}
+ 							}
+ 							if(i == 0)
+ 							{
+ 								perp_direction_score+=(((tiles_seen[i-ques_counter])->getPoints ())*letter_multiplier_bonus(board[curr_row][curr_column][1]));//adding the score of the tile
+ 						
+ 							}
  						perp_direction_multiplier*=word_multiplier_bonus(board[curr_row][curr_column][1]);
 
  					}
@@ -723,6 +890,7 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 //(char dir, int s_row, int s_column, std::string tiles, Board& board_obj, Dictionary& dict)//here board is passed by value not reference
 		int move_score = 0;
 
+
 		if(! Player::valid_place( dir, row, column, tiles, board_obj, dict, hand_tiles_for_input_letters, first_move, move_score))
 		{//if invalid place
 		 //assuming no spaces between tiles but just a string of the tiles
@@ -730,13 +898,20 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 			std::cout<<"Invalid place"<<std::endl;
 			return;
 		}
+ 		
+
+
 
 		else
 		{//deemed valid and board = row, column
+
+
 			//c_row, c_column are the current positions on the board of the program
-			for(unsigned int i = 0; i< tiles.size() ;++i)
+			for(unsigned int i = 0; i< tiles.size() ;i++)
 			{
 				Tile* curr_tile =hand_tiles_for_input_letters[i];
+
+				
 
 				 if(board[row][column][0] == '.')
 			   {//means unoccupied spot
@@ -753,10 +928,11 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 			   	
 			   		if(curr_tile->isBlank ())
 			   		{
-			   			std::cout<<"Enter use of tile"<<std::endl;
-			   			char use;
-			   			std::cin>>use;
-			   			curr_tile->useAs(toupper(use));
+			   			//std::cout<<"Enter use of tile"<<std::endl;
+			   			//char use;
+			   			//std::cin>>use;
+			   			curr_tile->useAs(toupper(tiles[i+1]));
+			   			tiles.erase(i+1, 1);
 			   		}
 
 			   		std::stringstream ss;
@@ -777,8 +953,8 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 					std::set<Tile*>::iterator it;
 	 				for (it=drawn_tiles.begin(); it!=drawn_tiles.end(); ++it)
 	 				{
-	 					std::cout<<"Drawn tiles are"<<std::endl;
-	 					std::cout <<" [" << (*it)->getLetter() << ", "<< (*it)->getPoints() << "]";
+	 					//std::cout<<"Drawn tiles are"<<std::endl;
+	 					//std::cout <<" [" << (*it)->getLetter() << ", "<< (*it)->getPoints() << "]";
 						current_tiles.insert(*it) ;
 	 				}
 
@@ -797,9 +973,14 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 				//curr_tile = NULL;
 				//erase takes in the position			 
 			   	
+				//std::cout<<"END OF FOR : tILES SIZE"<< tiles.size()<< "I:"<<i <<std::endl;
 			}
 
 			score +=move_score;
+			if(tiles.size()==7)
+			{
+				score+=50;
+			}
 			std::cout<<"SCORE IS: "<< score << std::endl;
 
 		}
@@ -807,4 +988,19 @@ bool Player::valid_place(char dir, int s_row, int s_column, std::string tiles, B
 
 	 	board_obj.set_board(board);
  	}
+int Player::final_score()
+{
 
+
+	std::set<Tile*>::iterator it;
+	int tile_sum= 0;
+	for (it=current_tiles.begin(); it!=current_tiles.end(); ++it)
+	{
+	 	//std::cout<<"Drawn tiles are"<<std::endl;
+	 	//std::cout <<" [" << (*it)->getLetter() << ", "<< (*it)->getPoints() << "]";
+		tile_sum+=(*it)-> getPoints();
+	}
+	score-=tile_sum;
+
+	return tile_sum;
+}

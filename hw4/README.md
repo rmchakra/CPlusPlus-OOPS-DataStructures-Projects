@@ -4,6 +4,9 @@
 - **USC ID**: 1233719421
 - **Email**: rmchakra@usc.edu
 
+Please not that the executeable created by the makefile may nbe "Scrabble" or "scrabble" depending on which version of the code yourte testing with. Please check the appropriate object name
+
+
 ? tile has been implemented differently from given scrabble game such that it would be entered while the letters are being placed by the program rather than as a term following during the input
 
 Unused variable result will be used in future implementation hence produces a warning

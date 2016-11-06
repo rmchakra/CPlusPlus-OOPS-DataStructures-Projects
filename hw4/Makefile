@@ -9,7 +9,7 @@ GTEST = -I /usr/include/gtest/ -l gtest -l gtest_main -pthread
 VGA = valgrind --tool=memcheck --leak-check=yes --track-origins=yes
 
 
-all: Board Dictionary Bag  Player Scrabble clean
+all: Board Dictionary Bag  Player Scrabble
 
 Reset: 
 	reset
@@ -29,8 +29,8 @@ Player: Player.cpp Player.h
 	$(CXX) $(CPPFLAGS) -c $< -o Player.o	
 
 Scrabble: Board.o Dictionary.o Tile.h Bag.o Player.o Scrabble.cpp
-	$(CXX) $(CPPFLAGS) $^ -o scrabble
-	./scrabble config.txt
+	$(CXX) $(CPPFLAGS) $^ -o Scrabble
+	#./scrabble config.txt
 
 #intermediate compilation
 

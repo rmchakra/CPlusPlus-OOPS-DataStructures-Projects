@@ -37,6 +37,7 @@ public:
  	int char_to_int(char c);
  	int word_multiplier_bonus(char c);
  	int letter_multiplier_bonus(char c);
+ 	int final_score();
  	
 private:
 	std::string name;
