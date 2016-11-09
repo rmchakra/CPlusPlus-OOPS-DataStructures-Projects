@@ -5,19 +5,24 @@
 
 CXX = g++
 CPPFLAGS = -g -Wall
-GTEST = -I /usr/include/gtest/ -l gtest -l gtest_main -pthread
 VGA = valgrind --tool=memcheck --leak-check=yes --track-origins=yes
 
 
-all: AI_Base
+all: Scrabble_funcs AI_Base Scrabble_obj Scrabble
 
-AI_Base: AI_Base.h
-	$(CXX) $(CPPFLAGS) $^ -o AI_Base
+Scrabble_funcs: Scrabble_funcs.cpp
+	$(CXX) $(CPPFLAGS) -c $^ -o Scrabble_funcs.o
 
 
+AI_Base: AI_Base.cpp
+	$(CXX) $(CPPFLAGS) -c $^ -o AI_Base.o
 
-Scrabble: Board.o Dictionary.o Tile.h Bag.o Player.o Scrabble.cpp
-	$(CXX) $(CPPFLAGS) $^ -o Scrabble
+
+Scrabble_obj: Scrabble.cpp Board.o Dictionary.o Tile.h Bag.o Player.o AI_Base.o Scrabble_funcs.o 
+	$(CXX) $(CPPFLAGS) -c $< -o Scrabble.o
 	#./scrabble config.txt
+
+Scrabble: Util.o Board.o Dictionary.o Tile.h Bag.o Player.o Game.o Move.o AI_Base.o Scrabble_funcs.o Scrabble.o
+	$(CXX) $(CPPFLAGS) $^ -o Scrabble
 
 #intermediate compilation

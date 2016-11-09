@@ -26,8 +26,7 @@ class AI_Base: public AbstractAI
     return name;
   }
   // returns the name by which the AI would like to be called
-
-  virtual void initialize (Dictionary* dict)
+ virtual void  initialize (Dictionary* dict)
   {//this just adds all the prefixes to the words
     set <string> all_words = dict->allWords ();
     
@@ -44,10 +43,11 @@ class AI_Base: public AbstractAI
       }
   }
 
-  void all_perms( string tiles, string res, int num, int& counter, vector <string> &all_perms_tiles) 
+  void all_perms( string tiles, string res, int num, int& counter, vector <string> &all_perms_tiles);
 /*
 
   have a for loop that goes through each of the spots. Another for within  where after the first iteration horizontal is false
+  and second is true
   Within this have a function call for the permutations of letters and trying to place them at the given spot.
   for the move exceptions use 
 
@@ -57,7 +57,10 @@ class AI_Base: public AbstractAI
 
 
 
+  if the last member of the words from get words is not a word, then check if its not a prefix. If not a prefix then return
 
+  Have a move vector which stores all of the possible moves and have a virtual determine move function which determines the move for each of the different AIs
+  Have all_perms take in a vector by reference that places every move in
 
 
 
@@ -86,7 +89,7 @@ class AI_Base: public AbstractAI
 */
 
 
-  {//PASS IN RES HAVING THE LETTERS TO THE TOP/LEFT BASED ON DIRECTION
+  //PASS IN RES HAVING THE LETTERS TO THE TOP/LEFT BASED ON DIRECTION
     //Each time I recurse is when I'm adding new letters to the string of prefixes
     //INCREMENT THE BOARD POSITION HORIZONTALLY OR VERTICALLY AND HAVE A WHILE THAT KEEPS ADDING LETTERS AT THE BOARD SPOT AS LONG AS
     //THE SPOT IS OCCUPIED.
@@ -94,16 +97,8 @@ class AI_Base: public AbstractAI
     //FOR INCREASED LETTERS OF THE STRING
     //IN THE IF INSTEAD OF COUT PUSH BACK INTO THE VECTOR
 
-     if(prefixes.find(res) == prefixes.end()) return; //will not recurse further down that prefix check for prefix, but before that check if it is a word also for letters in the middle of the word on the bpard and letters after he placed tile remember to add it to the word search
+     
   
-      if(res.size()>0)
-     { cout << res <<num<<"Counter is :" << counter<<endl; counter++;}
-  
-  
-
-  for( int i = 0; i < (int)tiles.length(); i++ )
-     {all_perms( string(tiles).erase(i,1), res + tiles[i], i, counter, all_perms_tiles );}
-  }
 
 
 
