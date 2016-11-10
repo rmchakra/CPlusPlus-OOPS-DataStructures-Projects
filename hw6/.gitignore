@@ -2,3 +2,5 @@ AI_Base.o
 Scrabble_funcs.o
 Scrabble
 Scrabble.o
+CPUS.o
+CPUL.o
