@@ -72,10 +72,14 @@ void gg_no_re(Game& game)//GOOD_GAME_NO_REMATCH
 
 }
 
-void play(Game& game)
+void play(Game& game, vector <AI_Base*> AIS)
 {
 	
-	string player_identity = ((game.getCurrentPlayer ())->getName ();//now we have name of player as string)
+	string player_identity = (game.getCurrentPlayer ())->getName ();//now we have name of player as string)
+
+	bool ai_flag = false;
+	bool CPUS_flag = false;
+	bool CPUL_flag = false;
 
 	if( player_identity.size()>3)//so it doesnt seg fault if I try to get the substring
 	{
@@ -83,22 +87,55 @@ void play(Game& game)
 
 		if(type == "CPUS")//position 0 for length of 4 gives first 4 characters if the string
 		{//this is the max score AI which will take in the current player and perform the move for it
-
+			ai_flag = true;
+			cout<<"max score AI's turn"<< endl;
+			CPUS_flag = true;
 		}
 		else if(type == "CPUL")//position 0 for length of 4 gives first 4 characters if the string
 		{//this is the max letter AI which will take in the current player and perform the move for it
-
+			ai_flag = true;
+			CPUL_flag = true;
+			cout<<"max letter AI's turn"<< endl;
 		}
 
 	}
 
-
-	string command = scores_instruction_command(game);
-
-	while (!valid_move(game, command))
+	if(!ai_flag)
 	{
-		command = scores_instruction_command(game);
+		string command = scores_instruction_command(game);
+
+		while (!valid_move(game, command))
+		{
+			command = scores_instruction_command(game);
+		}
 	}
+	else
+	{//AIs must make the move
+
+		Board* board_ = game.getBoard ();
+		Player* curr_player = game.getCurrentPlayer ();
+		std::map<char, int> initialTileCount = game.initialTileCount();
+		Move m;
+		if(CPUS_flag)
+		{
+			m = (AIS[0])->getMove (*board_, *curr_player, initialTileCount);
+		//valid_move(Game& game, string command); 
+		}
+
+		else if(CPUL_flag)
+		{//here AI needs to make the move;
+
+			m = (AIS[1])->getMove (*board_, *curr_player, initialTileCount);
+			//valid_move(Game& game, string command); 
+		}
+		game.makeMove(m);
+
+		 display_move(game, m);
+	}
+
+	
+
+	
 
 	if (game.getCurrentPlayer()->numberofTiles() == 0)
 	{ //endgame case since it hasnt been refilled so bag must be empty and player has no tiles
@@ -114,12 +151,45 @@ void play(Game& game)
      	}
 
 	}
+
+
 	game.finalizeMove ();
 }
 
 
 
+void display_move(Game& game, Move& m)
+{
+	string curr_player = game.getCurrentPlayer ()->getName ();
+	cout<< "Player "<< curr_player << "chose to :";
+	if(m.isPass ()){cout<<"PASS";}
+	else
+	{
+		if(m.isExchange ())
+		{
+			cout<<"EXCHANGE THE TILES :";
+		}
+		if(m.isWord ())
+		{
+			cout<<"Place ";
+			if(m.isHorizontal ()){cout<<"Horizontally";}
+			else{cout<<"Vertically";}
+			cout<<"at row "<< m.y()<< " and column "<< m.x()<< " ";
 
+			cout<<"THE TILES :";
+		}
+
+			std::vector<Tile*> tile_vector = m.tileVector ();
+			for(int i = 0; i < (int)tile_vector.size(); i++)
+			{
+				cout<< tile_vector[i]->getLetter ()<< tile_vector[i]->getPoints ()<< " ";
+			}
+
+	}
+
+	cout << endl;
+ 	
+}
 
 
 
@@ -148,7 +218,14 @@ string scores_instruction_command(Game& game)
 	   cout<<it->second << endl ;
      }
 
-    cout<< (game.getBoard ())->getDisplay();
+
+
+    cout<< game.getBoard()->getDisplay();
+
+
+
+
+
 
 	cout<<"To pass your turn, type PASS"<<endl;
 	cout<<"To discard tiles, type EXCHANGE, followed by a string of those tiles."<<endl;

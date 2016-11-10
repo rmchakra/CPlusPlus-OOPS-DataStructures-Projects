@@ -1,3 +1,6 @@
+#ifndef AI_BASE_H_
+#define AI_BASE_H_
+
 #include <string>
 #include <map>
 #include <vector>
@@ -21,6 +24,7 @@ using std::vector;
 class AI_Base: public AbstractAI
 {
  public:
+    virtual ~AI_Base() {}; 
   virtual std::string getName()
   {
     return name;
@@ -115,11 +119,10 @@ class AI_Base: public AbstractAI
 
      */
 
-  virtual Move getMove (const Board & board, const Player & player, std::map<char, int> initialTileCount)
-  {
-    Move m;
-    return m;
-  }
+  // virtual Move getMove (const Board & board, const Player & player, std::map<char, int> initialTileCount) = 0
+  // {
+    
+  // }
   /* This will be the main function doing the work.
      You will get the board and player, and have hopefully stored the dictionary.
      You also get a map giving you the initial number of each type of tiles in the bag.
@@ -136,3 +139,5 @@ class AI_Base: public AbstractAI
     string name;
     set <string> prefixes;
 };
+
+#endif 

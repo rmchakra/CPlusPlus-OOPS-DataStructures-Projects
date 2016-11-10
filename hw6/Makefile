@@ -8,21 +8,35 @@ CPPFLAGS = -g -Wall
 VGA = valgrind --tool=memcheck --leak-check=yes --track-origins=yes
 
 
-all: Scrabble_funcs AI_Base Scrabble_obj Scrabble
+all: Scrabble_funcs AI_Base CPUS Scrabble_obj Scrabble
 
 Scrabble_funcs: Scrabble_funcs.cpp
 	$(CXX) $(CPPFLAGS) -c $^ -o Scrabble_funcs.o
 
+#AbstractAI: AbstractAI.h
+#$(CXX) $(CPPFLAGS) -c $^ -o AbstractAI.o
 
 AI_Base: AI_Base.cpp
 	$(CXX) $(CPPFLAGS) -c $^ -o AI_Base.o
 
+CPUS: CPUS.cpp
+	$(CXX) $(CPPFLAGS) -c $^ -o CPUS.o
 
-Scrabble_obj: Scrabble.cpp Board.o Dictionary.o Tile.h Bag.o Player.o AI_Base.o Scrabble_funcs.o 
-	$(CXX) $(CPPFLAGS) -c $< -o Scrabble.o
+CPUL: CPUL.cpp
+	$(CXX) $(CPPFLAGS) -c $^ -o CPUL.o
+
+Scrabble_obj: Scrabble.cpp
+	$(CXX) $(CPPFLAGS) -c $^ -o Scrabble.o
 	#./scrabble config.txt
 
-Scrabble: Util.o Board.o Dictionary.o Tile.h Bag.o Player.o Game.o Move.o AI_Base.o Scrabble_funcs.o Scrabble.o
+Scrabble: Util.o Board.o Dictionary.o Tile.h Bag.o Player.o Game.o Move.o AbstractAI.h AI_Base.o CPUS.o CPUL.o Scrabble_funcs.o Scrabble.o
 	$(CXX) $(CPPFLAGS) $^ -o Scrabble
 
+clean:
+	rm Scrabble_funcs.o
+	rm AI_Base.o
+	rm CPUS.o
+	rm CPUL.o
+	rm Scrabble.o
+	rm Scrabble
 #intermediate compilation
