@@ -11,6 +11,7 @@
 #include "Board.h"
 #include "Player.h"
 #include "AbstractAI.h"
+#include "Exceptions.h"
 #include <iostream>
 
 using std::string;
@@ -38,22 +39,28 @@ class AI_Base: public AbstractAI
       {
           string prefix_of_curr_word = "";
           string curr_word = *it;
+          dict_words.insert(curr_word);
           for (int j = 0; j < (int)curr_word.size() - 1; ++j)
           {
             prefix_of_curr_word+=curr_word[j];
+            dict_char_types.insert(curr_word[j]);
             //here remember to add curr_word[j] to the set containing each 
             prefixes.insert(prefix_of_curr_word);
           }
       }
   }
 
-  void all_perms( string tiles, string res, int num, int& counter, vector <string> &all_perms_tiles);
+  void all_moves( const Board & board, const Player & player, vector<Move>& possible_moves, vector<int>& possible_scores);
+
+  
+  void moves_per_square(const Board & board, const Player & player, string all_tiles, string tiles_being_placed,const int& x,const int& y,bool horizontal_bool, vector<Move>& possible_moves, vector<int>& possible_scores); 
 /*
 
-  have a for loop that goes through each of the spots. Another for within  where after the first iteration horizontal is false
+  have a for loop that goes through each of the spots. 
+    Another for within  where after the first iteration horizontal is false
   and second is true
-  Within this have a function call for the permutations of letters and trying to place them at the given spot.
-  for the move exceptions use 
+  Within this have a function call for the permutations of letters and trying to place them
+   at the given spot. for the move exceptions use 
 
 
 
@@ -136,8 +143,10 @@ class AI_Base: public AbstractAI
   */
 
    protected:
-    string name;
     set <string> prefixes;
+    set <string> dict_words;
+    set <char> dict_char_types;
+    string name;
 };
 
 #endif 

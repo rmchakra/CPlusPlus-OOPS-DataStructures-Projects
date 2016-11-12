@@ -29,7 +29,7 @@ Scrabble_obj: Scrabble.cpp
 	$(CXX) $(CPPFLAGS) -c $^ -o Scrabble.o
 	#./scrabble config.txt
 
-Scrabble: Util.o Board.o Dictionary.o Tile.h Bag.o Player.o Game.o Move.o AbstractAI.h AI_Base.o CPUS.o CPUL.o Scrabble_funcs.o Scrabble.o
+Scrabble: Exceptions.h Util.o Board.o Dictionary.o Tile.h Bag.o Player.o Game.o Move.o AbstractAI.h AI_Base.o CPUS.o CPUL.o Scrabble_funcs.o Scrabble.o
 	$(CXX) $(CPPFLAGS) $^ -o Scrabble
 
 clean:

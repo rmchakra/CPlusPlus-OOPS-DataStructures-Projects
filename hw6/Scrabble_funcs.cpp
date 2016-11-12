@@ -47,6 +47,12 @@ bool valid_move(Game& game, string command)
 
 
 	}
+	catch(MoveException &me)
+	{
+		cout<<"LOCATION OF MOVE EXCEPTION IS VALID_MOVE"<<endl;
+		cout<<me.getMessage()<<endl;
+		return false;
+	}
 	catch(...)
 	{
 		std::cout << "INCORRECT COMMAND "<<std::endl;
@@ -69,6 +75,21 @@ void gg_no_re(Game& game)//GOOD_GAME_NO_REMATCH
 	{
 		cout << winners[i] << endl;
 	}
+
+	cout<<"FINAL Scores are ::::"<<endl;
+
+
+	vector<pair<string,int> > pair_name_score= game.getScores();
+
+	for (vector<pair<string,int> > ::iterator it=pair_name_score.begin(); it!=pair_name_score.end(); ++it)
+     {
+       cout<<it->first << ":" ;
+	   cout<<it->second << endl ;
+     }
+
+
+
+    cout<< game.getBoard()->getDisplay();
 
 }
 
@@ -115,6 +136,7 @@ void play(Game& game, vector <AI_Base*> AIS)
 		Board* board_ = game.getBoard ();
 		Player* curr_player = game.getCurrentPlayer ();
 		std::map<char, int> initialTileCount = game.initialTileCount();
+		cout<<"CURRENT TILES OF :"<< curr_player->getName () <<"ARE :"<<curr_player->getHand ()<<endl;
 		Move m;
 		if(CPUS_flag)
 		{
@@ -128,9 +150,12 @@ void play(Game& game, vector <AI_Base*> AIS)
 			m = (AIS[1])->getMove (*board_, *curr_player, initialTileCount);
 			//valid_move(Game& game, string command); 
 		}
+
+		
+		display_move(game, m);
+
 		game.makeMove(m);
 
-		 display_move(game, m);
 	}
 
 	
@@ -161,7 +186,7 @@ void play(Game& game, vector <AI_Base*> AIS)
 void display_move(Game& game, Move& m)
 {
 	string curr_player = game.getCurrentPlayer ()->getName ();
-	cout<< "Player "<< curr_player << "chose to :";
+	cout<< "Player :"<< curr_player << "choses to :";
 	if(m.isPass ()){cout<<"PASS";}
 	else
 	{

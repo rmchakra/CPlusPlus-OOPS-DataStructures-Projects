@@ -25,7 +25,7 @@ using std::string;
 {
 	if (nargs < 2 || nargs > 2)
 		cout << "Usage: Scrabble <config-filename>\n";
-	try {
+try {
 		
 		Game game(args[1]);
 
@@ -52,9 +52,9 @@ using std::string;
 		AIS.push_back (new CPUS());
 		AIS.push_back (new CPUL());
 
-		//AIS[0] = new CPUS();
+		AIS[0]->initialize (game.getDictionary());
+		AIS[1]->initialize (game.getDictionary());
 
-		//AIS[1] = new CPUS();
 
 		while (!game.isFinished()) 
 		{
@@ -112,9 +112,11 @@ using std::string;
 
 		return 1;
 	}	
-	catch (...)
-	{ cout << "UNKNOWN CATCH ALL ERROR "<< endl;
-	return 1;}
+	// catch (MoveException &me)
+	// {cout<<"EXCEPTION IS Located in scrabble.cpp:"<< me.getMessage(); return 1;}
+	// catch(...)
+	// { cout << "UNKNOWN CATCH ALL ERROR "<< endl;
+	// return 1;}
 
 	return 0;
 

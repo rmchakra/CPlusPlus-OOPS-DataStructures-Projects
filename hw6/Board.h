@@ -65,6 +65,20 @@ public:
 	   - "NONEIGHBOR": The proposed move is not adjacent to any previously placed tile.
 	*/
 
+	std::vector<std::string> getWords (const Move &m, int &score, bool &valid) const;
+        /* nearly identical to the other Board::getWords() function.
+	   The only difference is that it throws fewer exceptions, 
+	   which could be very useful for backtracking search.
+           Specifically, it only throws the following MoveException versions:
+           - "OUTOFBOUNDS"
+           - "OCCUPIED"
+	   When the move is the first move and the start square was not included,
+	   or the move was a later move not adjacent to any tiles,
+	   or the move used an empty tile string,
+	   it instead sets the bool valid to false.
+	   If the function returns with valid == true, then the move was legal.
+	*/
+
 	void executeMove (const Move & m);
 	/* Executes the given move, by placing the tiles on the board.
 	   This function does not check for correctness of the move, so could
@@ -106,7 +120,7 @@ protected:
 	bool inBounds (int x, int y) const;
 	void calculateBoundaries (int numToPlace, int x, int y, int dx, int dy, int &sx, int &sy, int &l) const;
 	void getWords (std::vector<std::string> & allWords, int sx, int sy, int dx, int dy,
-				   std::vector<Tile*> v, int &score, bool main) const;
+		       std::vector<Tile*> v, int &score, bool main, bool &valid) const;
 	bool hasOccupiedNeighbor (int x, int y) const;
 };
 
