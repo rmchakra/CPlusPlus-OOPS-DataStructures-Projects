@@ -483,48 +483,6 @@ typename BinarySearchTree<Key, Value>::iterator BinarySearchTree<Key, Value>::en
 */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 template<typename Key, typename Value>
 typename BinarySearchTree<Key, Value>::iterator BinarySearchTree<Key, Value>::find(const Key& key) const 
 {
@@ -579,31 +537,6 @@ typename BinarySearchTree<Key, Value>::iterator BinarySearchTree<Key, Value>::fi
 	       	}
 	    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 template<typename Key, typename Value>
