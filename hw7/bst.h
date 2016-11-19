@@ -215,7 +215,6 @@ class BinarySearchTree
   		// A virtual insert function lets future derivations of this class implement
   		// their specific insert logic.
   		virtual void insert(const std::pair<Key, Value>& keyValuePair);
-  		virtual void insert_helper(Node<Key, Value>& Curr_Node,const std::pair<Key, Value>& keyValuePair);
 
 
   		// Deletes all nodes in the tree and resets for use.
@@ -264,6 +263,11 @@ class BinarySearchTree
 		void deleteAll (Node<Key, Value>* root);
 
 		/* Feel free to add additional member and/or helper functions! */
+
+  		virtual void insert_helper(Node<Key, Value>& Curr_Node,const std::pair<Key, Value>& keyValuePair);	
+		iterator find_helper(Node<Key, Value>& Curr_Node, const Key& key) const;
+
+
 
 	public:
 		// Main data member of the class.
@@ -393,7 +397,6 @@ typename BinarySearchTree<Key, Value>::iterator& BinarySearchTree<Key, Value>::i
 						//go to the parent
 						//check if the current has no parent (youre reaching the root from right)then return NULL
 					//after the while again go to the parent
-
 				while((*parent).getRight() == mCurrent)
 				{
 					mCurrent = (*mCurrent).getParent();
@@ -405,19 +408,8 @@ typename BinarySearchTree<Key, Value>::iterator& BinarySearchTree<Key, Value>::i
 
 		}
 
-
-		
-
-
-
-
 	}	
-
 	return *this;
-
-
-
-
 }
 
 /*  
@@ -481,7 +473,7 @@ template<typename Key, typename Value>
 typename BinarySearchTree<Key, Value>::iterator BinarySearchTree<Key, Value>::end()
 {
 	// TODO
-	//return iterator(NULL); 
+	//effectively carries out return iterator(NULL); 
 	return iterator();
 }
 
@@ -489,11 +481,62 @@ typename BinarySearchTree<Key, Value>::iterator BinarySearchTree<Key, Value>::en
 * Returns an iterator to the item with the given key, k
 * or the end iterator if k does not exist in the tree
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 template<typename Key, typename Value>
 typename BinarySearchTree<Key, Value>::iterator BinarySearchTree<Key, Value>::find(const Key& key) const 
 {
 	// TODO
-	return iterator(); // A dummy return value until you provide your implementation. 
+	//return iterator(); // A dummy return value until you provide your implementation. 
+	if(mRoot == NULL)
+	{//cant be found in an empty tree
+		return iterator();
+	}
+
+	return find_helper(*mRoot, key);
+
 }
 
 /**
@@ -501,6 +544,68 @@ typename BinarySearchTree<Key, Value>::iterator BinarySearchTree<Key, Value>::fi
 * inserting.  Implementing this will help you test your iterator, but is not necessary: if you
 * don't implement it, then you can put your entire insert implementation in avlbst.h
 */
+ template<typename Key, typename Value>
+typename BinarySearchTree<Key, Value>::iterator BinarySearchTree<Key, Value>::find_helper(Node<Key, Value>& Curr_Node, const Key& key) const
+{
+		if(key == Curr_Node.getKey())
+		{//if its found give the iterator with the pointer to the correct value
+			return iterator(&Curr_Node);
+		}
+
+		if(key < Curr_Node.getKey())
+	    {
+	       	if(Curr_Node.getLeft() == NULL)
+	       	{//value will not be found
+	       		return iterator();//returns iterator that points to NULL which means it isnt found
+	      	
+	       	}
+	       	else
+	       	{
+	        	return find_helper(*(Curr_Node.getLeft()),key);
+	       	}
+	    }
+	    // go right
+	    else
+	    {
+	       	if(Curr_Node.getRight() == NULL)
+	       	{
+	       		//value will not be found
+	       		return iterator();//returns iterator that points to NULL which means it isnt found
+	      	
+	       	}
+	       	else
+	       	{
+	        	return find_helper(*(Curr_Node.getRight()),key);
+	       	}
+	    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 template<typename Key, typename Value>
 void BinarySearchTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 {//Curr node would be the root
@@ -552,44 +657,6 @@ void BinarySearchTree<Key, Value>::insert_helper(Node<Key, Value>& Curr_Node,con
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /**
