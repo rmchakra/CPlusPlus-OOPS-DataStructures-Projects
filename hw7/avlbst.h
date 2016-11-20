@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <algorithm>
 #include <string>
 #include "bst.h"
 
@@ -120,12 +121,20 @@ class AVLTree : public BinarySearchTree<Key, Value>
 public:
 	// Methods for inserting/removing elements from the tree. You must implement
 	// both of these methods. 
+    AVLTree();
     virtual void insert(const std::pair<Key, Value>& keyValuePair) override;
     void remove(const Key& key);
 
 private:
 	/* Helper functions are strongly encouraged to help separate the problem
 	   into smaller pieces. You should not need additional data members. */
+int get_height(AVLNode<Key, Value>* x);
+void left_rotate(AVLNode<Key, Value>* z, AVLNode<Key, Value>* y, AVLNode<Key, Value>* x);
+void right_rotate(AVLNode<Key, Value>* z, AVLNode<Key, Value>* y, AVLNode<Key, Value>* x);
+void balance();
+bool is_balanced(AVLNode<Key, Value>& x);
+void update_height(AVLNode<Key, Value>& x);
+
 };
 
 /*
@@ -138,10 +147,23 @@ Begin implementations for the AVLTree class.
 * Insert function for a key value pair. Finds location to insert the node and then balances the tree. 
 */
 template<typename Key, typename Value>
-void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
-{
-    // TODO
+AVLTree<Key, Value>::AVLTree()
+{//TODO - my own TODO - this redefines mRoot as AVL Node
+
+    std::cout<<"AVL TREE BEING CONSTRUCTED"<<std::endl;
 }
+template<typename Key, typename Value>
+void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
+{//to access inherited members use this->
+    //to make mRoot into an AVL node use
+    // TODO
+    BinarySearchTree< Key, Value>::insert(keyValuePair);
+    std::cout<<"AVLTREE INSERT"<<std::endl;
+    //now call find on the inserted key
+    //but find gives a pair
+    //so write another find_node function
+}   
+
 
 /**
 * Remove function for a given key. Finds the node, reattaches pointers, and then balances when finished. 
@@ -151,7 +173,71 @@ void AVLTree<Key, Value>::remove(const Key& key)
 {
    // TODO
 }
+template<typename Key, typename Value>
+int get_height(AVLNode<Key, Value>* x)
+{
+    if(x==NULL) return -1;//if its a NULL pointer height is -1
+    return x->getHeight();
+}
 
+template<typename Key, typename Value>
+void left_rotate(AVLNode<Key, Value>* z)
+{//z is the unbalanced node
+
+    // AVLNode<Key, Value>* y = z.right;
+    
+    // y.parent = z.parent//y's parent is set as parent of z
+    // if(y.parent == NULL)
+    // {//if z previously was the root
+    //     this->mRoot = y;
+    // }
+    // else
+    // {//setting y as child of z's parent
+
+    //      z.is right child
+    //     {
+    //         z.parent.right = y;
+    //     }
+
+    //     z.is left child
+    //     {
+    //         z.parent.left = y;
+    //     }
+    // }
+
+    // z.right = y.left; 
+    // if(z.right!=NULL)
+    // {
+    //     z.right.parent = z
+    // }
+
+    // z.is left child
+    // y.left = z;
+    // z.parent = y
+    // update_height(z)
+    // update_height(y)
+}
+template<typename Key, typename Value>
+void right_rotate(AVLNode<Key, Value>* z, AVLNode<Key, Value>* y, AVLNode<Key, Value>* x)
+{
+
+}
+template<typename Key, typename Value>
+void balance()
+{
+
+}
+template<typename Key, typename Value>
+bool is_balanced(AVLNode<Key, Value>& x)
+{
+    return true;//dummy value for now
+}
+
+template<typename Key, typename Value>
+void update_height(AVLNode<Key, Value>& x)
+{
+    x.setHeight(1+std::max(get_height(x.getLeft()),get_height(x.getRight())));
+}
 /*
 ------------------------------------------
 End implementations for the AVLTree class.
