@@ -144,6 +144,7 @@ void rotate(AVLNode<Key, Value>* z, std::string& zig_zag);//determines the kind 
     void d_right_rotate(AVLNode<Key, Value>* z);//double rotations
         void replace_node(AVLNode<Key, Value>* z, AVLNode<Key, Value>* y);//this only changes relationship between z's parent and y
 bool is_balanced(AVLNode<Key, Value>* z);
+bool is_balanced(Node<Key, Value>* z);
 void update_height(AVLNode<Key, Value>* x);
 AVLNode<Key, Value>* insert_helper(AVLNode<Key, Value>& Curr_Node,const std::pair<Key, Value>& keyValuePair);
 //Later insert helper should return the pointer to the node so that it can be rebalanced from there
@@ -162,7 +163,6 @@ template<typename Key, typename Value>
 AVLTree<Key, Value>::AVLTree()
 {//TODO - my own TODO - this redefines mRoot as AVL Node
 
-    std::cout<<"AVL TREE BEING CONSTRUCTED"<<std::endl;
 }
 
 template<typename Key, typename Value>
@@ -186,38 +186,63 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 
 
 
-    Node<Key, Value>* insert_location = internalFind(keyValuePair.first);
+    Node<Key, Value>* insert_location = this->internalFind(keyValuePair.first);
 
 
 
     if(insert_location == NULL)//means it is not already present
     {
-        AVLNode<Key, Value>* new_node = insert_helper(*(this->mRoot), keyValuePair);//pointer to the node which has just been inserted
+        Node<Key, Value>* new_node = insert_helper(*(static_cast<AVLNode<Key,Value>*>(this->mRoot)), keyValuePair);//pointer to the node which has just been inserted
+        
+    //     AVLNode<Key, Value>* new_node_ancestor = static_cast<AVLNode<Key,Value>*>( new_node->getParent() );
+
+    //     if(new_node_ancestor !=NULL)//if new node ancestor is not the root
+    //     for (; i < count; ++i)
+    //     {
+    //         /* code */
+    //     }
+
+
+
+
+
+
+
         //checking balance
-        for ( AVLNode<Key, Value>* new_node_ancestor = new_node->getParent(); new_node_ancestor!=NULL; new_node_ancestor = new_node_ancestor->getParent())
+        // if(new_node->getParent() == this->mRoot) new_node_ancestor = static_cast<AVLNode<Key,Value>*>(new_node->getParent());
+        // else new_node_ancestor = new_node->getParent();
+
+        Node<Key, Value>* new_node_ancestor = new_node->getParent();
+
+
+        while(new_node_ancestor!=NULL)
         {
-            if(! is_balanced(new_node_ancestor))//if the node is not balanced
+
+            if(!is_balanced(static_cast<AVLNode<Key,Value>*>(new_node_ancestor)))//if the node is not balanced
             {
+
+                // std::cout<<"In insert:UNBALANCED NODE "<<new_node_ancestor->getKey(); //<< "with height"<< new_node_ancestor->getHeight()<<"\n";
                 //new_node_ancestor is z
                 std::string zig_zag = "";
-                AVLNode<Key, Value>* y = max_height_child(new_node_ancestor, zig_zag);
+                AVLNode<Key, Value>* y = max_height_child(static_cast<AVLNode<Key,Value>*>(new_node_ancestor), zig_zag);
                 AVLNode<Key, Value>* x = max_height_child(y, zig_zag);
+
+                // std::cout<<"zig zag is"<< zig_zag<< "\n";
                 
-                rotate(zig_zag);
+                rotate(static_cast<AVLNode<Key,Value>*>(new_node_ancestor), zig_zag);
             }
+
+
+            // if(new_node_ancestor->getParent() == this->mRoot) new_node_ancestor = static_cast<AVLNode<Key,Value>*>(new_node_ancestor->getParent());
+            // else new_node_ancestor = new_node_ancestor ->getParent();
+            new_node_ancestor = new_node_ancestor ->getParent();
         }
+
     }
     else//it is already present so overwrite the value
     {//no need to balance since tree configuration is not changing but only the value of one of the nodes
         insert_location->setValue(keyValuePair.second);
     }
-
-
-
-
-   
-
-
 
 /*
     Start at the newly-inserted node and walk up to the root, checking if each node is balanced (the height- balance rule applies to this node). If a node is unbalanced, rotate the subtree rooted at that node. Rotate the following three nodes:
@@ -315,11 +340,22 @@ AVLNode<Key, Value>* AVLTree<Key, Value>::insert_helper(AVLNode<Key, Value>& Cur
 template<typename Key, typename Value>
 bool AVLTree<Key, Value>::is_balanced(AVLNode<Key, Value>* z)
 {
+    //std::cout<< "ENTERS IS_BALANCED_AVLNODEAVLTREE \n";
     AVLNode<Key, Value>* left_child = z->getLeft();
     AVLNode<Key, Value>* right_child = z->getRight();
 
-    if((std::abs(get_height(right_child)-get_height(left_child)))> 1) return false;
-    return true;
+    if((std::abs(get_height(right_child)-get_height(left_child)))> 1)
+    {
+        std::cout<<z->getKey() <<"UNBALANCED is_balanced \n"; 
+        return false;
+    }
+    else
+    {
+        std::cout<< z->getKey() <<" BALANCED in is_balanced \n";
+        return true;
+    }
+
+        
 }
 
 template<typename Key, typename Value>
@@ -361,7 +397,7 @@ bool AVLTree<Key, Value>::is_left_child(AVLNode<Key, Value>* z)
 
 //BELOW THIS IS ROTATION ACTIONS
 template<typename Key, typename Value>
-void rotate(AVLNode<Key, Value>* z, std::string& zig_zag)
+void AVLTree<Key, Value>::rotate(AVLNode<Key, Value>* z, std::string& zig_zag)
 {//use this to determine the kind of rotation
     //for zig zag right is 1 and left is 0
     if(zig_zag == "11") left_rotate(z);
@@ -440,6 +476,8 @@ void AVLTree<Key, Value>::left_rotate(AVLNode<Key, Value>* z)
     // y.left = z;
     // z.parent = y;
 
+    //y could now possibly be the root which if it is, then z was the root earlier and hence needs to be static cast for the update height
+
     // update_height(z)//which is now a child of y
     // update_height(y)
 
@@ -463,35 +501,6 @@ void AVLTree<Key, Value>::left_rotate(AVLNode<Key, Value>* z)
     update_height(y);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::right_rotate(AVLNode<Key, Value>* z)
 {
@@ -508,6 +517,22 @@ void AVLTree<Key, Value>::right_rotate(AVLNode<Key, Value>* z)
     // z.parent = y
     // update_height(z)
     // update_height(y)
+
+    //PSEUDOCODE ABOVE THIS POINT  
+
+    AVLNode<Key, Value>* y = z->getLeft();
+    replace_node(z, y);
+
+    z->setLeft(y->getRight()); 
+    if(z->getLeft()!=NULL)
+    {
+        (z->getLeft())->setParent(z);
+    }
+
+    y->setRight(z);
+    z->setParent(y);
+    update_height(z);
+    update_height(y);   
 }
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::d_left_rotate(AVLNode<Key, Value>* z)

@@ -259,8 +259,8 @@ class BinarySearchTree
   
 	protected:
 		Node<Key, Value>* internalFind(const Key& key) const;
-		void printRoot (Node<Key, Value>* root) const;
-		void deleteAll (Node<Key, Value>* root);
+		void printRoot(Node<Key, Value>* root) const;
+		void deleteAll(Node<Key, Value>* root);
 
 		/* Feel free to add additional member and/or helper functions! */
 
@@ -634,7 +634,7 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
 * Helper function to print the tree's contents
 */
 template<typename Key, typename Value>
-void BinarySearchTree<Key, Value>::printRoot (Node<Key, Value>* root) const
+void BinarySearchTree<Key, Value>::printRoot(Node<Key, Value>* root) const
 {
 	if (root != NULL)
 	{
