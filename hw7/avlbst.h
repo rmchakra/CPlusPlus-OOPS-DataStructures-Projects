@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <algorithm>
+#include <cmath> 
 #include <string>
 #include "bst.h"
 
@@ -128,19 +129,22 @@ public:
 private:
 	/* Helper functions are strongly encouraged to help separate the problem
 	   into smaller pieces. You should not need additional data members. */
+AVLNode<Key, Value>* max_height_child(AVLNode<Key, Value>* Curr_Node, std::string& right);//returns child with max height
 int get_height(AVLNode<Key, Value>* x);
 bool is_right_child(AVLNode<Key, Value>* z);
 bool is_left_child(AVLNode<Key, Value>* z);
-void replace_node(AVLNode<Key, Value>* z, AVLNode<Key, Value>* y);
 
-//this only changes relationship between z's parent and y
-void left_rotate(AVLNode<Key, Value>* z);
-void right_rotate(AVLNode<Key, Value>* z);
-void d_left_rotate(AVLNode<Key, Value>* z);//double rotations
-void d_right_rotate(AVLNode<Key, Value>* z);//double rotations
-void balance();
-bool is_balanced(AVLNode<Key, Value>& z);
-void update_height(AVLNode<Key, Value>& x);
+
+//have a rotate function
+void rotate(AVLNode<Key, Value>* z, std::string& zig_zag);//determines the kind of rotation and then performs it
+//Each indentation is a helper function of less indented functions
+    void left_rotate(AVLNode<Key, Value>* z);
+    void right_rotate(AVLNode<Key, Value>* z);
+    void d_left_rotate(AVLNode<Key, Value>* z);//double rotations
+    void d_right_rotate(AVLNode<Key, Value>* z);//double rotations
+        void replace_node(AVLNode<Key, Value>* z, AVLNode<Key, Value>* y);//this only changes relationship between z's parent and y
+bool is_balanced(AVLNode<Key, Value>* z);
+void update_height(AVLNode<Key, Value>* x);
 AVLNode<Key, Value>* insert_helper(AVLNode<Key, Value>& Curr_Node,const std::pair<Key, Value>& keyValuePair);
 //Later insert helper should return the pointer to the node so that it can be rebalanced from there
 };
@@ -160,6 +164,7 @@ AVLTree<Key, Value>::AVLTree()
 
     std::cout<<"AVL TREE BEING CONSTRUCTED"<<std::endl;
 }
+
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 {//to access inherited members use this->
@@ -177,7 +182,53 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
     }
 
 
-    AVLNode<Key, Value>* new_node = insert_helper(*(this->mRoot), keyValuePair);
+    //find within first. If found then overwrite the value, else insert_helper is called
+
+
+
+    Node<Key, Value>* insert_location = internalFind(keyValuePair.first);
+
+
+
+    if(insert_location == NULL)//means it is not already present
+    {
+        AVLNode<Key, Value>* new_node = insert_helper(*(this->mRoot), keyValuePair);//pointer to the node which has just been inserted
+        //checking balance
+        for ( AVLNode<Key, Value>* new_node_ancestor = new_node->getParent(); new_node_ancestor!=NULL; new_node_ancestor = new_node_ancestor->getParent())
+        {
+            if(! is_balanced(new_node_ancestor))//if the node is not balanced
+            {
+                //new_node_ancestor is z
+                std::string zig_zag = "";
+                AVLNode<Key, Value>* y = max_height_child(new_node_ancestor, zig_zag);
+                AVLNode<Key, Value>* x = max_height_child(y, zig_zag);
+                
+                rotate(zig_zag);
+            }
+        }
+    }
+    else//it is already present so overwrite the value
+    {//no need to balance since tree configuration is not changing but only the value of one of the nodes
+        insert_location->setValue(keyValuePair.second);
+    }
+
+
+
+
+   
+
+
+
+/*
+    Start at the newly-inserted node and walk up to the root, checking if each node is balanced (the height- balance rule applies to this node). If a node is unbalanced, rotate the subtree rooted at that node. Rotate the following three nodes:
+1. Let z be (a pointer to) the first unbalanced node on the way up. In this case, that node is the one holding the value 78.
+2. Let y be the child of z with greater height (hint: this is always an ancestor of the node you inserted. Why?). Why are ties impossible?
+3. Let x be the child of y with greater height (this is always an ancestor of the node you inserted, or the node itself. Why?). Why are ties impossible?
+
+*/
+
+
+
 
 
     //BinarySearchTree< Key, Value>::insert(keyValuePair);
@@ -186,9 +237,47 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
     //but find gives a pair
     //so write another find_node function
 }
-//Later insert helper should return the pointer to the node so that it can be rebalanced from there
+
+
+
+
+
+
+
+/**
+* Remove function for a given key. Finds the node, reattaches pointers, and then balances when finished. 
+*/
 template<typename Key, typename Value>
-AVLNode<Key, Value>* insert_helper(AVLNode<Key, Value>& Curr_Node,const std::pair<Key, Value>& keyValuePair)
+void AVLTree<Key, Value>::remove(const Key& key)
+{
+   // TODO
+}
+
+//HELPER FUNCTIONS
+
+template<typename Key, typename Value>
+AVLNode<Key, Value>* AVLTree<Key, Value>::max_height_child(AVLNode<Key, Value>* z, std::string& right)//right is 1 left is 0
+{//zig zag goes from left before and adds to the right of it
+    AVLNode<Key, Value>* left_child = z->getLeft();
+    AVLNode<Key, Value>* right_child = z->getRight();
+
+    if(get_height(right_child) > get_height(left_child))
+    {
+        right+='1';
+        return right_child;
+    }
+    else
+    {
+        right+='0';
+        return left_child;
+    }
+
+}
+
+
+
+template<typename Key, typename Value>
+AVLNode<Key, Value>* AVLTree<Key, Value>::insert_helper(AVLNode<Key, Value>& Curr_Node,const std::pair<Key, Value>& keyValuePair)
 {
     if(keyValuePair.first < Curr_Node.getKey())
     {
@@ -201,7 +290,7 @@ AVLNode<Key, Value>* insert_helper(AVLNode<Key, Value>& Curr_Node,const std::pai
         }
         else
         {
-             insert_helper(*(Curr_Node.getLeft()),keyValuePair);
+            return insert_helper(*(Curr_Node.getLeft()),keyValuePair);
         }
     }
     // go right
@@ -216,27 +305,36 @@ AVLNode<Key, Value>* insert_helper(AVLNode<Key, Value>& Curr_Node,const std::pai
         }
         else
         {
-             insert_helper(*(Curr_Node.getRight()),keyValuePair);
+            return insert_helper(*(Curr_Node.getRight()),keyValuePair);
         }
     }
 }
 
 
 
-/**
-* Remove function for a given key. Finds the node, reattaches pointers, and then balances when finished. 
-*/
 template<typename Key, typename Value>
-void AVLTree<Key, Value>::remove(const Key& key)
+bool AVLTree<Key, Value>::is_balanced(AVLNode<Key, Value>* z)
 {
-   // TODO
+    AVLNode<Key, Value>* left_child = z->getLeft();
+    AVLNode<Key, Value>* right_child = z->getRight();
+
+    if((std::abs(get_height(right_child)-get_height(left_child)))> 1) return false;
+    return true;
 }
+
 template<typename Key, typename Value>
 int AVLTree<Key, Value>::get_height(AVLNode<Key, Value>* x)
 {
     if(x==NULL) return -1;//if its a NULL pointer height is -1
     return x->getHeight();
 }
+
+template<typename Key, typename Value>
+void AVLTree<Key, Value>::update_height(AVLNode<Key, Value>* x)
+{
+    x->setHeight(1+std::max(get_height(x->getLeft()),get_height(x->getRight())));
+}
+
 template<typename Key, typename Value>
 bool AVLTree<Key, Value>::is_right_child(AVLNode<Key, Value>* z)
 {
@@ -261,31 +359,17 @@ bool AVLTree<Key, Value>::is_left_child(AVLNode<Key, Value>* z)
 
 
 
+//BELOW THIS IS ROTATION ACTIONS
+template<typename Key, typename Value>
+void rotate(AVLNode<Key, Value>* z, std::string& zig_zag)
+{//use this to determine the kind of rotation
+    //for zig zag right is 1 and left is 0
+    if(zig_zag == "11") left_rotate(z);
+    else if(zig_zag == "00") right_rotate(z);
+    else if(zig_zag == "10") d_left_rotate(z);
+    else if(zig_zag == "01") d_right_rotate(z);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 
@@ -375,25 +459,39 @@ void AVLTree<Key, Value>::left_rotate(AVLNode<Key, Value>* z)
     y->setLeft(z);
     z->setParent(y);
 
-   // update_height(z)//which is now a child of y
-    //update_height(y)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    update_height(z);//which is now a child of y
+    update_height(y);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::right_rotate(AVLNode<Key, Value>* z)
 {
@@ -442,7 +540,9 @@ void AVLTree<Key, Value>::d_left_rotate(AVLNode<Key, Value>* z)
     // x.right = y;
     // y.parent = x;
 
-
+    // update_height(z);
+    // update_height(y);
+     // update_height(x);
 
 
 
@@ -479,24 +579,14 @@ void AVLTree<Key, Value>::d_right_rotate(AVLNode<Key, Value>* z)
 
     // x.right = z;
     // z.parent = x;
+
+
+    // update_height(z);
+    // update_height(y);
+     // update_height(x);
 }
 
-template<typename Key, typename Value>
-void AVLTree<Key, Value>::balance()
-{
 
-}
-template<typename Key, typename Value>
-bool AVLTree<Key, Value>::is_balanced(AVLNode<Key, Value>& z)
-{
-    return true;//dummy value for now
-}
-
-template<typename Key, typename Value>
-void AVLTree<Key, Value>::update_height(AVLNode<Key, Value>& x)
-{
-    x.setHeight(1+std::max(get_height(x.getLeft()),get_height(x.getRight())));
-}
 /*
 ------------------------------------------
 End implementations for the AVLTree class.
