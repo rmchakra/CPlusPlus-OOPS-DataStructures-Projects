@@ -135,7 +135,8 @@ bool is_right_child(AVLNode<Key, Value>* z);
 bool is_left_child(AVLNode<Key, Value>* z);
 
 
-//have a rotate function
+//INSERT HELPERS
+void balance(Node<Key, Value>* new_node);
 void rotate(AVLNode<Key, Value>* z, std::string& zig_zag);//determines the kind of rotation and then performs it
 //Each indentation is a helper function of less indented functions
     void left_rotate(AVLNode<Key, Value>* z);
@@ -147,7 +148,17 @@ bool is_balanced(AVLNode<Key, Value>* z);
 bool is_balanced(Node<Key, Value>* z);
 void update_height(AVLNode<Key, Value>* x);
 AVLNode<Key, Value>* insert_helper(AVLNode<Key, Value>& Curr_Node,const std::pair<Key, Value>& keyValuePair);
-//Later insert helper should return the pointer to the node so that it can be rebalanced from there
+
+//REMOVE HELPERS
+
+//int leaf_children_number(Node<Key, Value>* new_node);
+    bool is_leaf(Node<Key, Value>* new_node);
+    bool has_right_child(Node<Key, Value>* z);
+    bool has_left_child(Node<Key, Value>* z);
+    void disconnect_node(Node<Key, Value>* node);
+
+
+
 };
 
 /*
@@ -172,6 +183,8 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
     //every new node is defined as an avl node
     // TODO
 
+    //heights are only updated during rotations but not during insertions
+
     if(this->mRoot == NULL)
     {//this is when you add to the tree for the first time
         AVLNode<Key, Value>* new_node = new AVLNode<Key, Value>(keyValuePair.first, keyValuePair.second, NULL);
@@ -193,7 +206,7 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
     if(insert_location == NULL)//means it is not already present
     {
         Node<Key, Value>* new_node = insert_helper(*(static_cast<AVLNode<Key,Value>*>(this->mRoot)), keyValuePair);//pointer to the node which has just been inserted
-        
+        balance(new_node);
     //     AVLNode<Key, Value>* new_node_ancestor = static_cast<AVLNode<Key,Value>*>( new_node->getParent() );
 
     //     if(new_node_ancestor !=NULL)//if new node ancestor is not the root
@@ -212,31 +225,9 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
         // if(new_node->getParent() == this->mRoot) new_node_ancestor = static_cast<AVLNode<Key,Value>*>(new_node->getParent());
         // else new_node_ancestor = new_node->getParent();
 
-        Node<Key, Value>* new_node_ancestor = new_node->getParent();
 
 
-        while(new_node_ancestor!=NULL)
-        {
-
-            if(!is_balanced(static_cast<AVLNode<Key,Value>*>(new_node_ancestor)))//if the node is not balanced
-            {
-
-                // std::cout<<"In insert:UNBALANCED NODE "<<new_node_ancestor->getKey(); //<< "with height"<< new_node_ancestor->getHeight()<<"\n";
-                //new_node_ancestor is z
-                std::string zig_zag = "";
-                AVLNode<Key, Value>* y = max_height_child(static_cast<AVLNode<Key,Value>*>(new_node_ancestor), zig_zag);
-                AVLNode<Key, Value>* x = max_height_child(y, zig_zag);
-
-                // std::cout<<"zig zag is"<< zig_zag<< "\n";
-                
-                rotate(static_cast<AVLNode<Key,Value>*>(new_node_ancestor), zig_zag);
-            }
-
-
-            // if(new_node_ancestor->getParent() == this->mRoot) new_node_ancestor = static_cast<AVLNode<Key,Value>*>(new_node_ancestor->getParent());
-            // else new_node_ancestor = new_node_ancestor ->getParent();
-            new_node_ancestor = new_node_ancestor ->getParent();
-        }
+        
 
     }
     else//it is already present so overwrite the value
@@ -276,10 +267,162 @@ template<typename Key, typename Value>
 void AVLTree<Key, Value>::remove(const Key& key)
 {
    // TODO
+
+    Node<Key, Value>* del_node = this->internalFind(key);
+
+    if(del_node == NULL)
+    {//if youre attempting to remove a node which is not present do not do anything
+        std::cout<<"ATTEMPTING TO REMOVE"<<key<<"WHICH IS NOT A NODE OF THE TREE \n";
+        return;
+    }
+    else
+    {
+        
+        if(this->mRoot == del_node)
+        {
+            this->mRoot = NULL;
+        }
+        else if (is_leaf(del_node))
+        {//disconnect node from parent(from tree)
+
+           Node<Key, Value>* parent_del_node = del_node->getParent();
+
+           disconnect_node(del_node);
+           balance(parent_del_node);
+        }
+        else if(!has_right_child(del_node))
+        {//deleted node doesnt have a right child
+    
+            Node<Key, Value>* parent_del_node = del_node->getParent();
+            Node<Key, Value>* left_child = del_node->getLeft();
+            replace_node(static_cast<AVLNode<Key,Value>*> (del_node),static_cast<AVLNode<Key,Value>*>(left_child));
+//this only changes relationship between del_node's parent and second param node
+            balance(parent_del_node);
+        }
+
+        else if(has_right_child(del_node))
+        {
+            Node<Key, Value>* sucessor = del_node->getRight();//initially the right child
+            while(has_left_child(sucessor))
+            {
+                sucessor = sucessor->getLeft();
+            }//now arrived at the leftmost child
+
+            Node<Key, Value>* parent_sucessor = sucessor->getParent();
+                
+
+            if(is_leaf(sucessor))
+            {
+                disconnect_node(del_node);//parents of node have that child set to Null now
+                replace_node(static_cast<AVLNode<Key,Value>*> (del_node), static_cast<AVLNode<Key,Value>*> (sucessor));
+                sucessor->setLeft(del_node->getLeft());
+                sucessor->setRight(del_node->getRight());
+
+            }
+            else if(has_right_child(sucessor))
+            {
+                Node<Key, Value>* right_of_successor = sucessor->getRight();
+                disconnect_node(right_of_successor);//parents of node have that child set to Null now
+                replace_node(static_cast<AVLNode<Key,Value>*> (sucessor), static_cast<AVLNode<Key,Value>*> (right_of_successor));
+            }
+
+            balance(parent_sucessor);
+        }
+
+        delete del_node;
+
+    }
+
 }
 
 //HELPER FUNCTIONS
 
+template<typename Key, typename Value>
+void AVLTree<Key, Value>::disconnect_node(Node<Key, Value>* node)
+//disconnects kid from parents but maintains parent of the kid
+{
+    if(is_right_child(static_cast<AVLNode<Key,Value>*> (node)))
+    {
+        (node->getParent())->setRight(NULL);
+    }
+    else if(is_left_child(static_cast<AVLNode<Key,Value>*>(node)))
+    {
+      (node->getParent())->setLeft(NULL);
+    }
+}
+
+
+
+
+template<typename Key, typename Value>
+bool AVLTree<Key, Value>::is_leaf(Node<Key, Value>* node)
+{
+    if(node == NULL)
+    {
+        std::cout<<"Checking if a NULL is a leaf \n";
+        return false;
+    }
+    if ((node->getLeft() == NULL) && (node->getRight() == NULL))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }    
+}
+template<typename Key, typename Value>
+bool AVLTree<Key, Value>::has_right_child(Node<Key, Value>* z)
+{
+    return (!(z->getRight() == NULL));
+}
+template<typename Key, typename Value>
+bool AVLTree<Key, Value>::has_left_child(Node<Key, Value>* z)
+{
+    return (!(z->getLeft() == NULL));
+}
+
+
+template<typename Key, typename Value>
+void  AVLTree<Key, Value>::balance(Node<Key, Value>* new_node_ancestor)
+{//THIS IS ACTUALLY THE NEW NODE BUT WE DO AN EXTRA CHECK BECAUSE FOR DELETED NODE WE DONT WANT IT TO NOT HAPPEN
+
+    // std::cout<<"ENTERS BALANCE"<<new_node_ancestor->getKey()<<" \n";
+    if(new_node_ancestor == NULL)
+    {
+        
+        return;
+    }
+
+//
+    //Node<Key, Value>* new_node_ancestor = new_node->getParent();
+    
+    while(new_node_ancestor!=NULL)
+        {
+            update_height(static_cast<AVLNode<Key,Value>*> (new_node_ancestor));
+
+
+            if(!is_balanced(static_cast<AVLNode<Key,Value>*>(new_node_ancestor)))//if the node is not balanced
+            {
+
+                // std::cout<<"In insert:UNBALANCED NODE "<<new_node_ancestor->getKey(); //<< "with height"<< new_node_ancestor->getHeight()<<"\n";
+                //new_node_ancestor is z
+                std::string zig_zag = "";
+                AVLNode<Key, Value>* y = max_height_child(static_cast<AVLNode<Key,Value>*>(new_node_ancestor), zig_zag);
+                // AVLNode<Key, Value>* x =
+                max_height_child(y, zig_zag);
+
+                // std::cout<<"zig zag is"<< zig_zag<< "\n";
+                
+                rotate(static_cast<AVLNode<Key,Value>*>(new_node_ancestor), zig_zag);
+            }
+
+
+            // if(new_node_ancestor->getParent() == this->mRoot) new_node_ancestor = static_cast<AVLNode<Key,Value>*>(new_node_ancestor->getParent());
+            // else new_node_ancestor = new_node_ancestor ->getParent();
+            new_node_ancestor = new_node_ancestor ->getParent();
+        }
+}
 template<typename Key, typename Value>
 AVLNode<Key, Value>* AVLTree<Key, Value>::max_height_child(AVLNode<Key, Value>* z, std::string& right)//right is 1 left is 0
 {//zig zag goes from left before and adds to the right of it
@@ -291,11 +434,29 @@ AVLNode<Key, Value>* AVLTree<Key, Value>::max_height_child(AVLNode<Key, Value>* 
         right+='1';
         return right_child;
     }
-    else
+    else if(get_height(right_child) < get_height(left_child))
     {
         right+='0';
         return left_child;
     }
+    else
+    {//if its a tie then make it be a single and not a double rotation. Ties are impossible for insert
+        //so this is only for delete
+        right+=right;
+        if(right == "00")
+        {
+            return left_child;
+        }
+        else if(right == "11")
+        {    
+            return right_child;
+        }
+        std::cout<<"ENTERS AN IMPOSSIBLE CASE in max_height_child\n";
+    
+    }
+
+    std::cout<<"ENTERS AN IMPOSSIBLE CASE AND max_height_child GIVES NULL VALUE \n";
+    return NULL;//This is to satisfy the compiler that control wont reach end of a NON-Void function
 
 }
 
@@ -340,19 +501,25 @@ AVLNode<Key, Value>* AVLTree<Key, Value>::insert_helper(AVLNode<Key, Value>& Cur
 template<typename Key, typename Value>
 bool AVLTree<Key, Value>::is_balanced(AVLNode<Key, Value>* z)
 {
-    //std::cout<< "ENTERS IS_BALANCED_AVLNODEAVLTREE \n";
+    // std::cout<< "ENTERS IS_BALANCED_AVLNODEAVLTREE \n";
     AVLNode<Key, Value>* left_child = z->getLeft();
     AVLNode<Key, Value>* right_child = z->getRight();
 
     if((std::abs(get_height(right_child)-get_height(left_child)))> 1)
     {
-        std::cout<<z->getKey() <<"UNBALANCED is_balanced \n"; 
+        // std::cout<<z->getKey() <<"UNBALANCED with diff :"<<(std::abs(get_height(right_child)-get_height(left_child))) <<"\n"; 
         return false;
     }
     else
     {
-        std::cout<< z->getKey() <<" BALANCED in is_balanced \n";
-        return true;
+        // std::cout<< z->getKey() <<" BALANCED in is_balanced"<<(std::abs(get_height(right_child)-get_height(left_child))) << "\n";
+        // std::cout<<" LEFT HEIGHT:"<<get_height(left_child) << "\n";
+        // std::cout<<" RIGHT HEIGHT:"<<get_height(right_child) << "\n";
+
+        // std::cout<<" RIGHT child:"<<right_child->getKey() << "\n";
+        // std::cout<<"parent of n is :"<<((this->internalFind("n"))->getParent())->getKey();
+        // std::cout<<" RIGHT grand child:"<<(right_child->getLeft())->getKey() << "\n";
+       return true;
     }
 
         
@@ -406,9 +573,6 @@ void AVLTree<Key, Value>::rotate(AVLNode<Key, Value>* z, std::string& zig_zag)
     else if(zig_zag == "01") d_right_rotate(z);
 
 }
-
-
-
 
 
 template<typename Key, typename Value>
@@ -489,9 +653,9 @@ void AVLTree<Key, Value>::left_rotate(AVLNode<Key, Value>* z)
     replace_node(z, y);
 
     z->setRight(y->getLeft()); 
-    if(z->getRight()!=NULL)
+    if(y->getLeft()!=NULL)
     {
-        (z->getRight())->setParent(z);
+        (y->getLeft())->setParent(z);
     }
 
     y->setLeft(z);
@@ -524,9 +688,9 @@ void AVLTree<Key, Value>::right_rotate(AVLNode<Key, Value>* z)
     replace_node(z, y);
 
     z->setLeft(y->getRight()); 
-    if(z->getLeft()!=NULL)
+    if(y->getRight()!=NULL)
     {
-        (z->getLeft())->setParent(z);
+        (y->getRight())->setParent(z);
     }
 
     y->setRight(z);
@@ -567,17 +731,47 @@ void AVLTree<Key, Value>::d_left_rotate(AVLNode<Key, Value>* z)
 
     // update_height(z);
     // update_height(y);
-     // update_height(x);
+    // update_height(x);
 
 
+    //PSEUDOCODE ABOVE THIS POINT  
 
+    AVLNode<Key, Value>* y = z->getRight();
+    AVLNode<Key, Value>* x = y->getLeft();
+    
+    replace_node(z, x);
 
+    z->setRight(x->getLeft()); 
+    if(z->getRight()!=NULL)
+    {
+        (z->getRight())->setParent(z);
+    }
+
+    z->setParent(x);
+    x->setLeft(z);
+
+    //above this does LHS Z actions
+
+    //Now RHS y actions
+
+    y->setLeft(x->getRight());
+    if(x->getRight()!=NULL)
+    {
+        (x->getRight())->setParent(y);
+    }
+
+    x->setRight(y);
+    y->setParent(x);
+
+    update_height(z);
+    update_height(y);
+    update_height(x);
 }
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::d_right_rotate(AVLNode<Key, Value>* z)
 //double rotations
 {
-     //AVLNode<Key, Value>* y = z.left;
+    //AVLNode<Key, Value>* y = z.left;
     //AVLNode<Key, Value>x = y.right;
 
     
@@ -609,6 +803,49 @@ void AVLTree<Key, Value>::d_right_rotate(AVLNode<Key, Value>* z)
     // update_height(z);
     // update_height(y);
      // update_height(x);
+
+
+    //PSEUDOCODE ABOVE THIS POINT  
+
+    /*
+->getRight()
+->getLeft()
+->setRight(y)
+->setLeft(z)
+->setParent(x)
+    */
+
+    AVLNode<Key, Value>* y = z->getLeft();
+    AVLNode<Key, Value>* x = y->getRight();
+
+    
+    replace_node(z, x);
+
+    y->setRight(x->getLeft()); 
+    if(x->getLeft()!=NULL)
+    {
+        (x->getLeft())->setParent(z);
+    }
+    y->setParent(x);
+    x->setLeft(y);
+
+    //above this does LHS Y actions
+
+    //Now RHS y actions
+
+    z->setLeft(x->getRight());
+    if(x->getRight()!=NULL)
+    {
+        (z->getLeft())->setParent(z);
+    }
+    z->setParent(x);
+    x->setRight(z);
+
+    update_height(z);
+    update_height(y);
+    update_height(x);
+
+
 }
 
 

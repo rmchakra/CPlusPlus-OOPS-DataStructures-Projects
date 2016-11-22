@@ -5,14 +5,17 @@ CXX = g++
 CPPFLAGS = -g -Wall -std=c++11
 VGA = valgrind --tool=memcheck --leak-check=yes --track-origins=yes
 
-all: BST 
+all: CLEAR BST clean
+
+CLEAR:
+	  clear
 
 RESET: 
 		reset
 
 BST: p2_main.cpp
 	$(CXX) $(CPPFLAGS) $^ -o AVLBST
-	#./BST
+	./AVLBST
 
 
 clean: 
