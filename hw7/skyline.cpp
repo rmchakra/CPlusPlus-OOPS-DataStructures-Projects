@@ -20,6 +20,11 @@ class floor_range
   }
   //< is this->top < rhs.bot
 
+  long long get_lower()
+  {
+    return lower;
+  }
+
 
   bool operator<(const floor_range& rhs) const;
   bool operator>(const floor_range& rhs) const;
@@ -179,15 +184,26 @@ Finally add the node [x,z].
           {//(*found_node_it).first gives the range key
             //  long long lower;
            // long long upper;
+
+
+            //cant edit a key. NEed to remove and reinsert
             if((*found_node_it).first.lower < recolor_range.lower)
             {
               if ((*found_node_it).first.upper < recolor_range.upper)
               {
-                (*found_node_it).first.upper = recolor_range.lower - 1;
+                
+                string color = (found_node_it)->second;
+                long long low;
+                low = (found_node_it)->first).get_lower();
+
+                // ((found_node_it)->first).upper = recolor_range.lower - 1;
               }
               else
               {
-
+                string color = (*found_node_it).second;
+                my_obj.insert(std::make_pair(floor_range l_n((*found_node_it).first.lower, lower_recolor-1), color));
+                // my_obj.insert(std::make_pair(floor_range l_n((*found_node_it).first.lower, lower_recolor-1), color));
+              
               }
             }
             else

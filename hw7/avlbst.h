@@ -522,11 +522,11 @@ AVLNode<Key, Value>* AVLTree<Key, Value>::max_height_child(AVLNode<Key, Value>* 
         {    
             return right_child;
         }
-        std::cout<<"ENTERS AN IMPOSSIBLE CASE in max_height_child\n";
+        // std::cout<<"ENTERS AN IMPOSSIBLE CASE in max_height_child\n";
     
     }
 
-    std::cout<<"ENTERS AN IMPOSSIBLE CASE AND max_height_child GIVES NULL VALUE \n";
+    // std::cout<<"ENTERS AN IMPOSSIBLE CASE AND max_height_child GIVES NULL VALUE \n";
     return NULL;//This is to satisfy the compiler that control wont reach end of a NON-Void function
 
 }
@@ -649,26 +649,7 @@ void AVLTree<Key, Value>::rotate(AVLNode<Key, Value>* z, std::string& zig_zag)
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::replace_node(AVLNode<Key, Value>* z, AVLNode<Key, Value>* y)
 {//this only changes relationship between z's parent and y
-//      y.parent = z.parent//y's parent is set as parent of z
-//     if(y.parent == NULL)
-//     {//if z previously was the root
-//         this->mRoot = y;
-//     }
-//     else
-//     {//setting y as child of z's parent
-
-//          z.is right child
-//         {
-//             z.parent.right = y;
-//         }
-
-//         z.is left child
-//         {
-//             z.parent.left = y;
-//         }
-//     }
-
-    //PSEUDOCODE ABOVE THIS POINT    
+//     
     y->setParent(z->getParent());
     if(y->getParent() == NULL)
     {//if z previously was the root
@@ -698,23 +679,6 @@ template<typename Key, typename Value>
 void AVLTree<Key, Value>::left_rotate(AVLNode<Key, Value>* z)
 {//z is the unbalanced node
 
-     //AVLNode<Key, Value>* y = z.right;
-    
-    //replace_node(z, y);
-
-    // z.right = y.left; 
-    // if(z.right!=NULL)
-    // {
-    //     z.right.parent = z;
-    // }
-
-    // y.left = z;
-    // z.parent = y;
-
-    //y could now possibly be the root which if it is, then z was the root earlier and hence needs to be static cast for the update height
-
-    // update_height(z)//which is now a child of y
-    // update_height(y)
 
 
     //PSEUDOCODE ABOVE THIS POINT  
@@ -739,21 +703,7 @@ void AVLTree<Key, Value>::left_rotate(AVLNode<Key, Value>* z)
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::right_rotate(AVLNode<Key, Value>* z)
 {
-    //AVLNode<Key, Value>* y = z.left;
-    //replace_node(z, y);
 
-    // z.left = y.right; 
-    // if(z.left!=NULL)
-    // {
-    //     z.left.parent = z;
-    // }
-
-    // y.right = z;
-    // z.parent = y
-    // update_height(z)
-    // update_height(y)
-
-    //PSEUDOCODE ABOVE THIS POINT  
 
     AVLNode<Key, Value>* y = z->getLeft();
     replace_node(z, y);
@@ -773,39 +723,6 @@ template<typename Key, typename Value>
 void AVLTree<Key, Value>::d_left_rotate(AVLNode<Key, Value>* z)
 //double rotations
 {
-    //AVLNode<Key, Value>* y = z.right;
-    //AVLNode<Key, Value>x = y.left;
-    
-    //replace_node(z, x);
-
-    // z.right = x.left; 
-    // if(z.right!=NULL)
-    // {
-    //     z.right.parent = z;
-    // }
-
-    // x.left = z;
-    // z.parent = x;
-
-    //above this does LHS Z actions
-
-    //Now RHS y actions
-
-    //y.left = x.right;
-    //if(y.left!=NULL)
-    // {
-    //     y.left.parent = y;
-    // }
-
-    // x.right = y;
-    // y.parent = x;
-
-    // update_height(z);
-    // update_height(y);
-    // update_height(x);
-
-
-    //PSEUDOCODE ABOVE THIS POINT  
 
     AVLNode<Key, Value>* y = z->getRight();
     AVLNode<Key, Value>* x = y->getLeft();
@@ -842,49 +759,6 @@ template<typename Key, typename Value>
 void AVLTree<Key, Value>::d_right_rotate(AVLNode<Key, Value>* z)
 //double rotations
 {
-    //AVLNode<Key, Value>* y = z.left;
-    //AVLNode<Key, Value>x = y.right;
-
-    
-    //replace_node(z, x);
-
-    // y.right = x.left; 
-    // if(y.right!=NULL)
-    // {
-    //     y.right.parent = z;
-    // }
-
-    // x.left = y;
-    // y.parent = x;
-
-    //above this does LHS Y actions
-
-    //Now RHS y actions
-
-    //z.left = x.right;
-    //if(z.left!=NULL)
-    // {
-    //     z.left.parent = z;
-    // }
-
-    // x.right = z;
-    // z.parent = x;
-
-
-    // update_height(z);
-    // update_height(y);
-     // update_height(x);
-
-
-    //PSEUDOCODE ABOVE THIS POINT  
-
-    /*
-->getRight()
-->getLeft()
-->setRight(y)
-->setLeft(z)
-->setParent(x)
-    */
 
     AVLNode<Key, Value>* y = z->getLeft();
     AVLNode<Key, Value>* x = y->getRight();
