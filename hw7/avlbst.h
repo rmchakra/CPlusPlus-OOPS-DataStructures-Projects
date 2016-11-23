@@ -279,8 +279,94 @@ void AVLTree<Key, Value>::remove(const Key& key)
     {
         
         if(this->mRoot == del_node)
-        {
-            this->mRoot = NULL;
+        {//THIS IS WRONG -> THIS WILL SIMPLY GET RID OF THE ROOT AND NOT REPLACE ITS WITH THE SUCCESSOR WHICH IS WHAT SHOULD HAPPEN
+            if(is_leaf(del_node))
+            {
+                this->mRoot = NULL; 
+            }
+            else
+            {
+                if(!has_right_child(del_node))
+                {//if it doesnt have a right child means it can only have a left child apart from the root which is a part of the tree 
+                    Node<Key, Value>* left_child = del_node->getLeft();
+                    left_child->setParent(NULL);
+                    this->mRoot =left_child;
+                }
+                else if(has_right_child(del_node))
+                {
+
+
+
+
+
+
+
+
+
+
+
+
+
+                     Node<Key, Value>* sucessor = del_node->getRight();//initially the right child
+                    bool right_child_had_left_kids = false;
+                    while(has_left_child(sucessor))
+                    {
+                        right_child_had_left_kids = true;
+                        sucessor = sucessor->getLeft();
+                    }//now arrived at the leftmost child
+
+
+                    // std::cout<<"ENTERS HAS RIGHT CHILD CASE \n";
+                    Node<Key, Value>* parent_sucessor = sucessor->getParent();
+                        
+
+                    if(is_leaf(sucessor))
+                    {
+                        disconnect_node(sucessor);//parents of node have that child set to Null now
+                        sucessor->setLeft(del_node->getLeft());
+                        sucessor->setRight(del_node->getRight());
+                        sucessor->setParent(NULL);
+                        this->mRoot =sucessor;
+                    }
+                    else if(has_right_child(sucessor))
+                    {
+                        Node<Key, Value>* right_of_successor = sucessor->getRight();
+                        disconnect_node(right_of_successor);//parents of node have that child set to Null now
+                        replace_node(static_cast<AVLNode<Key,Value>*> (sucessor), static_cast<AVLNode<Key,Value>*> (right_of_successor));
+                        //replace_node(static_cast<AVLNode<Key,Value>*> (del_node), static_cast<AVLNode<Key,Value>*> (sucessor));
+                        sucessor->setLeft(del_node->getLeft());
+                        sucessor->setRight(del_node->getRight());
+                        sucessor->setParent(NULL);
+                        this->mRoot =sucessor;
+                    }
+                    if(right_child_had_left_kids)
+                    {
+                      balance(parent_sucessor);//this is the previous parent
+                    }
+                    else
+                    {//if right child didnt have kids, then want to start balancing from the right child which has now replaced deleted node
+                        balance(sucessor);//balancing from the right child of the delted node which is the sucessor
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                }
+            }
         }
         else if (is_leaf(del_node))
         {//disconnect node from parent(from tree)
@@ -301,20 +387,27 @@ void AVLTree<Key, Value>::remove(const Key& key)
         }
 
         else if(has_right_child(del_node))
-        {
+        {//DISCONNECTING AND THEN REPLACING NODE WILL FAIL
+            // std::cout<<"ENTERS HAS RIGHT CHILD CASE \n";
             Node<Key, Value>* sucessor = del_node->getRight();//initially the right child
+            bool right_child_had_left_kids = false;
             while(has_left_child(sucessor))
             {
+                right_child_had_left_kids = true;
                 sucessor = sucessor->getLeft();
             }//now arrived at the leftmost child
 
+
+            // std::cout<<"ENTERS HAS RIGHT CHILD CASE \n";
             Node<Key, Value>* parent_sucessor = sucessor->getParent();
                 
 
             if(is_leaf(sucessor))
             {
-                disconnect_node(del_node);//parents of node have that child set to Null now
+                disconnect_node(sucessor);//parents of node have that child set to Null now
                 replace_node(static_cast<AVLNode<Key,Value>*> (del_node), static_cast<AVLNode<Key,Value>*> (sucessor));
+                //sets y's parent then y as chold of z's parent according to what child z is
+
                 sucessor->setLeft(del_node->getLeft());
                 sucessor->setRight(del_node->getRight());
 
@@ -322,11 +415,19 @@ void AVLTree<Key, Value>::remove(const Key& key)
             else if(has_right_child(sucessor))
             {
                 Node<Key, Value>* right_of_successor = sucessor->getRight();
-                disconnect_node(right_of_successor);//parents of node have that child set to Null now
+                // disconnect_node(right_of_successor);//parents of node have that child set to Null now
                 replace_node(static_cast<AVLNode<Key,Value>*> (sucessor), static_cast<AVLNode<Key,Value>*> (right_of_successor));
+                replace_node(static_cast<AVLNode<Key,Value>*> (del_node), static_cast<AVLNode<Key,Value>*> (sucessor));
+                
             }
-
-            balance(parent_sucessor);
+            if(right_child_had_left_kids)
+            {
+              balance(parent_sucessor);//this is the previous parent
+            }
+            else
+            {//if right child didnt have kids, then want to start balancing from the right child which has now replaced deleted node
+                balance(sucessor);//balancing from the right child of the delted node which is the sucessor
+            }
         }
 
         delete del_node;
