@@ -288,26 +288,14 @@ void AVLTree<Key, Value>::remove(const Key& key)
             {
                 if(!has_right_child(del_node))
                 {//if it doesnt have a right child means it can only have a left child apart from the root which is a part of the tree 
+                    //if theres only a left child then dont need to balance
                     Node<Key, Value>* left_child = del_node->getLeft();
                     left_child->setParent(NULL);
                     this->mRoot =left_child;
                 }
                 else if(has_right_child(del_node))
                 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-                     Node<Key, Value>* sucessor = del_node->getRight();//initially the right child
+                    Node<Key, Value>* sucessor = del_node->getRight();//initially the right child
                     bool right_child_had_left_kids = false;
                     while(has_left_child(sucessor))
                     {
@@ -347,24 +335,6 @@ void AVLTree<Key, Value>::remove(const Key& key)
                     {//if right child didnt have kids, then want to start balancing from the right child which has now replaced deleted node
                         balance(sucessor);//balancing from the right child of the delted node which is the sucessor
                     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 }
             }
         }
