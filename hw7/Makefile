@@ -15,7 +15,7 @@ RESET:
 
 BST: skyline.cpp
 	$(CXX) $(CPPFLAGS) $^ -o AVLBST
-	#./AVLBST
+	#./AVLBST hw7_destroyer.in sky_out.txt
 
 
 clean: 
