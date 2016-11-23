@@ -13,7 +13,7 @@ CLEAR:
 RESET: 
 		reset
 
-BST: p2_main.cpp
+BST: skyline.cpp
 	$(CXX) $(CPPFLAGS) $^ -o AVLBST
 	#./AVLBST
 

@@ -1,0 +1,4 @@
+RECOLOR x y c 
+changes the color of the floors x through y (inclusive) to c. If y is less than x, then you should output an error.
+COLOR x outputs the color of the skyscraper at height x.
+SKYLINE '\0'
