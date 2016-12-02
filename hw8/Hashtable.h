@@ -5,27 +5,13 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h> 
 
 using std::vector;
 using std::pow;
 
-/*
-#include "Hashtable.h"
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
 
-using namespace std;
-
-
-int main()
-{
-	unsigned int dumb = 0;
-	Hashtable haha();
-	return 0;
-}
-
-*/
 
 /**
 * A Hashtable to store <std::string, int> as the entries. The string represents
@@ -107,9 +93,17 @@ private:
 	* Include any additional private data members and/or helper functions to finish
 	* this problem. 
     */
+
+	int hash_func1(const std::string& k);
+	int hash_func2(const std::string& k);
+
+
+
+    //variabes
     unsigned int probe_type;
     vector <my_int> hash_values;
     int no_of_resizes;
+    bool debug_mode;
 };
 
 #endif

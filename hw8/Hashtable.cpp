@@ -2,6 +2,7 @@
 
 
 #define DUMMY 5
+#define HASH_ARR_SIZE 5
 #define INITIAL_HASH_ELEMENT_COUNT 11
 /**
 * A Hashtable to store <std::string, int> as the entries. The string represents
@@ -22,6 +23,7 @@
 Hashtable::Hashtable(bool debug, unsigned int probing)
 {
 	probe_type = probing;
+	debug_mode = debug;
 	resize();
 
 	// for (int i = 0; i < INITIAL_HASH_ELEMENT_COUNT; ++i)
@@ -107,6 +109,36 @@ Store these values in an int array. Place zeros in the leading positions if the 
 We will now hash the word. Use the following formula to produce the result, and make sure to cast this into a long long at the appropriate places so that you don't have an overflow error: the compiler will assume each intermediate value is an int if you don't specify this. size is the number of indices in the hashtable:
 	*/
 
+
+	
+	return DUMMY;
+}
+
+int Hashtable::hash_func1(const std::string& k)
+{
+	int random_numbers[] ={983132572, 1468777056, 552714139, 984953261, 261934300 };
+
+/*
+generating the random values r as coefficients for the arrauy
+
+*/
+
+if(!debug_mode)
+{
+	srand (time(NULL));//seeding the rand value
+	for (int i = 0; i < HASH_ARR_SIZE; ++i)
+	{
+		random_numbers[i] = rand();
+	}
+}
+
+
+
+//beginning the function implementation
+
+
+
+
 	int w_arr_pos = 0;
 	int word_arr [5];
 
@@ -127,20 +159,35 @@ We will now hash the word. Use the following formula to produce the result, and 
 			//each 6 letter sequence needs to be stores in separate pos of the int array
 			//increase array index here.
 			word_arr [w_arr_pos] = term_val;
-			w_arr_pos++
-			term_val = 0
+			w_arr_pos++;
+			term_val = 0;
 		}
 	}
-
-	for (int i = 0; i <= w_arr_pos; ++i)
-	{//cycles through the array until the desired position
-		/* code */
+	for (int i = w_arr_pos+1; i < HASH_ARR_SIZE; ++i)
+	{
+		word_arr[i] = 0;
 	}
+
+	long long final_sum = 0;
+
+	for (int i = 0; i < HASH_ARR_SIZE; ++i)
+	{//cycles through the array until the desired position
+		final_sum += (long long)(random_numbers[i] * word_arr[i]);
+	}
+
+	final_sum = (final_sum% (hash_values.size()));
+
 
 
 	//rbegin and rend
 	//dummy value
-
+	
 	
 	return DUMMY;
-}//poetry, football, chess
+
+
+}
+int Hashtable::hash_func2(const std::string& k)
+{
+
+}
