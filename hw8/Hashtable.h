@@ -10,8 +10,42 @@
 
 using std::vector;
 using std::pow;
+using std::cout;
+using std::endl;
+using std::pair;
+using std::make_pair;
+using std::string;
+//questions
+/*
+	resize seg faults
+	vector of pairs. The first will be unitialised string which 
+	make_pair(-2, -1)
+	string, int
+	uninitialised string means the string is not present in the array.
+	ints are initialised to 0; strings are initialised to null
+	while(!string.empty())
 
 
+
+
+	int main() {
+    std::ofstream output("long_ass_file.txt");
+    for (int i = 0; i < BIG_NUM; i++) { 
+        std::ifstream input("book.txt");
+       std::string curr;
+        while (getline(input, curr)) 
+            output << curr << std::ends;
+        }
+   }
+   return 0;
+}
+    
+}
+
+Report all should output to the stream it takes by reference, not cout
+
+
+*/
 
 /**
 * A Hashtable to store <std::string, int> as the entries. The string represents
@@ -95,13 +129,13 @@ private:
     */
 
 	int hash_func1(const std::string& k);
-	int hash_func2(const std::string& k);
-
+	int hash_func2(const std::string& k);	
+	void word_gen(int (&a) [5], const std::string& k);
 
 
     //variabes
     unsigned int probe_type;
-    vector <my_int> hash_values;
+    vector <pair<string,int>> hash_values; 
     int no_of_resizes;
     bool debug_mode;
 };
