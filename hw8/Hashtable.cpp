@@ -25,16 +25,16 @@ Hashtable::Hashtable(bool debug, unsigned int probing)
 {
 	probe_type = probing;
 	debug_mode = debug;
-	no_of_resizes = 0;
+	no_of_resizes = -1;
 	unique_inserts = 0;
 	cout<<"ENTERS CONSTRUCTOR";
 	// int a;
 	// cout<<"unitialised int is"<<a<<"\n";
-	string s;
-	cout<<"unitialised string is"<<s<<"string . empty is "<<s.empty()<<"\n";
+	resize();
 
 
-	// resize();
+
+	
 	
 
 
@@ -79,7 +79,7 @@ void Hashtable::add(const std::string& k)
 
 	int pos; bool already_present;
 
-	pos_finder(k, pos, already_present);
+	pos_finder(k, pos, already_present, hash_values);
 
 	if(!already_present)
 	{//if its a new value
@@ -120,7 +120,7 @@ int Hashtable::count(const std::string& k) const
 	//dummy value
 	int pos; bool already_present;
 
-	pos_finder(k, pos, already_present);
+	pos_finder(k, pos, already_present, hash_values);
 
 	if(already_present)
 	{
@@ -149,6 +149,8 @@ void Hashtable::reportAll(std::ostream& out) const
 		if(   !(((hash_values[i]).first).empty())   )
 		{//if string is not empty i.e. is a value
 			out<<(hash_values[i]).first<<" "<<(hash_values[i]).second<<"\n";
+			// cout<<""
+			cout<<(hash_values[i]).first<<" "<<(hash_values[i]).second<<"\n";
 		}
 	}
 }
@@ -158,6 +160,13 @@ void Hashtable::reportAll(std::ostream& out) const
 	* factor is >= 0.5. See the assignment description for the specific increments
 	* when increasing the size of the Hashtable as well as other implementation details. 
 	*/
+
+void Hashtable::add_helper(const std::string& k, vector <pair<string,int>>& hash_values_var)
+{
+
+}
+
+
 void Hashtable::resize()
 {
 	int resize_array[] = {11, 23, 47, 97, 197, 397, 797, 1597, 3203, 6421, 12853, 25717, 51437, 102877, 205759, 411527, 823117, 1646237, 3292489, 6584983, 13169977, 26339969, 52679969, 105359969, 210719881, 421439783, 842879579, 1685759167};
@@ -167,22 +176,59 @@ void Hashtable::resize()
 
 
 	// cout << no_of_resizes;
-	hash_values.resize(resize_array[no_of_resizes]);
 	no_of_resizes++;
+	vector <pair<string,int>> new_hash_values(resize_array[no_of_resizes], make_pair("", 0));
+	// cout<<"new_hash_values size is"<<new_hash_values.size()<<"WITH VALUES\n";
+
+	// for (unsigned int i = 0; i < hash_values.size(); ++i)
+	// {//transferring from hash to new_hash
+	// 	if((!(((hash_values[i]).first).empty))
+	// 	{
+
+	// 		int pos; bool already_present;
+
+	// 		pos_finder(k, pos, already_present, new_hash_values);
+
+	// 		((new_hash_values[pos]).first) = (hash_values[i]).first;
+	// 		((new_hash_values[pos]).second) = (hash_values[i]).second;
+
+	// 	}
+	// 	// cout<<new_hash_values[i].first<<" "<<new_hash_values[i].second<<"\n";
+	// }
+
+	// fill constructor
+// // Constructs a container with n elements. Each element is a copy of val.
+// 	vector (size_type n, const value_type& val = value_type(),
+//                  const allocator_type& alloc = allocator_type());
+
+
+
+	vector <pair<string,int>> old_hash_values = hash_values;
+	// old_hash_values.resize(hash_values.size())
+	// old_hash_values = hash_values;
+
+//cant just use the same vector because what if it collides
+
+
+
+
+	hash_values.resize(resize_array[no_of_resizes]);
+
 
 /*
 	cout<<"ASSIGNING SIZE 5 ARRAY VALUES \n";
 	cout<<"1 2 3 4 5 \n";
 	vector <pair<string,int>> c;
-	//vector.resize(size, make_pair<string, int>(NULL, 0));
+	// //vector.resize(size, make_pair<string, int>(NULL, 0));
 	c.resize(5);
-	a.resize(c.size());
+
+	// a.resize(c.size());
 	for (int i = 0; i <5; ++i)
 	{
 		c[i] = make_pair("hi", i);
 		// cout<<resize_array[i]<<" \n";
 	}
-	a=c;
+	vector <pair<string,int>> a=c;
 	for (int i = 0; i <5; ++i)
 	{
 		cout<<a[i].first<<" "<< a[i].second<<" \n";
@@ -214,6 +260,7 @@ void Hashtable::resize()
 
 
 
+
 */
 
 
@@ -233,6 +280,12 @@ void Hashtable::resize()
 	*/
 int Hashtable::hash(const std::string& k) const
 {
+	int pos; bool already_present;
+	pos_finder(k,pos, already_present, hash_values);
+
+	return pos;
+
+
 	//get the int value
 
 	/*
@@ -267,20 +320,6 @@ We will now hash the word. Use the following formula to produce the result, and 
 
 
 //takes in the string and gives the input to store it at
-
-	
-
-
-
-
-
-
-
-
-
-
-	
-	return DUMMY;
 }
 	
 void Hashtable::word_gen(int (&word_arr)[5], const std::string& k) const
@@ -387,7 +426,7 @@ int Hashtable::hash_func2(const std::string& k) const
 	}
 
 	final_sum = (final_sum% (primes[no_of_resizes]));
-	final_sum = primes[no_of_resizes] - final_sum;
+	int final_s = primes[no_of_resizes] - final_sum;
 
 
 
@@ -395,12 +434,12 @@ int Hashtable::hash_func2(const std::string& k) const
 	//dummy value
 
 	
-	return (int)final_sum;
+	return final_s;
 }
 
 
 
-void Hashtable::pos_finder(const std::string& k, int& pos, bool& already_present) const
+void Hashtable::pos_finder(const std::string& k, int& pos, bool& already_present,const vector <pair<string,int>>& hash_v) const
 {//this gives position for both already present string as well as position to insert the new string at
 	// the one that calls this helper function will do this code
 	already_present = false;
@@ -408,10 +447,23 @@ void Hashtable::pos_finder(const std::string& k, int& pos, bool& already_present
 	if(probe_type == 0)
 	{//linear
 		//this should go into count
-		for (pos = hash_func1(k);   (!(((hash_values[pos]).first).empty())); ++pos)//while the position is occupied
+		for (pos = hash_func1(k);   (!(((hash_v[pos]).first).empty())); )//while the position is occupied
 		{
 
-			if(pos == (int)hash_values.size())
+			
+
+			if(		((hash_v[pos]).first)	== k	)
+			{//already present
+
+				// ++((hash_values[pos]).second);//updating the int associated with it
+				already_present = true;
+				break;
+			}
+
+
+			++pos;
+
+			if(pos == (int)hash_v.size())
 			{
 				pos = 0;
 				if(looped)
@@ -422,14 +474,6 @@ void Hashtable::pos_finder(const std::string& k, int& pos, bool& already_present
 				looped = true;
 			}
 
-			if(		((hash_values[pos]).first)	== k	)
-			{//already present
-
-				// ++((hash_values[pos]).second);//updating the int associated with it
-				already_present = true;
-				break;
-			}
-
 			
 		}
 
@@ -437,27 +481,28 @@ void Hashtable::pos_finder(const std::string& k, int& pos, bool& already_present
 	else if(probe_type == 1)
 	{//quadratic
 		int j =1;
-		for (pos = hash_func1(k);   (!(((hash_values[pos]).first).empty())); pos+= (j*j), j++)//while the position is occupied
+		for (pos = hash_func1(k);   (!(((hash_v[pos]).first).empty())); j++)//while the position is occupied
 		{
 
-			
-			if(pos >= (int)hash_values.size())
+			if(		((hash_v[pos]).first)	== k	)
+			{//already present
+
+				// ++((hash_values[pos]).second);//updating the int associated with it
+				already_present = true;
+				break;
+			}
+
+			pos+= (j*j);
+
+			if(pos >= (int)hash_v.size())
 			{//This needs to be changed
-				pos = pos-(int)hash_values.size();
+				pos = pos-(int)hash_v.size();
 				if(looped)
 				{
 					cout<<" all positions are occupied - nowhere to insert\n";
 					break;
 				}
 				looped = true;
-			}
-
-			if(		((hash_values[pos]).first)	== k	)
-			{//already present
-
-				// ++((hash_values[pos]).second);//updating the int associated with it
-				already_present = true;
-				break;
 			}
 
 			
@@ -470,13 +515,24 @@ void Hashtable::pos_finder(const std::string& k, int& pos, bool& already_present
 		//i + h′(k), i + 2h′(k), i + 3h′(k), . .
 		int j =1;
 		int second_hash = hash_func2(k);
-		for (pos = hash_func1(k);   (!(((hash_values[pos]).first).empty())); pos+= (j*second_hash), j++)//while the position is occupied
+		
+		for (pos = hash_func1(k);   (!(((hash_v[pos]).first).empty())); j++)//while the position is occupied
 		{
+			// second_hash = hash_func2(k);
+			//pos at the end of the loop is adjusted bu the multiplication but is only adjested for the max size after the looping conisition is checked
 
-			
-			if(pos >= (int)hash_values.size())
+			if(		((hash_v[pos]).first)	== k	)
+			{//already present
+
+				// ++((hash_values[pos]).second);//updating the int associated with it
+				already_present = true;
+				break;
+			}
+			 pos+= (j*second_hash);
+
+			 if(pos >= (int)hash_v.size())
 			{//This needs to be changed
-				pos = pos-(int)hash_values.size();
+				pos = pos-(int)hash_v.size();
 				if(looped)
 				{
 					cout<<" all positions are occupied - nowhere to insert\n";
@@ -484,15 +540,6 @@ void Hashtable::pos_finder(const std::string& k, int& pos, bool& already_present
 				}
 				looped = true;
 			}
-
-			if(		((hash_values[pos]).first)	== k	)
-			{//already present
-
-				// ++((hash_values[pos]).second);//updating the int associated with it
-				already_present = true;
-				break;
-			}
-
 			
 		}
 

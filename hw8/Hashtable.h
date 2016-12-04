@@ -2,6 +2,7 @@
 #define __HASH_TABLE_H
 
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -15,6 +16,7 @@ using std::endl;
 using std::pair;
 using std::make_pair;
 using std::string;
+using std::stringstream;
 //questions
 /*
 	resize seg faults
@@ -115,6 +117,8 @@ private:
 	*/
 	void resize();
 
+	void add_helper(const std::string& k, vector <pair<string,int>>& hash_values_var);
+
 	void insert_test()
 	{
 		int pos = 0;
@@ -136,7 +140,7 @@ private:
 	* this problem. 
     */
 
-	void pos_finder(const std::string& k, int& pos, bool& already_present) const;
+	void pos_finder(const std::string& k, int& pos, bool& already_present,const vector <pair<string,int>>& hash_v) const;
 	int hash_func1(const std::string& k)const;
 	int hash_func2(const std::string& k)const;	
 	void word_gen(int (&a) [5], const std::string& k) const;
@@ -145,7 +149,7 @@ private:
     //variabes
     unsigned int probe_type;
     vector <pair<string,int>> hash_values; 
-    vector <pair<string,int>> a;
+    // vector <pair<string,int>> a;
     int unique_inserts;
     int no_of_resizes;
     bool debug_mode;
