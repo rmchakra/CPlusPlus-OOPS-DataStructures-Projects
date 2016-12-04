@@ -115,6 +115,14 @@ private:
 	*/
 	void resize();
 
+	void insert_test()
+	{
+		int pos = 0;
+			((hash_values[pos]).second) = 1;
+			++((hash_values[pos]).second);//updating the int associated with it
+				
+	}
+
 	/**
 	* The actual hash function that transforms the string input into the index where
 	* the element should be stored. See the assignment for more details on how to 
@@ -128,14 +136,17 @@ private:
 	* this problem. 
     */
 
-	int hash_func1(const std::string& k);
-	int hash_func2(const std::string& k);	
-	void word_gen(int (&a) [5], const std::string& k);
+	void pos_finder(const std::string& k, int& pos, bool& already_present) const;
+	int hash_func1(const std::string& k)const;
+	int hash_func2(const std::string& k)const;	
+	void word_gen(int (&a) [5], const std::string& k) const;
 
 
     //variabes
     unsigned int probe_type;
     vector <pair<string,int>> hash_values; 
+    vector <pair<string,int>> a;
+    int unique_inserts;
     int no_of_resizes;
     bool debug_mode;
 };
