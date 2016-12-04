@@ -65,18 +65,43 @@ void Hashtable::add(const std::string& k)
 // 	Just keep track of the number of insertions you've done
 // And divide by size of the array/vector
 
-	// resize when load factor is Greater than or equal to half
 	//but his is only for different insertions so first you search and see if its present. If it is then simply
 	//increment the value of the int associated with the string 
 	//if its not present, the hash function when fiuncding will give an index where the string is blank.
 	//then you need to check for the resizing
 
-	// load factor is number of keys/total buckets
-	if(count(k)==0)//inserting a new value
-	{
+	
+	/**
+	* If the parameter k already exists as an element in the Hashtable, increment the 
+	* total number of entries. Otherwise create a new entry with a count of 1.
+	*/
+
+
+	int pos; bool already_present;
+
+	pos_finder(k, pos, already_present);
+
+	if(!already_present)
+	{//if its a new value
+		((hash_values[pos]).first) = k;
+		((hash_values[pos]).second) = 1;
+	}
+	else
+	{//it is already present
 
 		unique_inserts++;
+		++((hash_values[pos]).second);//updating the int associated with it
+				
 	}
+
+	// load factor is number of keys/total buckets
+	// resize when load factor is Greater than or equal to half
+	double load_factor = ((double)unique_inserts/((double)hash_values.size()));
+	if(load_factor >= 0.5)
+	{
+		resize();
+	}
+
 
 }
 
@@ -93,7 +118,18 @@ int Hashtable::count(const std::string& k) const
 	// }
 
 	//dummy value
-	return DUMMY;
+	int pos; bool already_present;
+
+	pos_finder(k, pos, already_present);
+
+	if(already_present)
+	{
+		return ((hash_values[pos]).second);//returns the int associated with that string
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 	/**
@@ -111,7 +147,7 @@ void Hashtable::reportAll(std::ostream& out) const
 	for (unsigned int i = 0; i < hash_values.size(); ++i)
 	{
 		if(   !(((hash_values[i]).first).empty())   )
-		{//if its not empty i.e. is a value
+		{//if string is not empty i.e. is a value
 			out<<(hash_values[i]).first<<" "<<(hash_values[i]).second<<"\n";
 		}
 	}
@@ -367,22 +403,6 @@ int Hashtable::hash_func2(const std::string& k) const
 void Hashtable::pos_finder(const std::string& k, int& pos, bool& already_present) const
 {//this gives position for both already present string as well as position to insert the new string at
 	// the one that calls this helper function will do this code
-
-	// 	if(!present)
-	// 	{
-	// 		((hash_values[pos]).first) = k;
-	// 		((hash_values[pos]).second) = 1;
-	// 	}
-	// else
-	// {
-
-			// ((hash_values[pos]).second) = 1;
-	// }
-
-
-
-
-
 	already_present = false;
 	bool looped = false;
 	if(probe_type == 0)
