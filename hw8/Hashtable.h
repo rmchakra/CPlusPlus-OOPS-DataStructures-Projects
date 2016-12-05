@@ -2,6 +2,7 @@
 #define __HASH_TABLE_H
 
 #include <string>
+#include <fstream>
 #include <sstream>
 #include <iostream>
 #include <vector>

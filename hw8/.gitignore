@@ -2,3 +2,7 @@ q3_tester.cpp
 HASHTABLE
 *.o
 hash_test.cpp
+*.txt
+*.in
+COUNTING
+counting

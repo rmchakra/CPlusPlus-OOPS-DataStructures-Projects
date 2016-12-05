@@ -25,9 +25,10 @@ Hashtable::Hashtable(bool debug, unsigned int probing)
 {
 	probe_type = probing;
 	debug_mode = debug;
+	// cout<<"debug mode is"<< debug_mode<<"probing is"<< probing<<"\n";
 	no_of_resizes = -1;
 	unique_inserts = 0;
-	cout<<"ENTERS CONSTRUCTOR";
+	// cout<<"ENTERS CONSTRUCTOR";
 	// int a;
 	// cout<<"unitialised int is"<<a<<"\n";
 	resize();
@@ -180,21 +181,21 @@ void Hashtable::resize()
 	vector <pair<string,int>> new_hash_values(resize_array[no_of_resizes], make_pair("", 0));
 	// cout<<"new_hash_values size is"<<new_hash_values.size()<<"WITH VALUES\n";
 
-	// for (unsigned int i = 0; i < hash_values.size(); ++i)
-	// {//transferring from hash to new_hash
-	// 	if((!(((hash_values[i]).first).empty))
-	// 	{
+	for (unsigned int i = 0; i < hash_values.size(); ++i)
+	{//transferring from hash to new_hash
+		if(!(((hash_values[i]).first).empty()))
+		{
 
-	// 		int pos; bool already_present;
+			int pos; bool already_present;
 
-	// 		pos_finder(k, pos, already_present, new_hash_values);
+			pos_finder(((hash_values[i]).first), pos, already_present, new_hash_values);
 
-	// 		((new_hash_values[pos]).first) = (hash_values[i]).first;
-	// 		((new_hash_values[pos]).second) = (hash_values[i]).second;
+			((new_hash_values[pos]).first) = (hash_values[i]).first;
+			((new_hash_values[pos]).second) = (hash_values[i]).second;
 
-	// 	}
-	// 	// cout<<new_hash_values[i].first<<" "<<new_hash_values[i].second<<"\n";
-	// }
+		}
+		// cout<<new_hash_values[i].first<<" "<<new_hash_values[i].second<<"\n";
+	}
 
 	// fill constructor
 // // Constructs a container with n elements. Each element is a copy of val.
@@ -202,8 +203,6 @@ void Hashtable::resize()
 //                  const allocator_type& alloc = allocator_type());
 
 
-
-	vector <pair<string,int>> old_hash_values = hash_values;
 	// old_hash_values.resize(hash_values.size())
 	// old_hash_values = hash_values;
 
@@ -213,6 +212,7 @@ void Hashtable::resize()
 
 
 	hash_values.resize(resize_array[no_of_resizes]);
+	hash_values = new_hash_values;
 
 
 /*
