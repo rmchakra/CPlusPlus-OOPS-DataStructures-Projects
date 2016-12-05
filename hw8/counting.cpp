@@ -1,19 +1,21 @@
 #include "Hashtable.h"
 #include <ctime>
+#include <cctype>
 
 using namespace std;
 void make_lower(string& a)
 	{
-		std::string b = "";
+		// std::string b = "";
 		for(unsigned int i =0 ; i<a.size();i++)
 		{
-			if(a[i]>'A' && a[i] < 'Z')
+			if(isalpha(a[i]))
 			{		
-				b+=tolower(a[i]);
+				a[i]=tolower(a[i]);
 			}
 			else
 			{
-				b+=a[i];
+				a.erase(i, 1);
+				i--;
 			}
 		}
 	}
@@ -25,6 +27,11 @@ int main ( int argc, char *argv[] )
     cerr << "Please provide correct number of commandline args" << endl;
     return 1;
   }
+
+
+  clock_t start;
+  double duration;
+
 
   ifstream input(argv[1]);
   ofstream output(argv[2]);
@@ -48,25 +55,62 @@ int main ( int argc, char *argv[] )
   ss<<argv[5];
   ss>> program_repetitions;
 
-  Hashtable haha(debug,probing);
-
   string word;
   vector<string> word_list;
   while(input>>word)
   {
   	make_lower(word);
-  	for (unsigned int i = 0; i < word.size(); ++i)
-  	{
-  		if(word[i] < 'a' || word[i]> 'z')
-  		{
-  			word.erase(i, 1);
-  		}
-  	}
+  	// for (unsigned int i = 0; i < word.size(); ++i)
+  	// {
+  	// 	if(!isalpha(word[i]))
+  	// 	{
+  	// 		word.erase(i, 1);
+  	// 	}
+  	// }
 
   	word_list.push_back(word);
-
+  	word.clear();
   	// output<<word<<"\n";
   }
+
+  long long size = word_list.size();
+  //NOW EVERYTHING IS IN THE WORDLIST
+
+
+
+    /* Preprocessing here that you don't want to time */
+
+  start = clock();
+
+  /* Your algorithm here */
+
+
+  for (int i = 0; i < program_repetitions; ++i)
+  {
+  	
+  	Hashtable haha(debug,probing);
+  	for (long long i = 0; i < size; ++i)
+  	{
+  		haha.add(word_list[i]);
+  	}
+
+  // stringstream sa;
+  // haha.reportAll(sa);
+  // output<<sa.str();
+  	haha.reportAll(output);
+
+  }
+
+  duration = ( clock() - start ) / (double) CLOCKS_PER_SEC;
+
+  // haha.reportAll(sa);
+  // output<<sa.str();
+
+ cout<<"duration is:";
+  std::cout << (double)duration/program_repetitions << endl;
+
+  //outputting occurances of each word
+
 
 
   return 0;

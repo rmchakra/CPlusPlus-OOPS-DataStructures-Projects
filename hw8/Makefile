@@ -1,5 +1,10 @@
 CXX = g++
 CPPFLAGS = -g -Wall -std=c++11
+#add -O2 between -g and -Wall
+#etext reps alternates between 1 and 9 but should be 16
+#both quad and double hash dont work since theyre looping.
+
+
 VGA = valgrind --tool=memcheck --leak-check=yes --track-origins=yes
 GTEST = -I /usr/include/gtest/ -l gtest -l gtest_main -pthread
 
@@ -35,3 +40,5 @@ clean:
 	rm q3_tester.o
 	rm Hashtable.o
 	rm HASHTABLE
+
+	#make hash private again

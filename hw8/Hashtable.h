@@ -85,6 +85,8 @@ public:
 	*/
 	Hashtable(bool debug = false, unsigned int probing = 0);
 
+	int hash(const std::string& k) const;
+
 	/**
 	* Destructor.
 	*/
@@ -110,6 +112,17 @@ public:
 	*/
 	void reportAll(std::ostream& out) const;
 
+	void clear_Hashtable()
+	{
+		hash_values.clear();
+		no_of_resizes = -1;
+		unique_inserts = 0;
+	// cout<<"ENTERS CONSTRUCTOR";
+	// int a;
+	// cout<<"unitialised int is"<<a<<"\n";
+	resize();
+	}
+
 private:
 	/**
 	* A helper function to resize and rehash the entries in the table when the load 
@@ -133,7 +146,6 @@ private:
 	* the element should be stored. See the assignment for more details on how to 
 	* implement this function according to our specific guidelines. 
 	*/
-	int hash(const std::string& k) const;
 
 private:
 	/**
@@ -142,7 +154,7 @@ private:
     */
 
 	void pos_finder(const std::string& k, int& pos, bool& already_present,const vector <pair<string,int>>& hash_v) const;
-	int hash_func1(const std::string& k)const;
+	int hash_func1(const std::string& k, const vector <pair<string,int>>& hash_v)const;
 	int hash_func2(const std::string& k)const;	
 	void word_gen(int (&a) [5], const std::string& k) const;
 
