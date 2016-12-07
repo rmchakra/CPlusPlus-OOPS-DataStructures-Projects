@@ -10,7 +10,7 @@ void make_lower(string& a)
 		{
 			if(isalpha(a[i]))
 			{		
-				a[i]=tolower(a[i]);
+				a[i]=(char)tolower(a[i]);
 			}
 			else
 			{
@@ -89,16 +89,16 @@ int main ( int argc, char *argv[] )
   {
   	
   	Hashtable haha(debug,probing);
-  	for (long long i = 0; i < size; ++i)
+  	for (long long j = 0; j < size; ++j)
   	{
-  		haha.add(word_list[i]);
+  		haha.add(word_list[j]);
   	}
 
   // stringstream sa;
   // haha.reportAll(sa);
   // output<<sa.str();
   	haha.reportAll(output);
-   cout<<"LOAD FACTOR IS:"<<haha.return_load_factor();
+   // cout<<"LOAD FACTOR IS:"<<haha.return_load_factor();
 
   }
 
