@@ -55,7 +55,8 @@ the sequences starting from i and i−1 are very different looking, the values w
 stored at i + 9, because i + 1 and i + 4 were also already in use. Now, key k′ is being inserted, which belongs in h(k′) = i + 1. Position i + 1 is already taken, but k′ now tries positions i + 2, i + 5, i + 10, . . .,
 so it won’t run through the unsuccessful sequence i + 4, i + 9. The only clustering we could get will be from actual collisions.
 
-Double hashing in my particular case could have been slower simply due to a random bad case of input occuring. In general however, Double hashing should be faster than quadratic probing.
+Double hashing in my particular case could have been slower simply due to a random bad case of input occuring. I know it is a case of bad input, becauase the only reason double hashing could be slower would be if the load factor were higher than 0.5. Higher the load factor, linear begins to become more efficient than double hashing. I however chewcked my proggram and my function resizes each time the load factor crosses 0.5 which indicates that it is not an issue of the function, but of the input.
+ In general however, Double hashing should be faster than quadratic probing.
 This is because the sequence of positions explored for a key k depends not only on the position i where it originally belonged, but also on the actual
 key k itself. So different keys, even if colliding under h, will be probing different sequences due to the different values returned by the second hash function h'. If i = h(k) is taken, k next probes the positions i + h′(k), i + 2h′(k), i + 3h′(k), . . .. This way, we spread out the probe positions much better
 across elements.
