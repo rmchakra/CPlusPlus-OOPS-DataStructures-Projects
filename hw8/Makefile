@@ -8,12 +8,9 @@ CPPFLAGS = -g -O2 -Wall -std=c++11
 VGA = valgrind --tool=memcheck --leak-check=yes --track-origins=yes
 GTEST = -I /usr/include/gtest/ -l gtest -l gtest_main -pthread
 
-all: CLEAR HASHTABLE_OBJ TEST counting
+all: HASHTABLE_OBJ counting
 #HASHTABLE - for main class that does nothing
 #TEST - 
-
-CLEAR:
-	  clear
 
 RESET: 
 		reset
