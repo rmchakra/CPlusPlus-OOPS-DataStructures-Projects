@@ -1,5 +1,5 @@
 CXX = g++
-CPPFLAGS = -g -Wall -std=c++11
+CPPFLAGS = -g -O2 -Wall -std=c++11
 #add -O2 between -g and -Wall
 #etext reps alternates between 1 and 9 but should be 16
 #both quad and double hash dont work since theyre looping.

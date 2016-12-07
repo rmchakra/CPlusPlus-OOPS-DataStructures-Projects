@@ -85,8 +85,6 @@ public:
 	*/
 	Hashtable(bool debug = false, unsigned int probing = 0);
 
-	int hash(const std::string& k) const;
-
 	/**
 	* Destructor.
 	*/
@@ -97,6 +95,17 @@ public:
 	* total number of entries. Otherwise create a new entry with a count of 1.
 	*/
 	void add(const std::string& k);
+
+	int return_table_size()
+	{
+		return hash_values.size();
+	}
+	double return_load_factor()
+	{
+		cout<<"unique_inserts is"<<unique_inserts<<"\n";
+		cout<<"table size is"<<hash_values.size()<<"\n";
+		return (double)unique_inserts/(double)hash_values.size();
+	}
 
 	/**
 	* Returns the total number of entries for the given string, or 0 if it does not
@@ -130,6 +139,8 @@ private:
 	* when increasing the size of the Hashtable as well as other implementation details. 
 	*/
 	void resize();
+	int hash(const std::string& k) const;
+
 
 	void add_helper(const std::string& k, vector <pair<string,int>>& hash_values_var);
 

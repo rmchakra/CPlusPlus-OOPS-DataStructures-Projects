@@ -60,13 +60,13 @@ int main ( int argc, char *argv[] )
   while(input>>word)
   {
   	make_lower(word);
-  	// for (unsigned int i = 0; i < word.size(); ++i)
-  	// {
-  	// 	if(!isalpha(word[i]))
-  	// 	{
-  	// 		word.erase(i, 1);
-  	// 	}
-  	// }
+  	for (unsigned int i = 0; i < word.size(); ++i)
+  	{
+  		if(!isalpha(word[i]))
+  		{
+  			word.erase(i, 1);
+  		}
+  	}
 
   	word_list.push_back(word);
   	word.clear();
@@ -98,6 +98,7 @@ int main ( int argc, char *argv[] )
   // haha.reportAll(sa);
   // output<<sa.str();
   	haha.reportAll(output);
+   cout<<"LOAD FACTOR IS:"<<haha.return_load_factor();
 
   }
 
@@ -108,7 +109,7 @@ int main ( int argc, char *argv[] )
 
  cout<<"duration is:";
   std::cout << (double)duration/program_repetitions << endl;
-
+   cout<<"Table size is"<<size;
   //outputting occurances of each word
 
 

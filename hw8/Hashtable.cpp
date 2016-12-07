@@ -80,7 +80,12 @@ void Hashtable::add(const std::string& k)
 	double load_factor = ((double)unique_inserts/((double)hash_values.size()));
 	if(load_factor >= 0.5)
 	{
+		// cout<<"BEFORE RESIZE \n";
+		// cout<<"LOAD FACTOR:"<<return_load_factor();
 		resize();
+
+		// cout<<"AFTER RESIZE \n";
+		// cout<<"LOAD FACTOR:"<<return_load_factor();
 	}
 
 
@@ -144,13 +149,15 @@ void Hashtable::reportAll(std::ostream& out) const
 	//if(string.empty()) means it is unitialised
 
 	// out<<pair.first
+
+		// cout<<"HASH VALUES 1234567890-W3E4567890-\n";
 	for (unsigned int i = 0; i < hash_values.size(); ++i)
 	{//change the i later
 		if(   !(((hash_values[i]).first).empty())   )
 		{//if string is not empty i.e. is a value
-			out<<(hash_values[i]).first<<" "<<(hash_values[i]).second<<" "<<i<<"\n";
-			// cout<<""
-			cout<<(hash_values[i]).first<<" "<<(hash_values[i]).second<<"\n";
+			out<<(hash_values[i]).first<<" "<<(hash_values[i]).second<<" "<<"\n";
+			
+			// cout<<(hash_values[i]).first<<" "<<(hash_values[i]).second<<"I IS:"<<i<<"\n";
 		}
 	}
 }
@@ -415,8 +422,8 @@ void Hashtable::pos_finder(const std::string& k, int& pos, bool& already_present
 				pos = 0;
 				if(looped)
 				{
-					cout<<" all positions are occupied - nowhere to insert string:"<<k<<"\n";
-					cout<<"size of hashtable is"<< hash_v.size()<<"\n";
+					// cout<<" all positions are occupied - nowhere to insert string:"<<k<<"\n";
+					// cout<<"size of hashtable is"<< hash_v.size()<<"\n";
 
 					break;
 				}
@@ -466,7 +473,8 @@ void Hashtable::pos_finder(const std::string& k, int& pos, bool& already_present
 		//i + h′(k), i + 2h′(k), i + 3h′(k), . .
 		int j =1;
 		int second_hash = hash_func2(k);
-		second_hash = second_hash%hash_v.size();
+		int hash_size = hash_v.size();
+		second_hash = second_hash%hash_size;
 		
 		for (pos = hash_func1(k, hash_v);   (!(((hash_v[pos]).first).empty())); j++)//while the position is occupied
 		{
@@ -481,7 +489,7 @@ void Hashtable::pos_finder(const std::string& k, int& pos, bool& already_present
 				break;
 			}
 			 pos+= (j*second_hash);
-			 pos = (pos%hash_v.size());
+			 pos = (pos%hash_size);
 
 
 			//  if(pos >= (int)hash_v.size())
